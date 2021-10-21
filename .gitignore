@@ -1,2 +1,7 @@
 .vim-bookmarks
 lib/
+parser/parser
+parser/raylib
+parser/rlc
+.dub
+examples/core/basic_window
