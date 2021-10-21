@@ -1,0 +1,53 @@
+private {
+   SharedLib lib;
+   RaylibSupport loadedVersion;
+}
+
+@nogc nothrow:
+
+void unloadRaylib() {
+   if (lib != invalidHandle) {
+      lib.unload();
+   }
+}
+
+RaylibSupport loadedRaylibVersion() @safe {
+   return loadedVersion;
+}
+
+bool isRaylibLoaded() @safe {
+   return lib != invalidHandle;
+}
+
+RaylibSupport loadRaylib() {
+   version (Windows) {
+      const(char)[][1] libNames = ["raylib.dll"];
+   } else version (Posix) {
+      const(char)[][3] libNames = [
+         "libraylib.so",
+         "/usr/local/lib/libraylib.so" //make install PLATFORM=PLATFORM_DESKTOP RAYLIB_LIBTYPE=SHARED
+         , "/usr/lib/libraylib.so"
+      ];
+   } else {
+      static assert(0, "bindbc-raylib is not yet supported on this platform");
+   }
+
+   RaylibSupport ret;
+   foreach (name; libNames) {
+      ret = loadRaylib(name.ptr);
+      if (ret != RaylibSupport.noLibrary) {
+         break;
+      }
+   }
+   return ret;
+}
+
+RaylibSupport loadRaylib(const(char)* libName) {
+   lib = load(libName);
+   if (lib == invalidHandle) {
+      return RaylibSupport.noLibrary;
+   }
+
+   auto errCount = errorCount();
+   loadedVersion = RaylibSupport.badLibrary;
+

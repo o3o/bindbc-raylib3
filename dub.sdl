@@ -1,0 +1,32 @@
+name "bindbc-raylib3"
+description "Dynamic and static bindings to Raylib, compatible with -betterC, @nogc, and nothrow."
+homepage ""
+authors "Orfeo Da Vià"
+license "Boost"
+
+targetType "staticLibrary"
+targetPath "lib"
+targetName "bindbc-raylib3"
+
+configuration "dynamic" {
+    versions "BindRaylib_Dynamic"
+    dependency "bindbc-loader" version="~>1.0.1"
+}
+
+configuration "dynamicBC" {
+    versions "BindRaylib_Dynamic"
+    dependency "bindbc-loader" version="~>1.0.1"
+    subConfiguration "bindbc-loader" "yesBC"
+    dflags "-betterC"
+}
+
+configuration "static" {
+    versions "BindRaylib_Static"
+    excludedSourceFiles "src/bindbc/raylib3/binddynamic.d"
+}
+
+configuration "staticBC" {
+    dflags "-betterC"
+    versions "BindRaylib_Static"
+    excludedSourceFiles "src/bindbc/raylib3/binddynamic.d"
+}

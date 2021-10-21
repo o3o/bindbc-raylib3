@@ -1,0 +1,13 @@
+name "core"
+description "Core - Basic window"
+authors "o3o"
+copyright "Copyright © 2021, o3o"
+dependency "bindbc-raylib3" path="../../"
+targetType "executable"
+
+// dub -cbasic
+configuration "basic300" {
+   targetName "basic_window"
+   sourceFiles "basic_window.d"
+   versions "RAYLIB_370" "BindRaylib_Dynamic"
+   }

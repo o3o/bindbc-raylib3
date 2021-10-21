@@ -1,0 +1,42 @@
+--- /home/dao/cc/raylib/parser/raylib_parser.c
++++ /home/dao/cc/raylib/parser/raylib_parser_o.c
+@@ -377,17 +377,17 @@
+                     {
+                         if (linePtr[c + 1] == ' ') c += 2;
+                         else c++;
+-  
++
+                         // Parse integer value
+                         int n = 0;
+                         char integer[16] = { 0 };
+-  
++
+                         while ((linePtr[c] != ',') && (linePtr[c] != ' ') && (linePtr[c] != '\0'))
+                         {
+                             integer[n] = linePtr[c];
+                             c++; n++;
+                         }
+-  
++
+                         if (integer[1] == 'x') enums[i].valueInteger[enums[i].valueCount] = (int)strtol(integer, NULL, 16);
+                         else enums[i].valueInteger[enums[i].valueCount] = atoi(integer);
+                     }
+@@ -907,14 +907,14 @@
+                 if (funcs[i].paramCount == 0) fprintf(outFile, "\n");
+                 else
+                 {
+-                    fprintf(outFile, ",\n      \"params\": {\n");
++                    fprintf(outFile, ",\n      \"params\": [\n");
+                     for (int p = 0; p < funcs[i].paramCount; p++)
+                     {
+-                        fprintf(outFile, "        \"%s\": \"%s\"", funcs[i].paramName[p], funcs[i].paramType[p]);
++                        fprintf(outFile, "        {\"name\": \"%s\",  \"type\": \"%s\" }", funcs[i].paramName[p], funcs[i].paramType[p]);
+                         if (p < funcs[i].paramCount - 1) fprintf(outFile, ",\n");
+                         else fprintf(outFile, "\n");
+                     }
+-                    fprintf(outFile, "      }\n");
++                    fprintf(outFile, "      ]\n");
+                 }
+                 fprintf(outFile, "    }");
+ 
+

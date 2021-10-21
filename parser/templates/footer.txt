@@ -1,0 +1,9 @@
+   if (errorCount() != errCount) {
+      return RaylibSupport.badLibrary;
+   } else {
+      loadedVersion = RaylibSupport.raylib370;
+   }
+
+   // here other versions
+   return loadedVersion;
+}
