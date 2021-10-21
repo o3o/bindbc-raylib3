@@ -124,12 +124,14 @@ When linking with the shared library (or the import library on Windows), the run
 
 Enabling the static binding can be done in two ways.
 
-### Via the compiler's `-version` switch or DUB's `versions` directive
+### Via the compiler's `-version` switch 
+
 Pass the `BindRaylib_Static` version to the compiler and link with the appropriate library.
 
 Using the compiler command line or a build system that doesn't support DUB, the `-version=BindRaylib_Static` option should be passed to the compiler when building your program.
 All of the required C libraries, as well as the `bindbc-raylib3` and `bindbc-loader` static libraries, must also be passed to the compiler on the command line or via your build system's configuration.
 
+### Via DUB's `versions` directive
 Using DUB, set the `BindRaylib_Static` version via its `versions` directive and  the required libraries in the `libs` directive. For example:
 
 __dub.json__
