@@ -1,13 +1,42 @@
 name "core"
-description "Core - Basic window"
-authors "o3o"
+description "Core Example"
+authors "Orfeo Da Vià"
 copyright "Copyright © 2021, o3o"
 dependency "bindbc-raylib3" path="../../"
 targetType "executable"
 
 // dub -cbasic
-configuration "basic300" {
-   targetName "basic_window"
-   sourceFiles "basic_window.d"
+configuration "basic" {
+   targetName "core_basic_window"
+   sourceFiles "core_basic_window.d"
    versions "RAYLIB_370" "BindRaylib_Dynamic"
+   }
+
+configuration "camera2" {
+   targetName "core_2d_camera2"
+   sourceFiles "core_2d_camera2.d"
+   }
+configuration "camera3" {
+   targetName "core_2d_camera3"
+   sourceFiles "core_2d_camera3.d"
+   }
+configuration "camera" {
+   targetName "core_2d_camera"
+   sourceFiles "core_2d_camera.d"
+   }
+configuration "ges2" {
+   targetName "core_input_gestures2"
+   sourceFiles "core_input_gestures2.d"
+   }
+configuration "ges" {
+   targetName "core_input_gestures"
+   sourceFiles "core_input_gestures.d"
+   }
+configuration "mouse" {
+   targetName "core_input_mouse"
+   sourceFiles "core_input_mouse.d"
+   }
+configuration "multi" {
+   targetName "core_input_multitouch"
+   sourceFiles "core_input_multitouch.d"
    }
