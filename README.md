@@ -1,16 +1,32 @@
 # bindbc-raylib3
-This project provides both static and dynamic bindings to the [raylib](https://www.raylib.com/) _a simple and easy-to-use library to enjoy videogames programming_ and [raygui](https://github.com/raysan5/raygui) _a simple and easy-to-use immediate-mode-gui library_.
+This project provides both static and dynamic bindings to the [raylib](https://www.raylib.com/) _a simple and easy-to-use library to enjoy videogames programming_.
 
 ## Versioning
 bindbc-raylib3 is being [semantically versioned](http://semver.org). Roughly described, major version changes will always represent backwards incompatible changes, minor version changes will always represent new features and will be backwards compatible, and patch ('tiny') version changes will always be bug fixes.
 
 ## Compile raylib source code
-You can [just compile raylib](https://github.com/o3o/bindbc-raylib/wiki/compile-raylib) or also include [support for raygui](https://github.com/o3o/bindbc-raylib/wiki/compile-raygui).
+See [raylib wiki](https://github.com/raysan5/raylib/wiki).
+
+Clone full raylib repository:
+```
+$ cd ~/cc
+$ git clone https://github.com/raysan5/raylib.git
+```
+
+compile as shared library and install:
+
+```
+$ cd raylib/src
+$ make RAYLIB_LIBTYPE=SHARED
+$ sudo make install RAYLIB_LIBTYPE=SHARED
+```
 
 
 ## Usage
-By default, `bindbc-raylib3` is configured to compile as a dynamic binding that is not `-betterC` compatible.
-The dynamic binding has no link-time dependency on the raylib library, so the raylib shared library must be manually loaded at run time. When configured as a static binding, there is a link-time dependency on the raylib library---either the static library or the appropriate file for linking with shared libraries on your platform (see below).
+By default, `bindbc-raylib3` is configured to compile as a _dynamic binding_ that is not `-betterC` compatible.
+The dynamic binding has no link-time dependency on the raylib library, so the raylib shared library must be manually loaded at run time.
+
+When configured as a _static binding_, there is a link-time dependency on the raylib library---either the static library or the appropriate file for linking with shared libraries on your platform (see below).
 
 When using DUB to manage your project, the static binding can be enabled via a DUB `subConfiguration` statement in your project's package file. `-betterC` compatibility is also enabled via subconfigurations.
 
@@ -31,7 +47,9 @@ dependency "bindbc-raylib3" version="~>0.1.0"
 ### The dynamic binding
 The dynamic binding requires no special configuration when using DUB to manage your project.
 There is no link-time dependency.
-At run time, the raylib shared library is required to be on the shared library search path of the user's system. On Windows, this is typically handled by distributing the raylib DLL with your program. On other systems, it usually means the user must install the raylib shared library through a package manager.
+At run time, the raylib shared library is required to be on the shared library search path of the user's system.
+On Windows, this is typically handled by distributing the raylib DLL with your program.
+On other systems, it usually means the user must install the raylib shared library through a package manager.
 
 To load the shared library, you need to call the `loadRaylib` function.
 This returns a member of the `RaylibSupport` enumeration (see [the README for `bindbc.loader`](https://github.com/BindBC/bindbc-loader/blob/master/README.md) for the error handling API):
@@ -39,7 +57,9 @@ This returns a member of the `RaylibSupport` enumeration (see [the README for `b
 * `RaylibSupport.noLibrary` indicating that the library failed to load (it couldn't be found)
 * `RaylibSupport.badLibrary` indicating that one or more symbols in the library failed to load
 * a member of `RaylibSupport` indicating a version number that matches the version of raylib that `bindbc-raylib3` was configured at compile-time to load.
+j
 By default, that is `RaylibSupport.raylib370`, but can be configured via a version identifier (see below). This value will match the global manifest constant, `raylibSupport`.
+
 ```d
 import bindbc.raylib3;
 
@@ -113,25 +133,26 @@ Following are the supported versions of raylib, the corresponding version IDs to
 |--------------------|------------------|--------------------|
 | raylib 3.7.0      | Raylib_370 (Default) | `RaylibSupport.raylib370`  |
 
-## The static binding
+### The static binding
 The static binding has a link-time dependency on either the shared or the static raylib library.
 On Windows, you can link with the static library or, to use the shared library (`raylib.dll`), with the import library.
 
-On other systems, you can link with either the static library or directly with the shared library. This requires the raylib development package be installed on your system at compile time, either by compiling the raylib source yourself, downloading the raylib precompiled binaries for Windows, or installing via a system package manager.
+On other systems, you can link with either the static library or directly with the shared library.
+This requires the raylib development package be installed on your system at compile time, either by compiling the raylib source yourself, downloading the raylib precompiled binaries for Windows, or installing via a system package manager.
 
 When linking with the static library, there is no run-time dependency on raylib.
 When linking with the shared library (or the import library on Windows), the run-time dependency is the same as the dynamic binding, the difference being that the shared library is no longer loaded manually&mdash;loading is handled automatically by the system when the program is launched.
 
 Enabling the static binding can be done in two ways.
 
-### Via the compiler's `-version` switch 
+#### Via the compiler's `-version` switch
 
 Pass the `BindRaylib_Static` version to the compiler and link with the appropriate library.
 
 Using the compiler command line or a build system that doesn't support DUB, the `-version=BindRaylib_Static` option should be passed to the compiler when building your program.
 All of the required C libraries, as well as the `bindbc-raylib3` and `bindbc-loader` static libraries, must also be passed to the compiler on the command line or via your build system's configuration.
 
-### Via DUB's `versions` directive
+#### Via DUB's `versions` directive
 Using DUB, set the `BindRaylib_Static` version via its `versions` directive and  the required libraries in the `libs` directive. For example:
 
 __dub.json__
