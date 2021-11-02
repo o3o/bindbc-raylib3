@@ -901,7 +901,8 @@ static void ExportParsedData(const char *fileName, int format)
             {
                 fprintf(outFile, "    {\n");
                 fprintf(outFile, "      \"name\": \"%s\",\n", funcs[i].name);
-                fprintf(outFile, "      \"description\": \"%s\",\n", CharReplace(funcs[i].desc, '\\', ' ') + 3);
+                fprintf(outFile, "      \"description\": \"%s\",\n",
+                    CharReplace(CharReplace(funcs[i].desc, '"', '`'), '\\', ' ') + 3);
                 fprintf(outFile, "      \"returnType\": \"%s\"", funcs[i].retType);
 
                 if (funcs[i].paramCount == 0) fprintf(outFile, "\n");
@@ -1001,3 +1002,5 @@ static void ExportParsedData(const char *fileName, int format)
 
     fclose(outFile);
 }
+
+
