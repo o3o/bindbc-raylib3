@@ -3,17 +3,19 @@ module bindbc.raylib.types;
 enum RaylibSupport {
    noLibrary,
    badLibrary,
-   raylib370 = 370
+   raylib370 = 370,
+   raylib400 = 400
 }
 
-enum RAYLIB_VERSION_MAJOR = 3;
 
 version (RAYLIB_370) {
+   enum RAYLIB_VERSION_MAJOR = 3;
    enum RAYLIB_VERSION_MINOR = 7;
    enum RAYLIB_VERSION_REVISION = 0;
    enum raylibSupport = RaylibSupport.raylib370;
 } else {
-   enum RAYLIB_VERSION_MINOR = 7;
+   enum RAYLIB_VERSION_MAJOR = 4;
+   enum RAYLIB_VERSION_MINOR = 0;
    enum RAYLIB_VERSION_REVISION = 0;
-   enum raylibSupport = RaylibSupport.raylib370;
+   enum raylibSupport = RaylibSupport.raylib400;
 }

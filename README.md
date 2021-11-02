@@ -52,7 +52,8 @@ Following are the supported versions of raylib, the corresponding version IDs to
 
 | Raylib version       | Version ID           | `RaylibSupport` Member    |
 | -------------------- | ------------------   | --------------------      |
-| 3.7.0                | Raylib_370 (Default) | `RaylibSupport.raylib370` |
+| 4.0.0                | Raylib_400 (Default) | `RaylibSupport.raylib400` |
+| 3.7.0                | Raylib_370  | `RaylibSupport.raylib370` |
 
 For bind-raylib3 version see [wiki]()
 
