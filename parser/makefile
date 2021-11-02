@@ -1,20 +1,27 @@
 .PHONY: all
-D_FILE = ../src/bindbc/raylib/binddynamic.d
+TYP = ../src/bindbc/raylib/types.d 
+DYN = ../src/bindbc/raylib/binddynamic.d
+D_FILE = ../src/bindbc/raylib/binddynamic.d ../src/bindbc/raylib/types.d 
+TEMPLATE_FILE = ./templates/footer.txt ./templates/load.txt ./templates/types.txt
 
-all: $(D_FILE)
+all: $(TYP) $(DYN)
 
-$(D_FILE): rlc raylib.json
-	./rlc -i raylib.json
-rlc: app.d
-	dmd -Jtemplates -of$@ $^
+$(TYP): rlc raylib.json
+	./rlc -f TYP -i raylib.json
+
+$(DYN): rlc raylib.json
+	./rlc -f DYN -i raylib.json
+
+rlc: app.d $(TEMPLATE_FILE)
+	dmd -Jtemplates -of$@ $<
 
 raylib.json: parser raylib/src/raylib.h
 	./parser -i raylib/src/raylib.h -f JSON -o $@
 
 parser: raylib_parser.c
 	gcc -o$@ $^
+
 clean:
-	-rm $(D_FILE)
+	-rm $(TYP)
+	-rm $(DYN)
 	-rm raylib.json
-
-

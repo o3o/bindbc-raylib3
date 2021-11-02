@@ -5,3 +5,15 @@ parser/raylib
 parser/rlc
 .dub
 examples/core/basic_window
+examples/core/core_2d_camera
+examples/core/core_2d_camera2
+examples/core/core_2d_camera3
+examples/core/core_basic_window
+examples/core/core_input_gestures
+examples/core/core_input_gestures2
+examples/core/core_input_mouse
+examples/core/core_input_multitouch
+examples/shapes/shapes_basic_shapes
+examples/shapes/shapes_basic_shapes2
+examples/textures/textures_particles_blending
+parser/rlc.o

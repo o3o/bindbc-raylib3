@@ -4,12 +4,16 @@ import std.json : JSONValue, parseJSON;
 import std.experimental.logger;
 
 void main(string[] args) {
+   enum TYP = "TYP";
+   enum DYN = "DYN";
    bool verbose;
    string input;
+   string file = "types";
    string dir = "../src/bindbc/raylib";
    auto opt = getopt(args,
          "input|i", "Json input file", &input,
          "dir|d", "Destination directory", &dir,
+         "file|f", "Define file types (TYP for types.d, DYN for binddynamic.d", &file,
          "verbose|v", &verbose);
    if (verbose) {
       globalLogLevel(LogLevel.trace);
@@ -22,14 +26,20 @@ void main(string[] args) {
    } else {
       JSONValue root = parseJSON(readText(input));
       // create types
+      if (file == TYP) {
       dir.createTypes(root);
-      dir.createBinddynamic(root);
+      } else if (file == DYN) {
+         dir.createBinddynamic(root);
+      } else {
+         error("invalid file type");
+      }
    }
 }
 
 void createTypes(string dir, JSONValue root) {
    import std.stdio : File;
    import std.path : buildPath;
+   import std.array : replace;
 
    JSONValue[] structs = root["structs"].array;
    JSONValue[] enums = root["enums"].array;
@@ -37,7 +47,7 @@ void createTypes(string dir, JSONValue root) {
 
    void writeRem(JSONValue j, string space = "") {
       if (j["description"].str.length) {
-         of.writefln("%s/// %s", space, j["description"].str);
+         of.writefln("%s/// %s", space, j["description"].str.replace(`"`, ""));
       }
    }
    string s = import("types.txt");
