@@ -1,5 +1,5 @@
 import std.stdio;
-import raylib;
+import bindbc.raylib;
 import std.format : format;
 import std.string : toStringz;
 
@@ -7,6 +7,7 @@ void main(string[] args) {
    // Initialization
    enum SCREEN_WIDTH = 800;
    enum SCREEN_HEIGHT = 450;
+   enum MAX_TOUCH_POINTS = 8; // Maximum number of touch points supported
 
    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "raylib [core] example - input multitouch");
    Vector2 ballPosition = Vector2(-100.0f, -100.0f);
@@ -19,18 +20,18 @@ void main(string[] args) {
    // Main game loop
    while (!WindowShouldClose()) {
       ballPosition = GetMousePosition();
-      if (IsMouseButtonDown(MouseButton.MOUSE_LEFT_BUTTON))
+      if (IsMouseButtonDown(MouseButton.MOUSE_BUTTON_LEFT))
          ballColor = MAROON;
-      if (IsMouseButtonDown(MouseButton.MOUSE_MIDDLE_BUTTON))
+      if (IsMouseButtonDown(MouseButton.MOUSE_BUTTON_MIDDLE))
          ballColor = LIME;
-      if (IsMouseButtonDown(MouseButton.MOUSE_RIGHT_BUTTON))
+      if (IsMouseButtonDown(MouseButton.MOUSE_BUTTON_RIGHT))
          ballColor = DARKBLUE;
 
-      if (IsMouseButtonPressed(MouseButton.MOUSE_LEFT_BUTTON))
+      if (IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT))
          touchCounter = 10;
-      if (IsMouseButtonPressed(MouseButton.MOUSE_MIDDLE_BUTTON))
+      if (IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_MIDDLE))
          touchCounter = 10;
-      if (IsMouseButtonPressed(MouseButton.MOUSE_RIGHT_BUTTON))
+      if (IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_RIGHT))
          touchCounter = 10;
 
       if (touchCounter > 0)
@@ -68,6 +69,6 @@ void main(string[] args) {
 void drawText(string text, float posX, float posY, int fontSize, Color color) {
    import std.string : toStringz;
    import std.conv : to;
-   DrawText(toStringz(text) , posX.to!int, posY.to!int, fontSize, color);
-}
 
+   DrawText(toStringz(text), posX.to!int, posY.to!int, fontSize, color);
+}

@@ -7,12 +7,12 @@
         {
           "name": "x",
           "type": "float",
-          "description": "Vector x component"
+          "description": ""
         },
         {
           "name": "y",
           "type": "float",
-          "description": "Vector y component"
+          "description": ""
         }
       ]
     },
@@ -23,17 +23,17 @@
         {
           "name": "x",
           "type": "float",
-          "description": "Vector x component"
+          "description": ""
         },
         {
           "name": "y",
           "type": "float",
-          "description": "Vector y component"
+          "description": ""
         },
         {
           "name": "z",
           "type": "float",
-          "description": "Vector z component"
+          "description": ""
         }
       ]
     },
@@ -44,22 +44,22 @@
         {
           "name": "x",
           "type": "float",
-          "description": "Vector x component"
+          "description": ""
         },
         {
           "name": "y",
           "type": "float",
-          "description": "Vector y component"
+          "description": ""
         },
         {
           "name": "z",
           "type": "float",
-          "description": "Vector z component"
+          "description": ""
         },
         {
           "name": "w",
           "type": "float",
-          "description": "Vector w component"
+          "description": ""
         }
       ]
     },
@@ -70,22 +70,22 @@
         {
           "name": "m0, m4, m8, m12",
           "type": "float",
-          "description": "Matrix first row (4 components)"
+          "description": ""
         },
         {
           "name": "m1, m5, m9, m13",
           "type": "float",
-          "description": "Matrix second row (4 components)"
+          "description": ""
         },
         {
           "name": "m2, m6, m10, m14",
           "type": "float",
-          "description": "Matrix third row (4 components)"
+          "description": ""
         },
         {
           "name": "m3, m7, m11, m15",
           "type": "float",
-          "description": "Matrix fourth row (4 components)"
+          "description": ""
         }
       ]
     },
@@ -96,22 +96,22 @@
         {
           "name": "r",
           "type": "unsigned char",
-          "description": "Color red value"
+          "description": ""
         },
         {
           "name": "g",
           "type": "unsigned char",
-          "description": "Color green value"
+          "description": ""
         },
         {
           "name": "b",
           "type": "unsigned char",
-          "description": "Color blue value"
+          "description": ""
         },
         {
           "name": "a",
           "type": "unsigned char",
-          "description": "Color alpha value"
+          "description": ""
         }
       ]
     },
@@ -122,22 +122,22 @@
         {
           "name": "x",
           "type": "float",
-          "description": "Rectangle top-left corner position x"
+          "description": ""
         },
         {
           "name": "y",
           "type": "float",
-          "description": "Rectangle top-left corner position y"
+          "description": ""
         },
         {
           "name": "width",
           "type": "float",
-          "description": "Rectangle width"
+          "description": ""
         },
         {
           "name": "height",
           "type": "float",
-          "description": "Rectangle height"
+          "description": ""
         }
       ]
     },
@@ -261,7 +261,7 @@
       ]
     },
     {
-      "name": "GlyphInfo",
+      "name": "CharInfo",
       "description": "",
       "fields": [
         {
@@ -301,29 +301,29 @@
           "description": "Base size (default chars height)"
         },
         {
-          "name": "glyphCount",
+          "name": "charsCount",
           "type": "int",
-          "description": "Number of glyph characters"
+          "description": "Number of characters"
         },
         {
-          "name": "glyphPadding",
+          "name": "charsPadding",
           "type": "int",
-          "description": "Padding around the glyph characters"
+          "description": "Padding around the chars"
         },
         {
           "name": "texture",
           "type": "Texture2D",
-          "description": "Texture atlas containing the glyphs"
+          "description": "Characters texture atlas"
         },
         {
           "name": "recs",
           "type": "Rectangle *",
-          "description": "Rectangles in texture for the glyphs"
+          "description": "Characters rectangles in texture"
         },
         {
-          "name": "glyphs",
-          "type": "GlyphInfo *",
-          "description": "Glyphs info data"
+          "name": "chars",
+          "type": "CharInfo *",
+          "description": "Characters info data"
         }
       ]
     },
@@ -477,7 +477,7 @@
         {
           "name": "locs",
           "type": "int *",
-          "description": "Shader locations array (RL_MAX_SHADER_LOCATIONS)"
+          "description": "Shader locations array (MAX_SHADER_LOCATIONS)"
         }
       ]
     },
@@ -654,7 +654,7 @@
       ]
     },
     {
-      "name": "RayCollision",
+      "name": "RayHitInfo",
       "description": "",
       "fields": [
         {
@@ -668,9 +668,9 @@
           "description": "Distance to nearest hit"
         },
         {
-          "name": "point",
+          "name": "position",
           "type": "Vector3",
-          "description": "Point of nearest hit"
+          "description": "Position of nearest hit"
         },
         {
           "name": "normal",
@@ -700,9 +700,9 @@
       "description": "",
       "fields": [
         {
-          "name": "frameCount",
+          "name": "sampleCount",
           "type": "unsigned int",
-          "description": "Total number of frames (considering channels)"
+          "description": "Total number of samples"
         },
         {
           "name": "sampleRate",
@@ -717,7 +717,7 @@
         {
           "name": "channels",
           "type": "unsigned int",
-          "description": "Number of channels (1-mono, 2-stereo, ...)"
+          "description": "Number of channels (1-mono, 2-stereo)"
         },
         {
           "name": "data",
@@ -748,7 +748,7 @@
         {
           "name": "channels",
           "type": "unsigned int",
-          "description": "Number of channels (1-mono, 2-stereo, ...)"
+          "description": "Number of channels (1-mono, 2-stereo)"
         }
       ]
     },
@@ -762,9 +762,9 @@
           "description": "Audio stream"
         },
         {
-          "name": "frameCount",
+          "name": "sampleCount",
           "type": "unsigned int",
-          "description": "Total number of frames (considering channels)"
+          "description": "Total number of samples"
         }
       ]
     },
@@ -778,9 +778,9 @@
           "description": "Audio stream"
         },
         {
-          "name": "frameCount",
+          "name": "sampleCount",
           "type": "unsigned int",
-          "description": "Total number of frames (considering channels)"
+          "description": "Total number of samples"
         },
         {
           "name": "looping",
@@ -903,6 +903,12 @@
     }
   ],
   "enums": [
+    {
+      "name": "Vector2",
+      "description": "",
+      "values": [
+      ]
+    },
     {
       "name": "ConfigFlags",
       "description": "",
@@ -1250,26 +1256,6 @@
           "description": ""
         },
         {
-          "name": "KEY_LEFT_BRACKET",
-          "value": 91,
-          "description": ""
-        },
-        {
-          "name": "KEY_BACKSLASH",
-          "value": 92,
-          "description": ""
-        },
-        {
-          "name": "KEY_RIGHT_BRACKET",
-          "value": 93,
-          "description": ""
-        },
-        {
-          "name": "KEY_GRAVE",
-          "value": 96,
-          "description": ""
-        },
-        {
           "name": "KEY_SPACE",
           "value": 32,
           "description": ""
@@ -1475,6 +1461,26 @@
           "description": ""
         },
         {
+          "name": "KEY_LEFT_BRACKET",
+          "value": 91,
+          "description": ""
+        },
+        {
+          "name": "KEY_BACKSLASH",
+          "value": 92,
+          "description": ""
+        },
+        {
+          "name": "KEY_RIGHT_BRACKET",
+          "value": 93,
+          "description": ""
+        },
+        {
+          "name": "KEY_GRAVE",
+          "value": 96,
+          "description": ""
+        },
+        {
           "name": "KEY_KP_0",
           "value": 320,
           "description": ""
@@ -1586,38 +1592,18 @@
       "description": "",
       "values": [
         {
-          "name": "MOUSE_BUTTON_LEFT",
+          "name": "MOUSE_LEFT_BUTTON",
           "value": 0,
           "description": ""
         },
         {
-          "name": "MOUSE_BUTTON_RIGHT",
+          "name": "MOUSE_RIGHT_BUTTON",
           "value": 1,
           "description": ""
         },
         {
-          "name": "MOUSE_BUTTON_MIDDLE",
+          "name": "MOUSE_MIDDLE_BUTTON",
           "value": 2,
-          "description": ""
-        },
-        {
-          "name": "MOUSE_BUTTON_SIDE",
-          "value": 3,
-          "description": ""
-        },
-        {
-          "name": "MOUSE_BUTTON_EXTRA",
-          "value": 4,
-          "description": ""
-        },
-        {
-          "name": "MOUSE_BUTTON_FORWARD",
-          "value": 5,
-          "description": ""
-        },
-        {
-          "name": "MOUSE_BUTTON_BACK",
-          "value": 6,
           "description": ""
         }
       ]
@@ -1855,22 +1841,22 @@
           "description": ""
         },
         {
-          "name": "MATERIAL_MAP_CUBEMAP",
+          "name": "MATERIAL_MAP_BRDG",
           "value": 7,
           "description": ""
         },
         {
-          "name": "MATERIAL_MAP_IRRADIANCE",
+          "name": "MATERIAL_MAP_CUBEMAP",
           "value": 8,
           "description": ""
         },
         {
-          "name": "MATERIAL_MAP_PREFILTER",
+          "name": "MATERIAL_MAP_IRRADIANCE",
           "value": 9,
           "description": ""
         },
         {
-          "name": "MATERIAL_MAP_BRDF",
+          "name": "MATERIAL_MAP_PREFILTER",
           "value": 10,
           "description": ""
         }
@@ -2059,32 +2045,6 @@
         {
           "name": "SHADER_UNIFORM_SAMPLER2D",
           "value": 8,
-          "description": ""
-        }
-      ]
-    },
-    {
-      "name": "ShaderAttributeDataType",
-      "description": "",
-      "values": [
-        {
-          "name": "SHADER_ATTRIB_FLOAT",
-          "value": 0,
-          "description": ""
-        },
-        {
-          "name": "SHADER_ATTRIB_VEC2",
-          "value": 1,
-          "description": ""
-        },
-        {
-          "name": "SHADER_ATTRIB_VEC3",
-          "value": 2,
-          "description": ""
-        },
-        {
-          "name": "SHADER_ATTRIB_VEC4",
-          "value": 3,
           "description": ""
         }
       ]
@@ -2356,7 +2316,7 @@
       ]
     },
     {
-      "name": "Gesture",
+      "name": "Gestures",
       "description": "",
       "values": [
         {
@@ -2741,24 +2701,6 @@
       "returnType": "const char *"
     },
     {
-      "name": "SwapScreenBuffer",
-      "description": "Swap back buffer with front buffer (screen drawing)",
-      "returnType": "void"
-    },
-    {
-      "name": "PollInputEvents",
-      "description": "Register all input events",
-      "returnType": "void"
-    },
-    {
-      "name": "WaitTime",
-      "description": "Wait for some milliseconds (halt program execution)",
-      "returnType": "void",
-      "params": [
-        {"name": "ms",  "type": "float" }
-      ]
-    },
-    {
       "name": "ShowCursor",
       "description": "Shows cursor",
       "returnType": "void"
@@ -2785,7 +2727,7 @@
     },
     {
       "name": "IsCursorOnScreen",
-      "description": "Check if cursor is on the screen",
+      "description": "Check if cursor is on the current screen.",
       "returnType": "bool"
     },
     {
@@ -2808,7 +2750,7 @@
     },
     {
       "name": "BeginMode2D",
-      "description": "Begin 2D mode with custom camera (2D)",
+      "description": "Initialize 2D mode with custom camera (2D)",
       "returnType": "void",
       "params": [
         {"name": "camera",  "type": "Camera2D" }
@@ -2821,7 +2763,7 @@
     },
     {
       "name": "BeginMode3D",
-      "description": "Begin 3D mode with custom camera (3D)",
+      "description": "Initializes 3D mode with custom camera (3D)",
       "returnType": "void",
       "params": [
         {"name": "camera",  "type": "Camera3D" }
@@ -2834,7 +2776,7 @@
     },
     {
       "name": "BeginTextureMode",
-      "description": "Begin drawing to render texture",
+      "description": "Initializes render texture for drawing",
       "returnType": "void",
       "params": [
         {"name": "target",  "type": "RenderTexture2D" }
@@ -2860,7 +2802,7 @@
     },
     {
       "name": "BeginBlendMode",
-      "description": "Begin blending mode (alpha, additive, multiplied, subtract, custom)",
+      "description": "Begin blending mode (alpha, additive, multiplied)",
       "returnType": "void",
       "params": [
         {"name": "mode",  "type": "int" }
@@ -3005,7 +2947,7 @@
     },
     {
       "name": "GetMouseRay",
-      "description": "Get a ray trace from mouse position",
+      "description": "Returns a ray trace from mouse position",
       "returnType": "Ray",
       "params": [
         {"name": "mousePosition",  "type": "Vector2" },
@@ -3014,7 +2956,7 @@
     },
     {
       "name": "GetCameraMatrix",
-      "description": "Get camera transform matrix (view matrix)",
+      "description": "Returns camera transform matrix (view matrix)",
       "returnType": "Matrix",
       "params": [
         {"name": "camera",  "type": "Camera" }
@@ -3022,7 +2964,7 @@
     },
     {
       "name": "GetCameraMatrix2D",
-      "description": "Get camera 2d transform matrix",
+      "description": "Returns camera 2d transform matrix",
       "returnType": "Matrix",
       "params": [
         {"name": "camera",  "type": "Camera2D" }
@@ -3030,7 +2972,7 @@
     },
     {
       "name": "GetWorldToScreen",
-      "description": "Get the screen space position for a 3d world space position",
+      "description": "Returns the screen space position for a 3d world space position",
       "returnType": "Vector2",
       "params": [
         {"name": "position",  "type": "Vector3" },
@@ -3039,7 +2981,7 @@
     },
     {
       "name": "GetWorldToScreenEx",
-      "description": "Get size position for a 3d world space position",
+      "description": "Returns size position for a 3d world space position",
       "returnType": "Vector2",
       "params": [
         {"name": "position",  "type": "Vector3" },
@@ -3050,7 +2992,7 @@
     },
     {
       "name": "GetWorldToScreen2D",
-      "description": "Get the screen space position for a 2d camera world space position",
+      "description": "Returns the screen space position for a 2d camera world space position",
       "returnType": "Vector2",
       "params": [
         {"name": "position",  "type": "Vector2" },
@@ -3059,7 +3001,7 @@
     },
     {
       "name": "GetScreenToWorld2D",
-      "description": "Get the world space position for a 2d camera screen space position",
+      "description": "Returns the world space position for a 2d camera screen space position",
       "returnType": "Vector2",
       "params": [
         {"name": "position",  "type": "Vector2" },
@@ -3076,34 +3018,26 @@
     },
     {
       "name": "GetFPS",
-      "description": "Get current FPS",
+      "description": "Returns current FPS",
       "returnType": "int"
     },
     {
       "name": "GetFrameTime",
-      "description": "Get time in seconds for last frame drawn (delta time)",
+      "description": "Returns time in seconds for last frame drawn (delta time)",
       "returnType": "float"
     },
     {
       "name": "GetTime",
-      "description": "Get elapsed time in seconds since InitWindow()",
+      "description": "Returns elapsed time in seconds since InitWindow()",
       "returnType": "double"
     },
     {
       "name": "GetRandomValue",
-      "description": "Get a random value between min and max (both included)",
+      "description": "Returns a random value between min and max (both included)",
       "returnType": "int",
       "params": [
         {"name": "min",  "type": "int" },
         {"name": "max",  "type": "int" }
-      ]
-    },
-    {
-      "name": "SetRandomSeed",
-      "description": "Set the seed for the random number generator",
-      "returnType": "void",
-      "params": [
-        {"name": "seed",  "type": "unsigned int" }
       ]
     },
     {
@@ -3124,7 +3058,7 @@
     },
     {
       "name": "TraceLog",
-      "description": "Show trace log messages (LOG_DEBUG, LOG_INFO, LOG_WARNING, LOG_ERROR...)",
+      "description": "Show trace log messages (LOG_DEBUG, LOG_INFO, LOG_WARNING, LOG_ERROR)",
       "returnType": "void",
       "params": [
         {"name": "logLevel",  "type": "int" },
@@ -3245,7 +3179,7 @@
       "description": "Unload file text data allocated by LoadFileText()",
       "returnType": "void",
       "params": [
-        {"name": "text",  "type": "char *" }
+        {"name": "text",  "type": "unsigned char *" }
       ]
     },
     {
@@ -3284,7 +3218,7 @@
     },
     {
       "name": "GetFileExtension",
-      "description": "Get pointer to extension for a filename string (includes dot: '.png')",
+      "description": "Get pointer to extension for a filename string (includes dot: `.png`)",
       "returnType": "const char *",
       "params": [
         {"name": "fileName",  "type": "const char *" }
@@ -3422,7 +3356,7 @@
     },
     {
       "name": "IsKeyPressed",
-      "description": "Check if a key has been pressed once",
+      "description": "Detect if a key has been pressed once",
       "returnType": "bool",
       "params": [
         {"name": "key",  "type": "int" }
@@ -3430,7 +3364,7 @@
     },
     {
       "name": "IsKeyDown",
-      "description": "Check if a key is being pressed",
+      "description": "Detect if a key is being pressed",
       "returnType": "bool",
       "params": [
         {"name": "key",  "type": "int" }
@@ -3438,7 +3372,7 @@
     },
     {
       "name": "IsKeyReleased",
-      "description": "Check if a key has been released once",
+      "description": "Detect if a key has been released once",
       "returnType": "bool",
       "params": [
         {"name": "key",  "type": "int" }
@@ -3446,7 +3380,7 @@
     },
     {
       "name": "IsKeyUp",
-      "description": "Check if a key is NOT being pressed",
+      "description": "Detect if a key is NOT being pressed",
       "returnType": "bool",
       "params": [
         {"name": "key",  "type": "int" }
@@ -3462,17 +3396,17 @@
     },
     {
       "name": "GetKeyPressed",
-      "description": "Get key pressed (keycode), call it multiple times for keys queued, returns 0 when the queue is empty",
+      "description": "Get key pressed (keycode), call it multiple times for keys queued",
       "returnType": "int"
     },
     {
       "name": "GetCharPressed",
-      "description": "Get char pressed (unicode), call it multiple times for chars queued, returns 0 when the queue is empty",
+      "description": "Get char pressed (unicode), call it multiple times for chars queued",
       "returnType": "int"
     },
     {
       "name": "IsGamepadAvailable",
-      "description": "Check if a gamepad is available",
+      "description": "Detect if a gamepad is available",
       "returnType": "bool",
       "params": [
         {"name": "gamepad",  "type": "int" }
@@ -3489,7 +3423,7 @@
     },
     {
       "name": "GetGamepadName",
-      "description": "Get gamepad internal name id",
+      "description": "Return gamepad internal name id",
       "returnType": "const char *",
       "params": [
         {"name": "gamepad",  "type": "int" }
@@ -3497,7 +3431,7 @@
     },
     {
       "name": "IsGamepadButtonPressed",
-      "description": "Check if a gamepad button has been pressed once",
+      "description": "Detect if a gamepad button has been pressed once",
       "returnType": "bool",
       "params": [
         {"name": "gamepad",  "type": "int" },
@@ -3506,7 +3440,7 @@
     },
     {
       "name": "IsGamepadButtonDown",
-      "description": "Check if a gamepad button is being pressed",
+      "description": "Detect if a gamepad button is being pressed",
       "returnType": "bool",
       "params": [
         {"name": "gamepad",  "type": "int" },
@@ -3515,7 +3449,7 @@
     },
     {
       "name": "IsGamepadButtonReleased",
-      "description": "Check if a gamepad button has been released once",
+      "description": "Detect if a gamepad button has been released once",
       "returnType": "bool",
       "params": [
         {"name": "gamepad",  "type": "int" },
@@ -3524,7 +3458,7 @@
     },
     {
       "name": "IsGamepadButtonUp",
-      "description": "Check if a gamepad button is NOT being pressed",
+      "description": "Detect if a gamepad button is NOT being pressed",
       "returnType": "bool",
       "params": [
         {"name": "gamepad",  "type": "int" },
@@ -3538,7 +3472,7 @@
     },
     {
       "name": "GetGamepadAxisCount",
-      "description": "Get gamepad axis count for a gamepad",
+      "description": "Return gamepad axis count for a gamepad",
       "returnType": "int",
       "params": [
         {"name": "gamepad",  "type": "int" }
@@ -3546,7 +3480,7 @@
     },
     {
       "name": "GetGamepadAxisMovement",
-      "description": "Get axis movement value for a gamepad axis",
+      "description": "Return axis movement value for a gamepad axis",
       "returnType": "float",
       "params": [
         {"name": "gamepad",  "type": "int" },
@@ -3563,7 +3497,7 @@
     },
     {
       "name": "IsMouseButtonPressed",
-      "description": "Check if a mouse button has been pressed once",
+      "description": "Detect if a mouse button has been pressed once",
       "returnType": "bool",
       "params": [
         {"name": "button",  "type": "int" }
@@ -3571,7 +3505,7 @@
     },
     {
       "name": "IsMouseButtonDown",
-      "description": "Check if a mouse button is being pressed",
+      "description": "Detect if a mouse button is being pressed",
       "returnType": "bool",
       "params": [
         {"name": "button",  "type": "int" }
@@ -3579,7 +3513,7 @@
     },
     {
       "name": "IsMouseButtonReleased",
-      "description": "Check if a mouse button has been released once",
+      "description": "Detect if a mouse button has been released once",
       "returnType": "bool",
       "params": [
         {"name": "button",  "type": "int" }
@@ -3587,7 +3521,7 @@
     },
     {
       "name": "IsMouseButtonUp",
-      "description": "Check if a mouse button is NOT being pressed",
+      "description": "Detect if a mouse button is NOT being pressed",
       "returnType": "bool",
       "params": [
         {"name": "button",  "type": "int" }
@@ -3595,22 +3529,17 @@
     },
     {
       "name": "GetMouseX",
-      "description": "Get mouse position X",
+      "description": "Returns mouse position X",
       "returnType": "int"
     },
     {
       "name": "GetMouseY",
-      "description": "Get mouse position Y",
+      "description": "Returns mouse position Y",
       "returnType": "int"
     },
     {
       "name": "GetMousePosition",
-      "description": "Get mouse position XY",
-      "returnType": "Vector2"
-    },
-    {
-      "name": "GetMouseDelta",
-      "description": "Get mouse delta between frames",
+      "description": "Returns mouse position XY",
       "returnType": "Vector2"
     },
     {
@@ -3642,7 +3571,7 @@
     },
     {
       "name": "GetMouseWheelMove",
-      "description": "Get mouse wheel movement Y",
+      "description": "Returns mouse wheel movement Y",
       "returnType": "float"
     },
     {
@@ -3655,34 +3584,21 @@
     },
     {
       "name": "GetTouchX",
-      "description": "Get touch position X for touch point 0 (relative to screen size)",
+      "description": "Returns touch position X for touch point 0 (relative to screen size)",
       "returnType": "int"
     },
     {
       "name": "GetTouchY",
-      "description": "Get touch position Y for touch point 0 (relative to screen size)",
+      "description": "Returns touch position Y for touch point 0 (relative to screen size)",
       "returnType": "int"
     },
     {
       "name": "GetTouchPosition",
-      "description": "Get touch position XY for a touch point index (relative to screen size)",
+      "description": "Returns touch position XY for a touch point index (relative to screen size)",
       "returnType": "Vector2",
       "params": [
         {"name": "index",  "type": "int" }
       ]
-    },
-    {
-      "name": "GetTouchPointId",
-      "description": "Get touch point identifier for given index",
-      "returnType": "int",
-      "params": [
-        {"name": "index",  "type": "int" }
-      ]
-    },
-    {
-      "name": "GetTouchPointCount",
-      "description": "Get number of touch points",
-      "returnType": "int"
     },
     {
       "name": "SetGesturesEnabled",
@@ -3703,6 +3619,11 @@
     {
       "name": "GetGestureDetected",
       "description": "Get latest detected gesture",
+      "returnType": "int"
+    },
+    {
+      "name": "GetTouchPointsCount",
+      "description": "Get touch points count",
       "returnType": "int"
     },
     {
@@ -3786,7 +3707,7 @@
     },
     {
       "name": "SetShapesTexture",
-      "description": "Set texture and rectangle to be used on shapes drawing",
+      "description": "",
       "returnType": "void",
       "params": [
         {"name": "texture",  "type": "Texture2D" },
@@ -3858,7 +3779,7 @@
     },
     {
       "name": "DrawLineBezierQuad",
-      "description": "Draw line using quadratic bezier curves with a control point",
+      "description": "raw line using quadratic bezier curves with a control point",
       "returnType": "void",
       "params": [
         {"name": "startPos",  "type": "Vector2" },
@@ -3869,25 +3790,12 @@
       ]
     },
     {
-      "name": "DrawLineBezierCubic",
-      "description": "Draw line using cubic bezier curves with 2 control points",
-      "returnType": "void",
-      "params": [
-        {"name": "startPos",  "type": "Vector2" },
-        {"name": "endPos",  "type": "Vector2" },
-        {"name": "startControlPos",  "type": "Vector2" },
-        {"name": "endControlPos",  "type": "Vector2" },
-        {"name": "thick",  "type": "float" },
-        {"name": "color",  "type": "Color" }
-      ]
-    },
-    {
       "name": "DrawLineStrip",
       "description": "Draw lines sequence",
       "returnType": "void",
       "params": [
         {"name": "points",  "type": "Vector2 *" },
-        {"name": "pointCount",  "type": "int" },
+        {"name": "pointsCount",  "type": "int" },
         {"name": "color",  "type": "Color" }
       ]
     },
@@ -4111,7 +4019,7 @@
       "returnType": "void",
       "params": [
         {"name": "rec",  "type": "Rectangle" },
-        {"name": "lineThick",  "type": "float" },
+        {"name": "lineThick",  "type": "int" },
         {"name": "color",  "type": "Color" }
       ]
     },
@@ -4134,7 +4042,7 @@
         {"name": "rec",  "type": "Rectangle" },
         {"name": "roundness",  "type": "float" },
         {"name": "segments",  "type": "int" },
-        {"name": "lineThick",  "type": "float" },
+        {"name": "lineThick",  "type": "int" },
         {"name": "color",  "type": "Color" }
       ]
     },
@@ -4166,7 +4074,7 @@
       "returnType": "void",
       "params": [
         {"name": "points",  "type": "Vector2 *" },
-        {"name": "pointCount",  "type": "int" },
+        {"name": "pointsCount",  "type": "int" },
         {"name": "color",  "type": "Color" }
       ]
     },
@@ -4176,7 +4084,7 @@
       "returnType": "void",
       "params": [
         {"name": "points",  "type": "Vector2 *" },
-        {"name": "pointCount",  "type": "int" },
+        {"name": "pointsCount",  "type": "int" },
         {"name": "color",  "type": "Color" }
       ]
     },
@@ -4201,19 +4109,6 @@
         {"name": "sides",  "type": "int" },
         {"name": "radius",  "type": "float" },
         {"name": "rotation",  "type": "float" },
-        {"name": "color",  "type": "Color" }
-      ]
-    },
-    {
-      "name": "DrawPolyLinesEx",
-      "description": "Draw a polygon outline of n sides with extended parameters",
-      "returnType": "void",
-      "params": [
-        {"name": "center",  "type": "Vector2" },
-        {"name": "sides",  "type": "int" },
-        {"name": "radius",  "type": "float" },
-        {"name": "rotation",  "type": "float" },
-        {"name": "lineThick",  "type": "float" },
         {"name": "color",  "type": "Color" }
       ]
     },
@@ -4290,17 +4185,6 @@
       ]
     },
     {
-      "name": "CheckCollisionPointLine",
-      "description": "Check if point belongs to line created between two points [p1] and [p2] with defined margin in pixels [threshold]",
-      "returnType": "bool",
-      "params": [
-        {"name": "point",  "type": "Vector2" },
-        {"name": "p1",  "type": "Vector2" },
-        {"name": "p2",  "type": "Vector2" },
-        {"name": "threshold",  "type": "int" }
-      ]
-    },
-    {
       "name": "GetCollisionRec",
       "description": "Get collision rectangle for two rectangles collision",
       "returnType": "Rectangle",
@@ -4340,26 +4224,13 @@
     },
     {
       "name": "LoadImageFromMemory",
-      "description": "Load image from memory buffer, fileType refers to extension: i.e. '.png'",
+      "description": "Load image from memory buffer, fileType refers to extension: i.e. `.png`",
       "returnType": "Image",
       "params": [
         {"name": "fileType",  "type": "const char *" },
         {"name": "fileData",  "type": "const unsigned char *" },
         {"name": "dataSize",  "type": "int" }
       ]
-    },
-    {
-      "name": "LoadImageFromTexture",
-      "description": "Load image from GPU texture data",
-      "returnType": "Image",
-      "params": [
-        {"name": "texture",  "type": "Texture2D" }
-      ]
-    },
-    {
-      "name": "LoadImageFromScreen",
-      "description": "Load image from screen buffer and (screenshot)",
-      "returnType": "Image"
     },
     {
       "name": "UnloadImage",
@@ -4455,8 +4326,20 @@
       ]
     },
     {
+      "name": "GenImagePerlinNoise",
+      "description": "Generate image: perlin noise",
+      "returnType": "Image",
+      "params": [
+        {"name": "width",  "type": "int" },
+        {"name": "height",  "type": "int" },
+        {"name": "offsetX",  "type": "int" },
+        {"name": "offsetY",  "type": "int" },
+        {"name": "scale",  "type": "float" }
+      ]
+    },
+    {
       "name": "GenImageCellular",
-      "description": "Generate image: cellular algorithm, bigger tileSize means bigger cells",
+      "description": "Generate image: cellular algorithm. Bigger tileSize means bigger cells",
       "returnType": "Image",
       "params": [
         {"name": "width",  "type": "int" },
@@ -4601,7 +4484,7 @@
     },
     {
       "name": "ImageMipmaps",
-      "description": "Compute all mipmap levels for a provided image",
+      "description": "Generate all mipmap levels for a provided image",
       "returnType": "void",
       "params": [
         {"name": "image",  "type": "Image *" }
@@ -4719,7 +4602,7 @@
       "params": [
         {"name": "image",  "type": "Image" },
         {"name": "maxPaletteSize",  "type": "int" },
-        {"name": "colorCount",  "type": "int *" }
+        {"name": "colorsCount",  "type": "int *" }
       ]
     },
     {
@@ -4745,16 +4628,6 @@
       "params": [
         {"name": "image",  "type": "Image" },
         {"name": "threshold",  "type": "float" }
-      ]
-    },
-    {
-      "name": "GetImageColor",
-      "description": "Get image pixel color at (x, y) position",
-      "returnType": "Color",
-      "params": [
-        {"name": "image",  "type": "Image" },
-        {"name": "x",  "type": "int" },
-        {"name": "y",  "type": "int" }
       ]
     },
     {
@@ -4988,6 +4861,19 @@
       ]
     },
     {
+      "name": "GetTextureData",
+      "description": "Get pixel data from GPU texture and return an Image",
+      "returnType": "Image",
+      "params": [
+        {"name": "texture",  "type": "Texture2D" }
+      ]
+    },
+    {
+      "name": "GetScreenData",
+      "description": "Get pixel data from screen buffer and return an Image (screenshot)",
+      "returnType": "Image"
+    },
+    {
       "name": "GenTextureMipmaps",
       "description": "Generate GPU mipmaps for a texture",
       "returnType": "void",
@@ -5118,13 +5004,13 @@
         {"name": "center",  "type": "Vector2" },
         {"name": "points",  "type": "Vector2 *" },
         {"name": "texcoords",  "type": "Vector2 *" },
-        {"name": "pointCount",  "type": "int" },
+        {"name": "pointsCount",  "type": "int" },
         {"name": "tint",  "type": "Color" }
       ]
     },
     {
       "name": "Fade",
-      "description": "Get color with alpha applied, alpha goes from 0.0f to 1.0f",
+      "description": "Returns color with alpha applied, alpha goes from 0.0f to 1.0f",
       "returnType": "Color",
       "params": [
         {"name": "color",  "type": "Color" },
@@ -5133,7 +5019,7 @@
     },
     {
       "name": "ColorToInt",
-      "description": "Get hexadecimal value for a Color",
+      "description": "Returns hexadecimal value for a Color",
       "returnType": "int",
       "params": [
         {"name": "color",  "type": "Color" }
@@ -5141,7 +5027,7 @@
     },
     {
       "name": "ColorNormalize",
-      "description": "Get Color normalized as float [0..1]",
+      "description": "Returns Color normalized as float [0..1]",
       "returnType": "Vector4",
       "params": [
         {"name": "color",  "type": "Color" }
@@ -5149,7 +5035,7 @@
     },
     {
       "name": "ColorFromNormalized",
-      "description": "Get Color from normalized values [0..1]",
+      "description": "Returns Color from normalized values [0..1]",
       "returnType": "Color",
       "params": [
         {"name": "normalized",  "type": "Vector4" }
@@ -5157,7 +5043,7 @@
     },
     {
       "name": "ColorToHSV",
-      "description": "Get HSV values for a Color, hue [0..360], saturation/value [0..1]",
+      "description": "Returns HSV values for a Color, hue [0..360], saturation/value [0..1]",
       "returnType": "Vector3",
       "params": [
         {"name": "color",  "type": "Color" }
@@ -5165,7 +5051,7 @@
     },
     {
       "name": "ColorFromHSV",
-      "description": "Get a Color from HSV values, hue [0..360], saturation/value [0..1]",
+      "description": "Returns a Color from HSV values, hue [0..360], saturation/value [0..1]",
       "returnType": "Color",
       "params": [
         {"name": "hue",  "type": "float" },
@@ -5175,7 +5061,7 @@
     },
     {
       "name": "ColorAlpha",
-      "description": "Get color with alpha applied, alpha goes from 0.0f to 1.0f",
+      "description": "Returns color with alpha applied, alpha goes from 0.0f to 1.0f",
       "returnType": "Color",
       "params": [
         {"name": "color",  "type": "Color" },
@@ -5184,7 +5070,7 @@
     },
     {
       "name": "ColorAlphaBlend",
-      "description": "Get src alpha-blended into dst color with tint",
+      "description": "Returns src alpha-blended into dst color with tint",
       "returnType": "Color",
       "params": [
         {"name": "dst",  "type": "Color" },
@@ -5197,7 +5083,7 @@
       "description": "Get Color structure from hexadecimal value",
       "returnType": "Color",
       "params": [
-        {"name": "hexValue",  "type": "unsigned int" }
+        {"name": "hexValue",  "type": "int" }
       ]
     },
     {
@@ -5250,7 +5136,7 @@
         {"name": "fileName",  "type": "const char *" },
         {"name": "fontSize",  "type": "int" },
         {"name": "fontChars",  "type": "int *" },
-        {"name": "glyphCount",  "type": "int" }
+        {"name": "charsCount",  "type": "int" }
       ]
     },
     {
@@ -5265,7 +5151,7 @@
     },
     {
       "name": "LoadFontFromMemory",
-      "description": "Load font from memory buffer, fileType refers to extension: i.e. '.ttf'",
+      "description": "Load font from memory buffer, fileType refers to extension: i.e. `.ttf`",
       "returnType": "Font",
       "params": [
         {"name": "fileType",  "type": "const char *" },
@@ -5273,19 +5159,19 @@
         {"name": "dataSize",  "type": "int" },
         {"name": "fontSize",  "type": "int" },
         {"name": "fontChars",  "type": "int *" },
-        {"name": "glyphCount",  "type": "int" }
+        {"name": "charsCount",  "type": "int" }
       ]
     },
     {
       "name": "LoadFontData",
       "description": "Load font data for further use",
-      "returnType": "GlyphInfo *",
+      "returnType": "CharInfo *",
       "params": [
         {"name": "fileData",  "type": "const unsigned char *" },
         {"name": "dataSize",  "type": "int" },
         {"name": "fontSize",  "type": "int" },
         {"name": "fontChars",  "type": "int *" },
-        {"name": "glyphCount",  "type": "int" },
+        {"name": "charsCount",  "type": "int" },
         {"name": "type",  "type": "int" }
       ]
     },
@@ -5294,9 +5180,9 @@
       "description": "Generate image font atlas using chars info",
       "returnType": "Image",
       "params": [
-        {"name": "chars",  "type": "const GlyphInfo *" },
+        {"name": "chars",  "type": "const CharInfo *" },
         {"name": "recs",  "type": "Rectangle **" },
-        {"name": "glyphCount",  "type": "int" },
+        {"name": "charsCount",  "type": "int" },
         {"name": "fontSize",  "type": "int" },
         {"name": "padding",  "type": "int" },
         {"name": "packMethod",  "type": "int" }
@@ -5307,8 +5193,8 @@
       "description": "Unload font chars info data (RAM)",
       "returnType": "void",
       "params": [
-        {"name": "chars",  "type": "GlyphInfo *" },
-        {"name": "glyphCount",  "type": "int" }
+        {"name": "chars",  "type": "CharInfo *" },
+        {"name": "charsCount",  "type": "int" }
       ]
     },
     {
@@ -5354,17 +5240,30 @@
       ]
     },
     {
-      "name": "DrawTextPro",
-      "description": "Draw text using Font and pro parameters (rotation)",
+      "name": "DrawTextRec",
+      "description": "Draw text using font inside rectangle limits",
       "returnType": "void",
       "params": [
         {"name": "font",  "type": "Font" },
         {"name": "text",  "type": "const char *" },
-        {"name": "position",  "type": "Vector2" },
-        {"name": "origin",  "type": "Vector2" },
-        {"name": "rotation",  "type": "float" },
+        {"name": "rec",  "type": "Rectangle" },
         {"name": "fontSize",  "type": "float" },
         {"name": "spacing",  "type": "float" },
+        {"name": "wordWrap",  "type": "bool" },
+        {"name": "tint",  "type": "Color" }
+      ]
+    },
+    {
+      "name": "DrawTextRecEx",
+      "description": "",
+      "returnType": "void",
+      "params": [
+        {"name": "font",  "type": "Font" },
+        {"name": "text",  "type": "const char *" },
+        {"name": "rec",  "type": "Rectangle" },
+        {"name": "fontSize",  "type": "float" },
+        {"name": "spacing",  "type": "float" },
+        {"name": "wordWrap",  "type": "bool" },
         {"name": "tint",  "type": "Color" }
       ]
     },
@@ -5402,81 +5301,11 @@
     },
     {
       "name": "GetGlyphIndex",
-      "description": "Get glyph index position in font for a codepoint (unicode character), fallback to '?' if not found",
+      "description": "Get index position for a unicode character on font",
       "returnType": "int",
       "params": [
         {"name": "font",  "type": "Font" },
         {"name": "codepoint",  "type": "int" }
-      ]
-    },
-    {
-      "name": "GetGlyphInfo",
-      "description": "Get glyph font info data for a codepoint (unicode character), fallback to '?' if not found",
-      "returnType": "GlyphInfo",
-      "params": [
-        {"name": "font",  "type": "Font" },
-        {"name": "codepoint",  "type": "int" }
-      ]
-    },
-    {
-      "name": "GetGlyphAtlasRec",
-      "description": "Get glyph rectangle in font atlas for a codepoint (unicode character), fallback to '?' if not found",
-      "returnType": "Rectangle",
-      "params": [
-        {"name": "font",  "type": "Font" },
-        {"name": "codepoint",  "type": "int" }
-      ]
-    },
-    {
-      "name": "LoadCodepoints",
-      "description": "Load all codepoints from a UTF-8 text string, codepoints count returned by parameter",
-      "returnType": "int *",
-      "params": [
-        {"name": "text",  "type": "const char *" },
-        {"name": "count",  "type": "int *" }
-      ]
-    },
-    {
-      "name": "UnloadCodepoints",
-      "description": "Unload codepoints data from memory",
-      "returnType": "void",
-      "params": [
-        {"name": "codepoints",  "type": "int *" }
-      ]
-    },
-    {
-      "name": "GetCodepointCount",
-      "description": "Get total number of codepoints in a UTF-8 encoded string",
-      "returnType": "int",
-      "params": [
-        {"name": "text",  "type": "const char *" }
-      ]
-    },
-    {
-      "name": "GetCodepoint",
-      "description": "Get next codepoint in a UTF-8 encoded string, 0x3f('?') is returned on failure",
-      "returnType": "int",
-      "params": [
-        {"name": "text",  "type": "const char *" },
-        {"name": "bytesProcessed",  "type": "int *" }
-      ]
-    },
-    {
-      "name": "CodepointToUTF8",
-      "description": "Encode one codepoint into UTF-8 byte array (array length returned as parameter)",
-      "returnType": "const char *",
-      "params": [
-        {"name": "codepoint",  "type": "int" },
-        {"name": "byteSize",  "type": "int *" }
-      ]
-    },
-    {
-      "name": "TextCodepointsToUTF8",
-      "description": "Encode text as codepoints array into UTF-8 text string (WARNING: memory must be freed!)",
-      "returnType": "char *",
-      "params": [
-        {"name": "codepoints",  "type": "int *" },
-        {"name": "length",  "type": "int" }
       ]
     },
     {
@@ -5507,7 +5336,7 @@
     },
     {
       "name": "TextFormat",
-      "description": "Text formatting with variables (sprintf() style)",
+      "description": "Text formatting with variables (sprintf style)",
       "returnType": "const char *",
       "params": [
         {"name": "text",  "type": "const char *" },
@@ -5526,7 +5355,7 @@
     },
     {
       "name": "TextReplace",
-      "description": "Replace text string (WARNING: memory must be freed!)",
+      "description": "Replace text string (memory must be freed!)",
       "returnType": "char *",
       "params": [
         {"name": "text",  "type": "char *" },
@@ -5536,7 +5365,7 @@
     },
     {
       "name": "TextInsert",
-      "description": "Insert text in a position (WARNING: memory must be freed!)",
+      "description": "Insert text in a position (memory must be freed!)",
       "returnType": "char *",
       "params": [
         {"name": "text",  "type": "const char *" },
@@ -5616,6 +5445,50 @@
       ]
     },
     {
+      "name": "TextToUtf8",
+      "description": "Encode text codepoint into utf8 text (memory must be freed!)",
+      "returnType": "char *",
+      "params": [
+        {"name": "codepoints",  "type": "int *" },
+        {"name": "length",  "type": "int" }
+      ]
+    },
+    {
+      "name": "GetCodepoints",
+      "description": "Get all codepoints in a string, codepoints count returned by parameters",
+      "returnType": "int *",
+      "params": [
+        {"name": "text",  "type": "const char *" },
+        {"name": "count",  "type": "int *" }
+      ]
+    },
+    {
+      "name": "GetCodepointsCount",
+      "description": "Get total number of characters (codepoints) in a UTF8 encoded string",
+      "returnType": "int",
+      "params": [
+        {"name": "text",  "type": "const char *" }
+      ]
+    },
+    {
+      "name": "GetNextCodepoint",
+      "description": "Returns next codepoint in a UTF8 encoded string; 0x3f('?') is returned on failure",
+      "returnType": "int",
+      "params": [
+        {"name": "text",  "type": "const char *" },
+        {"name": "bytesProcessed",  "type": "int *" }
+      ]
+    },
+    {
+      "name": "CodepointToUtf8",
+      "description": "Encode codepoint into utf8 text (char array length returned as parameter)",
+      "returnType": "const char *",
+      "params": [
+        {"name": "codepoint",  "type": "int" },
+        {"name": "byteLength",  "type": "int *" }
+      ]
+    },
+    {
       "name": "DrawLine3D",
       "description": "Draw a line in 3D world space",
       "returnType": "void",
@@ -5663,7 +5536,7 @@
       "returnType": "void",
       "params": [
         {"name": "points",  "type": "Vector3 *" },
-        {"name": "pointCount",  "type": "int" },
+        {"name": "pointsCount",  "type": "int" },
         {"name": "color",  "type": "Color" }
       ]
     },
@@ -5725,20 +5598,6 @@
       ]
     },
     {
-      "name": "DrawCubeTextureRec",
-      "description": "Draw cube with a region of a texture",
-      "returnType": "void",
-      "params": [
-        {"name": "texture",  "type": "Texture2D" },
-        {"name": "source",  "type": "Rectangle" },
-        {"name": "position",  "type": "Vector3" },
-        {"name": "width",  "type": "float" },
-        {"name": "height",  "type": "float" },
-        {"name": "length",  "type": "float" },
-        {"name": "color",  "type": "Color" }
-      ]
-    },
-    {
       "name": "DrawSphere",
       "description": "Draw sphere",
       "returnType": "void",
@@ -5786,19 +5645,6 @@
       ]
     },
     {
-      "name": "DrawCylinderEx",
-      "description": "Draw a cylinder with base at startPos and top at endPos",
-      "returnType": "void",
-      "params": [
-        {"name": "startPos",  "type": "Vector3" },
-        {"name": "endPos",  "type": "Vector3" },
-        {"name": "startRadius",  "type": "float" },
-        {"name": "endRadius",  "type": "float" },
-        {"name": "sides",  "type": "int" },
-        {"name": "color",  "type": "Color" }
-      ]
-    },
-    {
       "name": "DrawCylinderWires",
       "description": "Draw a cylinder/cone wires",
       "returnType": "void",
@@ -5808,19 +5654,6 @@
         {"name": "radiusBottom",  "type": "float" },
         {"name": "height",  "type": "float" },
         {"name": "slices",  "type": "int" },
-        {"name": "color",  "type": "Color" }
-      ]
-    },
-    {
-      "name": "DrawCylinderWiresEx",
-      "description": "Draw a cylinder wires with base at startPos and top at endPos",
-      "returnType": "void",
-      "params": [
-        {"name": "startPos",  "type": "Vector3" },
-        {"name": "endPos",  "type": "Vector3" },
-        {"name": "startRadius",  "type": "float" },
-        {"name": "endRadius",  "type": "float" },
-        {"name": "sides",  "type": "int" },
         {"name": "color",  "type": "Color" }
       ]
     },
@@ -5885,11 +5718,273 @@
       ]
     },
     {
-      "name": "GetModelBoundingBox",
-      "description": "Compute model bounding box limits (considers all meshes)",
+      "name": "UploadMesh",
+      "description": "Upload mesh vertex data in GPU and provide VAO/VBO ids",
+      "returnType": "void",
+      "params": [
+        {"name": "mesh",  "type": "Mesh *" },
+        {"name": "dynamic",  "type": "bool" }
+      ]
+    },
+    {
+      "name": "UpdateMeshBuffer",
+      "description": "Update mesh vertex data in GPU for a specific buffer index",
+      "returnType": "void",
+      "params": [
+        {"name": "mesh",  "type": "Mesh" },
+        {"name": "index",  "type": "int" },
+        {"name": "data",  "type": "void *" },
+        {"name": "dataSize",  "type": "int" },
+        {"name": "offset",  "type": "int" }
+      ]
+    },
+    {
+      "name": "DrawMesh",
+      "description": "Draw a 3d mesh with material and transform",
+      "returnType": "void",
+      "params": [
+        {"name": "mesh",  "type": "Mesh" },
+        {"name": "material",  "type": "Material" },
+        {"name": "transform",  "type": "Matrix" }
+      ]
+    },
+    {
+      "name": "DrawMeshInstanced",
+      "description": "Draw multiple mesh instances with material and different transforms",
+      "returnType": "void",
+      "params": [
+        {"name": "mesh",  "type": "Mesh" },
+        {"name": "material",  "type": "Material" },
+        {"name": "transforms",  "type": "Matrix *" },
+        {"name": "instances",  "type": "int" }
+      ]
+    },
+    {
+      "name": "UnloadMesh",
+      "description": "Unload mesh data from CPU and GPU",
+      "returnType": "void",
+      "params": [
+        {"name": "mesh",  "type": "Mesh" }
+      ]
+    },
+    {
+      "name": "ExportMesh",
+      "description": "Export mesh data to file, returns true on success",
+      "returnType": "bool",
+      "params": [
+        {"name": "mesh",  "type": "Mesh" },
+        {"name": "fileName",  "type": "const char *" }
+      ]
+    },
+    {
+      "name": "LoadMaterials",
+      "description": "Load materials from model file",
+      "returnType": "Material *",
+      "params": [
+        {"name": "fileName",  "type": "const char *" },
+        {"name": "materialCount",  "type": "int *" }
+      ]
+    },
+    {
+      "name": "LoadMaterialDefault",
+      "description": "Load default material (Supports: DIFFUSE, SPECULAR, NORMAL maps)",
+      "returnType": "Material"
+    },
+    {
+      "name": "UnloadMaterial",
+      "description": "Unload material from GPU memory (VRAM)",
+      "returnType": "void",
+      "params": [
+        {"name": "material",  "type": "Material" }
+      ]
+    },
+    {
+      "name": "SetMaterialTexture",
+      "description": "Set texture for a material map type (MATERIAL_MAP_DIFFUSE, MATERIAL_MAP_SPECULAR...)",
+      "returnType": "void",
+      "params": [
+        {"name": "material",  "type": "Material *" },
+        {"name": "mapType",  "type": "int" },
+        {"name": "texture",  "type": "Texture2D" }
+      ]
+    },
+    {
+      "name": "SetModelMeshMaterial",
+      "description": "Set material for a mesh",
+      "returnType": "void",
+      "params": [
+        {"name": "model",  "type": "Model *" },
+        {"name": "meshId",  "type": "int" },
+        {"name": "materialId",  "type": "int" }
+      ]
+    },
+    {
+      "name": "LoadModelAnimations",
+      "description": "Load model animations from file",
+      "returnType": "ModelAnimation *",
+      "params": [
+        {"name": "fileName",  "type": "const char *" },
+        {"name": "animsCount",  "type": "int *" }
+      ]
+    },
+    {
+      "name": "UpdateModelAnimation",
+      "description": "Update model animation pose",
+      "returnType": "void",
+      "params": [
+        {"name": "model",  "type": "Model" },
+        {"name": "anim",  "type": "ModelAnimation" },
+        {"name": "frame",  "type": "int" }
+      ]
+    },
+    {
+      "name": "UnloadModelAnimation",
+      "description": "Unload animation data",
+      "returnType": "void",
+      "params": [
+        {"name": "anim",  "type": "ModelAnimation" }
+      ]
+    },
+    {
+      "name": "UnloadModelAnimations",
+      "description": "Unload animation array data",
+      "returnType": "void",
+      "params": [
+        {"name": "animations",  "type": "ModelAnimation*" },
+        {"name": "count",  "type": "unsigned int" }
+      ]
+    },
+    {
+      "name": "IsModelAnimationValid",
+      "description": "Check model animation skeleton match",
+      "returnType": "bool",
+      "params": [
+        {"name": "model",  "type": "Model" },
+        {"name": "anim",  "type": "ModelAnimation" }
+      ]
+    },
+    {
+      "name": "GenMeshPoly",
+      "description": "Generate polygonal mesh",
+      "returnType": "Mesh",
+      "params": [
+        {"name": "sides",  "type": "int" },
+        {"name": "radius",  "type": "float" }
+      ]
+    },
+    {
+      "name": "GenMeshPlane",
+      "description": "Generate plane mesh (with subdivisions)",
+      "returnType": "Mesh",
+      "params": [
+        {"name": "width",  "type": "float" },
+        {"name": "length",  "type": "float" },
+        {"name": "resX",  "type": "int" },
+        {"name": "resZ",  "type": "int" }
+      ]
+    },
+    {
+      "name": "GenMeshCube",
+      "description": "Generate cuboid mesh",
+      "returnType": "Mesh",
+      "params": [
+        {"name": "width",  "type": "float" },
+        {"name": "height",  "type": "float" },
+        {"name": "length",  "type": "float" }
+      ]
+    },
+    {
+      "name": "GenMeshSphere",
+      "description": "Generate sphere mesh (standard sphere)",
+      "returnType": "Mesh",
+      "params": [
+        {"name": "radius",  "type": "float" },
+        {"name": "rings",  "type": "int" },
+        {"name": "slices",  "type": "int" }
+      ]
+    },
+    {
+      "name": "GenMeshHemiSphere",
+      "description": "Generate half-sphere mesh (no bottom cap)",
+      "returnType": "Mesh",
+      "params": [
+        {"name": "radius",  "type": "float" },
+        {"name": "rings",  "type": "int" },
+        {"name": "slices",  "type": "int" }
+      ]
+    },
+    {
+      "name": "GenMeshCylinder",
+      "description": "Generate cylinder mesh",
+      "returnType": "Mesh",
+      "params": [
+        {"name": "radius",  "type": "float" },
+        {"name": "height",  "type": "float" },
+        {"name": "slices",  "type": "int" }
+      ]
+    },
+    {
+      "name": "GenMeshTorus",
+      "description": "Generate torus mesh",
+      "returnType": "Mesh",
+      "params": [
+        {"name": "radius",  "type": "float" },
+        {"name": "size",  "type": "float" },
+        {"name": "radSeg",  "type": "int" },
+        {"name": "sides",  "type": "int" }
+      ]
+    },
+    {
+      "name": "GenMeshKnot",
+      "description": "Generate trefoil knot mesh",
+      "returnType": "Mesh",
+      "params": [
+        {"name": "radius",  "type": "float" },
+        {"name": "size",  "type": "float" },
+        {"name": "radSeg",  "type": "int" },
+        {"name": "sides",  "type": "int" }
+      ]
+    },
+    {
+      "name": "GenMeshHeightmap",
+      "description": "Generate heightmap mesh from image data",
+      "returnType": "Mesh",
+      "params": [
+        {"name": "heightmap",  "type": "Image" },
+        {"name": "size",  "type": "Vector3" }
+      ]
+    },
+    {
+      "name": "GenMeshCubicmap",
+      "description": "Generate cubes-based map mesh from image data",
+      "returnType": "Mesh",
+      "params": [
+        {"name": "cubicmap",  "type": "Image" },
+        {"name": "cubeSize",  "type": "Vector3" }
+      ]
+    },
+    {
+      "name": "MeshBoundingBox",
+      "description": "Compute mesh bounding box limits",
       "returnType": "BoundingBox",
       "params": [
-        {"name": "model",  "type": "Model" }
+        {"name": "mesh",  "type": "Mesh" }
+      ]
+    },
+    {
+      "name": "MeshTangents",
+      "description": "Compute mesh tangents",
+      "returnType": "void",
+      "params": [
+        {"name": "mesh",  "type": "Mesh *" }
+      ]
+    },
+    {
+      "name": "MeshBinormals",
+      "description": "Compute mesh binormals",
+      "returnType": "void",
+      "params": [
+        {"name": "mesh",  "type": "Mesh *" }
       ]
     },
     {
@@ -5956,7 +6051,7 @@
       "params": [
         {"name": "camera",  "type": "Camera" },
         {"name": "texture",  "type": "Texture2D" },
-        {"name": "position",  "type": "Vector3" },
+        {"name": "center",  "type": "Vector3" },
         {"name": "size",  "type": "float" },
         {"name": "tint",  "type": "Color" }
       ]
@@ -5969,310 +6064,14 @@
         {"name": "camera",  "type": "Camera" },
         {"name": "texture",  "type": "Texture2D" },
         {"name": "source",  "type": "Rectangle" },
-        {"name": "position",  "type": "Vector3" },
-        {"name": "size",  "type": "Vector2" },
-        {"name": "tint",  "type": "Color" }
-      ]
-    },
-    {
-      "name": "DrawBillboardPro",
-      "description": "Draw a billboard texture defined by source and rotation",
-      "returnType": "void",
-      "params": [
-        {"name": "camera",  "type": "Camera" },
-        {"name": "texture",  "type": "Texture2D" },
-        {"name": "source",  "type": "Rectangle" },
-        {"name": "position",  "type": "Vector3" },
-        {"name": "up",  "type": "Vector3" },
-        {"name": "size",  "type": "Vector2" },
-        {"name": "origin",  "type": "Vector2" },
-        {"name": "rotation",  "type": "float" },
-        {"name": "tint",  "type": "Color" }
-      ]
-    },
-    {
-      "name": "UploadMesh",
-      "description": "Upload mesh vertex data in GPU and provide VAO/VBO ids",
-      "returnType": "void",
-      "params": [
-        {"name": "mesh",  "type": "Mesh *" },
-        {"name": "dynamic",  "type": "bool" }
-      ]
-    },
-    {
-      "name": "UpdateMeshBuffer",
-      "description": "Update mesh vertex data in GPU for a specific buffer index",
-      "returnType": "void",
-      "params": [
-        {"name": "mesh",  "type": "Mesh" },
-        {"name": "index",  "type": "int" },
-        {"name": "data",  "type": "void *" },
-        {"name": "dataSize",  "type": "int" },
-        {"name": "offset",  "type": "int" }
-      ]
-    },
-    {
-      "name": "UnloadMesh",
-      "description": "Unload mesh data from CPU and GPU",
-      "returnType": "void",
-      "params": [
-        {"name": "mesh",  "type": "Mesh" }
-      ]
-    },
-    {
-      "name": "DrawMesh",
-      "description": "Draw a 3d mesh with material and transform",
-      "returnType": "void",
-      "params": [
-        {"name": "mesh",  "type": "Mesh" },
-        {"name": "material",  "type": "Material" },
-        {"name": "transform",  "type": "Matrix" }
-      ]
-    },
-    {
-      "name": "DrawMeshInstanced",
-      "description": "Draw multiple mesh instances with material and different transforms",
-      "returnType": "void",
-      "params": [
-        {"name": "mesh",  "type": "Mesh" },
-        {"name": "material",  "type": "Material" },
-        {"name": "transforms",  "type": "Matrix *" },
-        {"name": "instances",  "type": "int" }
-      ]
-    },
-    {
-      "name": "ExportMesh",
-      "description": "Export mesh data to file, returns true on success",
-      "returnType": "bool",
-      "params": [
-        {"name": "mesh",  "type": "Mesh" },
-        {"name": "fileName",  "type": "const char *" }
-      ]
-    },
-    {
-      "name": "GetMeshBoundingBox",
-      "description": "Compute mesh bounding box limits",
-      "returnType": "BoundingBox",
-      "params": [
-        {"name": "mesh",  "type": "Mesh" }
-      ]
-    },
-    {
-      "name": "GenMeshTangents",
-      "description": "Compute mesh tangents",
-      "returnType": "void",
-      "params": [
-        {"name": "mesh",  "type": "Mesh *" }
-      ]
-    },
-    {
-      "name": "GenMeshBinormals",
-      "description": "Compute mesh binormals",
-      "returnType": "void",
-      "params": [
-        {"name": "mesh",  "type": "Mesh *" }
-      ]
-    },
-    {
-      "name": "GenMeshPoly",
-      "description": "Generate polygonal mesh",
-      "returnType": "Mesh",
-      "params": [
-        {"name": "sides",  "type": "int" },
-        {"name": "radius",  "type": "float" }
-      ]
-    },
-    {
-      "name": "GenMeshPlane",
-      "description": "Generate plane mesh (with subdivisions)",
-      "returnType": "Mesh",
-      "params": [
-        {"name": "width",  "type": "float" },
-        {"name": "length",  "type": "float" },
-        {"name": "resX",  "type": "int" },
-        {"name": "resZ",  "type": "int" }
-      ]
-    },
-    {
-      "name": "GenMeshCube",
-      "description": "Generate cuboid mesh",
-      "returnType": "Mesh",
-      "params": [
-        {"name": "width",  "type": "float" },
-        {"name": "height",  "type": "float" },
-        {"name": "length",  "type": "float" }
-      ]
-    },
-    {
-      "name": "GenMeshSphere",
-      "description": "Generate sphere mesh (standard sphere)",
-      "returnType": "Mesh",
-      "params": [
-        {"name": "radius",  "type": "float" },
-        {"name": "rings",  "type": "int" },
-        {"name": "slices",  "type": "int" }
-      ]
-    },
-    {
-      "name": "GenMeshHemiSphere",
-      "description": "Generate half-sphere mesh (no bottom cap)",
-      "returnType": "Mesh",
-      "params": [
-        {"name": "radius",  "type": "float" },
-        {"name": "rings",  "type": "int" },
-        {"name": "slices",  "type": "int" }
-      ]
-    },
-    {
-      "name": "GenMeshCylinder",
-      "description": "Generate cylinder mesh",
-      "returnType": "Mesh",
-      "params": [
-        {"name": "radius",  "type": "float" },
-        {"name": "height",  "type": "float" },
-        {"name": "slices",  "type": "int" }
-      ]
-    },
-    {
-      "name": "GenMeshCone",
-      "description": "Generate cone/pyramid mesh",
-      "returnType": "Mesh",
-      "params": [
-        {"name": "radius",  "type": "float" },
-        {"name": "height",  "type": "float" },
-        {"name": "slices",  "type": "int" }
-      ]
-    },
-    {
-      "name": "GenMeshTorus",
-      "description": "Generate torus mesh",
-      "returnType": "Mesh",
-      "params": [
-        {"name": "radius",  "type": "float" },
+        {"name": "center",  "type": "Vector3" },
         {"name": "size",  "type": "float" },
-        {"name": "radSeg",  "type": "int" },
-        {"name": "sides",  "type": "int" }
-      ]
-    },
-    {
-      "name": "GenMeshKnot",
-      "description": "Generate trefoil knot mesh",
-      "returnType": "Mesh",
-      "params": [
-        {"name": "radius",  "type": "float" },
-        {"name": "size",  "type": "float" },
-        {"name": "radSeg",  "type": "int" },
-        {"name": "sides",  "type": "int" }
-      ]
-    },
-    {
-      "name": "GenMeshHeightmap",
-      "description": "Generate heightmap mesh from image data",
-      "returnType": "Mesh",
-      "params": [
-        {"name": "heightmap",  "type": "Image" },
-        {"name": "size",  "type": "Vector3" }
-      ]
-    },
-    {
-      "name": "GenMeshCubicmap",
-      "description": "Generate cubes-based map mesh from image data",
-      "returnType": "Mesh",
-      "params": [
-        {"name": "cubicmap",  "type": "Image" },
-        {"name": "cubeSize",  "type": "Vector3" }
-      ]
-    },
-    {
-      "name": "LoadMaterials",
-      "description": "Load materials from model file",
-      "returnType": "Material *",
-      "params": [
-        {"name": "fileName",  "type": "const char *" },
-        {"name": "materialCount",  "type": "int *" }
-      ]
-    },
-    {
-      "name": "LoadMaterialDefault",
-      "description": "Load default material (Supports: DIFFUSE, SPECULAR, NORMAL maps)",
-      "returnType": "Material"
-    },
-    {
-      "name": "UnloadMaterial",
-      "description": "Unload material from GPU memory (VRAM)",
-      "returnType": "void",
-      "params": [
-        {"name": "material",  "type": "Material" }
-      ]
-    },
-    {
-      "name": "SetMaterialTexture",
-      "description": "Set texture for a material map type (MATERIAL_MAP_DIFFUSE, MATERIAL_MAP_SPECULAR...)",
-      "returnType": "void",
-      "params": [
-        {"name": "material",  "type": "Material *" },
-        {"name": "mapType",  "type": "int" },
-        {"name": "texture",  "type": "Texture2D" }
-      ]
-    },
-    {
-      "name": "SetModelMeshMaterial",
-      "description": "Set material for a mesh",
-      "returnType": "void",
-      "params": [
-        {"name": "model",  "type": "Model *" },
-        {"name": "meshId",  "type": "int" },
-        {"name": "materialId",  "type": "int" }
-      ]
-    },
-    {
-      "name": "LoadModelAnimations",
-      "description": "Load model animations from file",
-      "returnType": "ModelAnimation *",
-      "params": [
-        {"name": "fileName",  "type": "const char *" },
-        {"name": "animCount",  "type": "unsigned int *" }
-      ]
-    },
-    {
-      "name": "UpdateModelAnimation",
-      "description": "Update model animation pose",
-      "returnType": "void",
-      "params": [
-        {"name": "model",  "type": "Model" },
-        {"name": "anim",  "type": "ModelAnimation" },
-        {"name": "frame",  "type": "int" }
-      ]
-    },
-    {
-      "name": "UnloadModelAnimation",
-      "description": "Unload animation data",
-      "returnType": "void",
-      "params": [
-        {"name": "anim",  "type": "ModelAnimation" }
-      ]
-    },
-    {
-      "name": "UnloadModelAnimations",
-      "description": "Unload animation array data",
-      "returnType": "void",
-      "params": [
-        {"name": "animations",  "type": "ModelAnimation*" },
-        {"name": "count",  "type": "unsigned int" }
-      ]
-    },
-    {
-      "name": "IsModelAnimationValid",
-      "description": "Check model animation skeleton match",
-      "returnType": "bool",
-      "params": [
-        {"name": "model",  "type": "Model" },
-        {"name": "anim",  "type": "ModelAnimation" }
+        {"name": "tint",  "type": "Color" }
       ]
     },
     {
       "name": "CheckCollisionSpheres",
-      "description": "Check collision between two spheres",
+      "description": "Detect collision between two spheres",
       "returnType": "bool",
       "params": [
         {"name": "center1",  "type": "Vector3" },
@@ -6283,7 +6082,7 @@
     },
     {
       "name": "CheckCollisionBoxes",
-      "description": "Check collision between two bounding boxes",
+      "description": "Detect collision between two bounding boxes",
       "returnType": "bool",
       "params": [
         {"name": "box1",  "type": "BoundingBox" },
@@ -6292,7 +6091,7 @@
     },
     {
       "name": "CheckCollisionBoxSphere",
-      "description": "Check collision between box and sphere",
+      "description": "Detect collision between box and sphere",
       "returnType": "bool",
       "params": [
         {"name": "box",  "type": "BoundingBox" },
@@ -6301,9 +6100,9 @@
       ]
     },
     {
-      "name": "GetRayCollisionSphere",
-      "description": "Get collision info between ray and sphere",
-      "returnType": "RayCollision",
+      "name": "CheckCollisionRaySphere",
+      "description": "Detect collision between ray and sphere",
+      "returnType": "bool",
       "params": [
         {"name": "ray",  "type": "Ray" },
         {"name": "center",  "type": "Vector3" },
@@ -6311,27 +6110,29 @@
       ]
     },
     {
-      "name": "GetRayCollisionBox",
-      "description": "Get collision info between ray and box",
-      "returnType": "RayCollision",
+      "name": "CheckCollisionRaySphereEx",
+      "description": "Detect collision between ray and sphere, returns collision point",
+      "returnType": "bool",
+      "params": [
+        {"name": "ray",  "type": "Ray" },
+        {"name": "center",  "type": "Vector3" },
+        {"name": "radius",  "type": "float" },
+        {"name": "collisionPoint",  "type": "Vector3 *" }
+      ]
+    },
+    {
+      "name": "CheckCollisionRayBox",
+      "description": "Detect collision between ray and box",
+      "returnType": "bool",
       "params": [
         {"name": "ray",  "type": "Ray" },
         {"name": "box",  "type": "BoundingBox" }
       ]
     },
     {
-      "name": "GetRayCollisionModel",
-      "description": "Get collision info between ray and model",
-      "returnType": "RayCollision",
-      "params": [
-        {"name": "ray",  "type": "Ray" },
-        {"name": "model",  "type": "Model" }
-      ]
-    },
-    {
-      "name": "GetRayCollisionMesh",
+      "name": "GetCollisionRayMesh",
       "description": "Get collision info between ray and mesh",
-      "returnType": "RayCollision",
+      "returnType": "RayHitInfo",
       "params": [
         {"name": "ray",  "type": "Ray" },
         {"name": "mesh",  "type": "Mesh" },
@@ -6339,9 +6140,18 @@
       ]
     },
     {
-      "name": "GetRayCollisionTriangle",
+      "name": "GetCollisionRayModel",
+      "description": "Get collision info between ray and model",
+      "returnType": "RayHitInfo",
+      "params": [
+        {"name": "ray",  "type": "Ray" },
+        {"name": "model",  "type": "Model" }
+      ]
+    },
+    {
+      "name": "GetCollisionRayTriangle",
       "description": "Get collision info between ray and triangle",
-      "returnType": "RayCollision",
+      "returnType": "RayHitInfo",
       "params": [
         {"name": "ray",  "type": "Ray" },
         {"name": "p1",  "type": "Vector3" },
@@ -6350,15 +6160,12 @@
       ]
     },
     {
-      "name": "GetRayCollisionQuad",
-      "description": "Get collision info between ray and quad",
-      "returnType": "RayCollision",
+      "name": "GetCollisionRayGround",
+      "description": "Get collision info between ray and ground plane (Y-normal plane)",
+      "returnType": "RayHitInfo",
       "params": [
         {"name": "ray",  "type": "Ray" },
-        {"name": "p1",  "type": "Vector3" },
-        {"name": "p2",  "type": "Vector3" },
-        {"name": "p3",  "type": "Vector3" },
-        {"name": "p4",  "type": "Vector3" }
+        {"name": "groundHeight",  "type": "float" }
       ]
     },
     {
@@ -6394,7 +6201,7 @@
     },
     {
       "name": "LoadWaveFromMemory",
-      "description": "Load wave from memory buffer, fileType refers to extension: i.e. '.wav'",
+      "description": "Load wave from memory buffer, fileType refers to extension: i.e. `.wav`",
       "returnType": "Wave",
       "params": [
         {"name": "fileType",  "type": "const char *" },
@@ -6425,7 +6232,7 @@
       "params": [
         {"name": "sound",  "type": "Sound" },
         {"name": "data",  "type": "const void *" },
-        {"name": "sampleCount",  "type": "int" }
+        {"name": "samplesCount",  "type": "int" }
       ]
     },
     {
@@ -6597,7 +6404,7 @@
       "returnType": "Music",
       "params": [
         {"name": "fileType",  "type": "const char *" },
-        {"name": "data",  "type": "unsigned char *" },
+        {"name": "data",  "type": "unsigned char*" },
         {"name": "dataSize",  "type": "int" }
       ]
     },
@@ -6618,7 +6425,7 @@
       ]
     },
     {
-      "name": "IsMusicStreamPlaying",
+      "name": "IsMusicPlaying",
       "description": "Check if music is playing",
       "returnType": "bool",
       "params": [
@@ -6658,15 +6465,6 @@
       ]
     },
     {
-      "name": "SeekMusicStream",
-      "description": "Seek music to a position (in seconds)",
-      "returnType": "void",
-      "params": [
-        {"name": "music",  "type": "Music" },
-        {"name": "position",  "type": "float" }
-      ]
-    },
-    {
       "name": "SetMusicVolume",
       "description": "Set volume for music (1.0 is max level)",
       "returnType": "void",
@@ -6701,21 +6499,13 @@
       ]
     },
     {
-      "name": "LoadAudioStream",
-      "description": "Load audio stream (to stream raw audio pcm data)",
+      "name": "InitAudioStream",
+      "description": "Init audio stream (to stream raw audio pcm data)",
       "returnType": "AudioStream",
       "params": [
         {"name": "sampleRate",  "type": "unsigned int" },
         {"name": "sampleSize",  "type": "unsigned int" },
         {"name": "channels",  "type": "unsigned int" }
-      ]
-    },
-    {
-      "name": "UnloadAudioStream",
-      "description": "Unload audio stream and free memory",
-      "returnType": "void",
-      "params": [
-        {"name": "stream",  "type": "AudioStream" }
       ]
     },
     {
@@ -6725,7 +6515,15 @@
       "params": [
         {"name": "stream",  "type": "AudioStream" },
         {"name": "data",  "type": "const void *" },
-        {"name": "frameCount",  "type": "int" }
+        {"name": "samplesCount",  "type": "int" }
+      ]
+    },
+    {
+      "name": "CloseAudioStream",
+      "description": "Close audio stream and free memory",
+      "returnType": "void",
+      "params": [
+        {"name": "stream",  "type": "AudioStream" }
       ]
     },
     {

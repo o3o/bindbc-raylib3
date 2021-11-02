@@ -19,60 +19,39 @@ version (RAYLIB_370) {
 }
 
 
-
+// structs
 
 struct Vector2 {
-   /// Vector x component
    float x;
-   /// Vector y component
    float y;
 }
 struct Vector3 {
-   /// Vector x component
    float x;
-   /// Vector y component
    float y;
-   /// Vector z component
    float z;
 }
 struct Vector4 {
-   /// Vector x component
    float x;
-   /// Vector y component
    float y;
-   /// Vector z component
    float z;
-   /// Vector w component
    float w;
 }
 struct Matrix {
-   /// Matrix first row (4 components)
    float m0, m4, m8, m12;
-   /// Matrix second row (4 components)
    float m1, m5, m9, m13;
-   /// Matrix third row (4 components)
    float m2, m6, m10, m14;
-   /// Matrix fourth row (4 components)
    float m3, m7, m11, m15;
 }
 struct Color {
-   /// Color red value
    ubyte r;
-   /// Color green value
    ubyte g;
-   /// Color blue value
    ubyte b;
-   /// Color alpha value
    ubyte a;
 }
 struct Rectangle {
-   /// Rectangle top-left corner position x
    float x;
-   /// Rectangle top-left corner position y
    float y;
-   /// Rectangle width
    float width;
-   /// Rectangle height
    float height;
 }
 struct Image {
@@ -121,7 +100,7 @@ struct NPatchInfo {
    /// Layout of the n-patch: 3x3, 1x3 or 3x1
    int layout;
 }
-struct GlyphInfo {
+struct CharInfo {
    /// Character value (Unicode)
    int value;
    /// Character offset X when drawing
@@ -136,16 +115,16 @@ struct GlyphInfo {
 struct Font {
    /// Base size (default chars height)
    int baseSize;
-   /// Number of glyph characters
-   int glyphCount;
-   /// Padding around the glyph characters
-   int glyphPadding;
-   /// Texture atlas containing the glyphs
+   /// Number of characters
+   int charsCount;
+   /// Padding around the chars
+   int charsPadding;
+   /// Characters texture atlas
    Texture2D texture;
-   /// Rectangles in texture for the glyphs
+   /// Characters rectangles in texture
    Rectangle* recs;
-   /// Glyphs info data
-   GlyphInfo* glyphs;
+   /// Characters info data
+   CharInfo* chars;
 }
 struct Camera3D {
    /// Camera position
@@ -204,7 +183,7 @@ struct Mesh {
 struct Shader {
    /// Shader program id
    uint id;
-   /// Shader locations array (RL_MAX_SHADER_LOCATIONS)
+   /// Shader locations array (MAX_SHADER_LOCATIONS)
    int* locs;
 }
 struct MaterialMap {
@@ -273,13 +252,13 @@ struct Ray {
    /// Ray direction
    Vector3 direction;
 }
-struct RayCollision {
+struct RayHitInfo {
    /// Did the ray hit something?
    bool hit;
    /// Distance to nearest hit
    float distance;
-   /// Point of nearest hit
-   Vector3 point;
+   /// Position of nearest hit
+   Vector3 position;
    /// Surface normal of hit
    Vector3 normal;
 }
@@ -290,13 +269,13 @@ struct BoundingBox {
    Vector3 max;
 }
 struct Wave {
-   /// Total number of frames (considering channels)
-   uint frameCount;
+   /// Total number of samples
+   uint sampleCount;
    /// Frequency (samples per second)
    uint sampleRate;
    /// Bit depth (bits per sample): 8, 16, 32 (24 not supported)
    uint sampleSize;
-   /// Number of channels (1-mono, 2-stereo, ...)
+   /// Number of channels (1-mono, 2-stereo)
    uint channels;
    /// Buffer data pointer
    void* data;
@@ -308,20 +287,20 @@ struct AudioStream {
    uint sampleRate;
    /// Bit depth (bits per sample): 8, 16, 32 (24 not supported)
    uint sampleSize;
-   /// Number of channels (1-mono, 2-stereo, ...)
+   /// Number of channels (1-mono, 2-stereo)
    uint channels;
 }
 struct Sound {
    /// Audio stream
    AudioStream stream;
-   /// Total number of frames (considering channels)
-   uint frameCount;
+   /// Total number of samples
+   uint sampleCount;
 }
 struct Music {
    /// Audio stream
    AudioStream stream;
-   /// Total number of frames (considering channels)
-   uint frameCount;
+   /// Total number of samples
+   uint sampleCount;
    /// Music looping enable
    bool looping;
    /// Type of music context (audio filetype)
@@ -376,6 +355,9 @@ alias Texture2D = Texture;
 alias TextureCubemap = Texture;
 alias Quaternion = Vector4;
 struct rAudioBuffer {}
+
+// enums
+
 enum ConfigFlags {
    FLAG_VSYNC_HINT = 64,
    FLAG_FULLSCREEN_MODE = 2,
@@ -447,10 +429,6 @@ enum KeyboardKey {
    KEY_X = 88,
    KEY_Y = 89,
    KEY_Z = 90,
-   KEY_LEFT_BRACKET = 91,
-   KEY_BACKSLASH = 92,
-   KEY_RIGHT_BRACKET = 93,
-   KEY_GRAVE = 96,
    KEY_SPACE = 32,
    KEY_ESCAPE = 256,
    KEY_ENTER = 257,
@@ -492,6 +470,10 @@ enum KeyboardKey {
    KEY_RIGHT_ALT = 346,
    KEY_RIGHT_SUPER = 347,
    KEY_KB_MENU = 348,
+   KEY_LEFT_BRACKET = 91,
+   KEY_BACKSLASH = 92,
+   KEY_RIGHT_BRACKET = 93,
+   KEY_GRAVE = 96,
    KEY_KP_0 = 320,
    KEY_KP_1 = 321,
    KEY_KP_2 = 322,
@@ -515,13 +497,9 @@ enum KeyboardKey {
    KEY_VOLUME_DOWN = 25,
 }
 enum MouseButton {
-   MOUSE_BUTTON_LEFT = 0,
-   MOUSE_BUTTON_RIGHT = 1,
-   MOUSE_BUTTON_MIDDLE = 2,
-   MOUSE_BUTTON_SIDE = 3,
-   MOUSE_BUTTON_EXTRA = 4,
-   MOUSE_BUTTON_FORWARD = 5,
-   MOUSE_BUTTON_BACK = 6,
+   MOUSE_LEFT_BUTTON = 0,
+   MOUSE_RIGHT_BUTTON = 1,
+   MOUSE_MIDDLE_BUTTON = 2,
 }
 enum MouseCursor {
    MOUSE_CURSOR_DEFAULT = 0,
@@ -572,10 +550,10 @@ enum MaterialMapIndex {
    MATERIAL_MAP_OCCLUSION = 4,
    MATERIAL_MAP_EMISSION = 5,
    MATERIAL_MAP_HEIGHT = 6,
-   MATERIAL_MAP_CUBEMAP = 7,
-   MATERIAL_MAP_IRRADIANCE = 8,
-   MATERIAL_MAP_PREFILTER = 9,
-   MATERIAL_MAP_BRDF = 10,
+   MATERIAL_MAP_BRDG = 7,
+   MATERIAL_MAP_CUBEMAP = 8,
+   MATERIAL_MAP_IRRADIANCE = 9,
+   MATERIAL_MAP_PREFILTER = 10,
 }
 enum ShaderLocationIndex {
    SHADER_LOC_VERTEX_POSITION = 0,
@@ -615,12 +593,6 @@ enum ShaderUniformDataType {
    SHADER_UNIFORM_IVEC3 = 6,
    SHADER_UNIFORM_IVEC4 = 7,
    SHADER_UNIFORM_SAMPLER2D = 8,
-}
-enum ShaderAttributeDataType {
-   SHADER_ATTRIB_FLOAT = 0,
-   SHADER_ATTRIB_VEC2 = 1,
-   SHADER_ATTRIB_VEC3 = 2,
-   SHADER_ATTRIB_VEC4 = 3,
 }
 enum PixelFormat {
    PIXELFORMAT_UNCOMPRESSED_GRAYSCALE = 1,
@@ -680,7 +652,7 @@ enum BlendMode {
    BLEND_SUBTRACT_COLORS = 4,
    BLEND_CUSTOM = 5,
 }
-enum Gesture {
+enum Gestures {
    GESTURE_NONE = 0,
    GESTURE_TAP = 1,
    GESTURE_DOUBLETAP = 2,
