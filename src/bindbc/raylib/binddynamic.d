@@ -1515,8 +1515,10 @@ RaylibSupport loadRaylib(const(char)* libName) {
    } else {
       loadedVersion = RaylibSupport.raylib370;
    }
+   static if (raylibSupport >= RaylibSupport.raylib400) {
+      loadedVersion = RaylibSupport.raylib400;
+   }
 
-   // here other versions
    return loadedVersion;
 }
 
