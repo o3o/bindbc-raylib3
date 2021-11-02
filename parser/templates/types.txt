@@ -17,5 +17,3 @@ version (RAYLIB_370) {
    enum RAYLIB_VERSION_REVISION = 0;
    enum raylibSupport = RaylibSupport.raylib370;
 }
-
-

@@ -39,7 +39,6 @@ void main(string[] args) {
 void createTypes(string dir, JSONValue root) {
    import std.stdio : File;
    import std.path : buildPath;
-   import std.array : replace;
 
    JSONValue[] structs = root["structs"].array;
    JSONValue[] enums = root["enums"].array;
@@ -47,12 +46,14 @@ void createTypes(string dir, JSONValue root) {
 
    void writeRem(JSONValue j, string space = "") {
       if (j["description"].str.length) {
-         of.writefln("%s/// %s", space, j["description"].str.replace(`"`, ""));
+         of.writefln("%s/// %s", space, j["description"].str);
       }
    }
    string s = import("types.txt");
    of.writeln(s);
 
+   of.writeln();
+   of.writeln("// structs");
    of.writeln();
    foreach (e; structs) {
       writeRem(e);
@@ -67,17 +68,24 @@ void createTypes(string dir, JSONValue root) {
    of.writeln();
 
    of.writeln("alias RenderTexture2D = RenderTexture;");
-//typedef Camera3D Camera;    // Camera type fallback, defaults to Camera3D
    of.writeln("alias Camera = Camera3D;");
    of.writeln("alias Texture2D = Texture;");
    of.writeln("alias TextureCubemap = Texture;");
-   //typedef Vector4 Quaternion;
    of.writeln("alias Quaternion = Vector4;");
    of.writeln("struct rAudioBuffer {}");
 
+   of.writeln();
+   of.writeln("// enums");
+   of.writeln();
+
    foreach (e; enums) {
+      string en =e["name"].str;
+      if (en.skipEnum) {
+         continue;
+      }
+
       writeRem(e);
-      of.writefln("enum %s {", e["name"].str);
+      of.writefln("enum %s {", en);
       foreach (f; e["values"].array) {
          writeRem(f, "   ");
          of.writefln("   %s = %s,", f["name"].str, f["value"].integer);
@@ -129,7 +137,7 @@ void createBinddynamic(in string dir, JSONValue root) {
 
    foreach (e; fun) {
       string fn = e["name"].str;
-      if (fn.skip) {
+      if (fn.skipFunc) {
          continue;
       }
 
@@ -150,7 +158,7 @@ void createBinddynamic(in string dir, JSONValue root) {
    //pdaveGetS8from daveGetS8from;
    foreach (e; fun) {
       string fn = e["name"].str;
-      if (fn.skip) {
+      if (fn.skipFunc) {
          continue;
       }
       of.writefln("   p%s %s;", fn, fn);
@@ -160,7 +168,7 @@ void createBinddynamic(in string dir, JSONValue root) {
    of.writeln(s);
    foreach (e; fun) {
       string fn = e["name"].str;
-      if (fn.skip) {
+      if (fn.skipFunc) {
          continue;
       }
       of.writefln(`   lib.bindSymbol(cast(void**)&%s, "%s");`, fn, fn);
@@ -170,7 +178,7 @@ void createBinddynamic(in string dir, JSONValue root) {
    of.writeln(f);
 }
 
-size_t skip(string fn) {
+size_t skipFunc(string fn) {
    import std.algorithm.comparison : among;
    return fn.among!(
                "SetLoadFileDataCallback",
@@ -183,6 +191,13 @@ size_t skip(string fn) {
                "TraceLogCallback",
                );
 }
+size_t skipEnum(string fn) {
+   import std.algorithm.comparison : among;
+   return fn.among!(
+               "Vector2"
+               );
+}
+
 
 
 string convertType(string cType) {
