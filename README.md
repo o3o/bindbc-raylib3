@@ -1,8 +1,6 @@
 # bindbc-raylib3
 This project provides both static and dynamic bindings to the [raylib](https://www.raylib.com/) _a simple and easy-to-use library to enjoy videogames programming_.
 
-## Versioning
-bindbc-raylib3 is being [semantically versioned](http://semver.org). Roughly described, major version changes will always represent backwards incompatible changes, minor version changes will always represent new features and will be backwards compatible, and patch ('tiny') version changes will always be bug fixes.
 
 ## Compile raylib source code
 See [raylib wiki](https://github.com/raysan5/raylib/wiki) and
@@ -45,7 +43,7 @@ void main(string[] args) {
 }
 ```
 
-For static binding see [wiki]()
+For static binding see [wiki](https://github.com/o3o/bindbc-raylib3/wiki/the-static-binding)
 
 ## Raylib version
 Following are the supported versions of raylib, the corresponding version IDs to pass to the compiler, and the corresponding `RaylibSupport` members.
@@ -55,7 +53,10 @@ Following are the supported versions of raylib, the corresponding version IDs to
 | 4.0.0                | Raylib_400 (Default) | `RaylibSupport.raylib400` |
 | 3.7.0                | Raylib_370  | `RaylibSupport.raylib370` |
 
-For bind-raylib3 version see [wiki]()
+For bind-raylib3 version see [wiki](https://github.com/o3o/bindbc-raylib3/wiki/version)
+
+## Versioning
+bindbc-raylib3 is being [semantically versioned](http://semver.org). Roughly described, major version changes will always represent backwards incompatible changes, minor version changes will always represent new features and will be backwards compatible, and patch ('tiny') version changes will always be bug fixes.
 
 ## Examples
 You can find [original raylib examples](https://www.raylib.com/examples.html) ported to D inside [examples directory](https://github.com/o3o/bindbc-raylib3/tree/master/examples).
