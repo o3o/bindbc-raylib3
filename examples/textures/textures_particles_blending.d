@@ -32,6 +32,8 @@ int main(string[] args) {
       enum int screenHeight = 450;
 
       InitWindow(screenWidth, screenHeight, "raylib [textures] example - particles blending");
+      scope (exit)
+         CloseWindow(); // Close window and OpenGL context on exit
 
       // Particles pool, reuse them!
       Particle[MAX_PARTICLES] mouseTail;
@@ -49,6 +51,8 @@ int main(string[] args) {
       float gravity = 3.0f;
 
       Texture2D smoke = LoadTexture("resources/spark_flame.png");
+      scope (exit)
+         UnloadTexture(smoke);
 
       int blending = BlendMode.BLEND_ALPHA;
 
@@ -128,13 +132,6 @@ int main(string[] args) {
 
          EndDrawing();
       }
-
-      // De-Initialization
-      //--------------------------------------------------------------------------------------
-      UnloadTexture(smoke);
-
-      CloseWindow(); // Close window and OpenGL context
-      //--------------------------------------------------------------------------------------
    }
    return 0;
 }
