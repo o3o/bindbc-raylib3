@@ -6,6 +6,7 @@ import std.experimental.logger;
 void main(string[] args) {
    enum TYP = "TYP";
    enum DYN = "DYN";
+   enum STA = "STA";
    bool verbose;
    string input;
    string file = "types";
@@ -13,7 +14,7 @@ void main(string[] args) {
    auto opt = getopt(args,
          "input|i", "Json input file", &input,
          "dir|d", "Destination directory", &dir,
-         "file|f", "Define file types (TYP for types.d, DYN for binddynamic.d", &file,
+         "file|f", "Define file types (TYP for types.d, DYN for binddynamic.d, STA for static", &file,
          "verbose|v", &verbose);
    if (verbose) {
       globalLogLevel(LogLevel.trace);
@@ -27,9 +28,11 @@ void main(string[] args) {
       JSONValue root = parseJSON(readText(input));
       // create types
       if (file == TYP) {
-      dir.createTypes(root);
+         dir.createTypes(root);
       } else if (file == DYN) {
          dir.createBinddynamic(root);
+      } else if (file == STA) {
+         dir.createBindstatic(root);
       } else {
          error("invalid file type");
       }
@@ -177,6 +180,56 @@ void createBinddynamic(in string dir, JSONValue root) {
    string f = import("footer.txt");
    of.writeln(f);
 }
+void createBindstatic(in string dir, JSONValue root) {
+   import std.stdio : File;
+   import std.path : buildPath;
+   import std.string : chop, stripRight;
+   import std.format : format;
+
+   JSONValue[] fun = root["functions"].array;
+   auto of = File(buildPath(dir, "bindstatic.d"), "w");
+
+   /**
+    *
+    */
+   void writeRem(JSONValue j, string space = "") {
+      if (j["description"].str.length) {
+         of.writefln("%s/**", space);
+         of.writefln("%s * %s", space, j["description"].str);
+         of.writefln("%s */", space);
+      }
+   }
+
+   of.writeln("module bindbc.raylib.bindstatic;");
+   of.writeln("");
+   of.writeln("version(BindBC_Static) version = BindRaylib_Static;");
+   of.writeln("version(BindRaylib_Static):");
+   of.writeln("");
+   of.writeln("import bindbc.raylib.types;");
+   of.writeln("extern (C) @nogc nothrow {");
+
+
+   foreach (e; fun) {
+      string fn = e["name"].str;
+      if (fn.skipFunc) {
+         continue;
+      }
+
+      writeRem(e, "   ");
+      of.writef(  "   %s %s(", e["returnType"].str.convertType, fn);
+      string args;
+      if ("params" in e) {
+         foreach (p; e["params"].array) {
+            args ~= format!("%s %s, ")(p["type"].str.convertType, p["name"].str);
+         }
+         of.write(args.stripRight.chop);
+      }
+      of.writeln(");");
+   }
+   of.writeln("}");
+   of.writeln();
+}
+
 
 size_t skipFunc(string fn) {
    import std.algorithm.comparison : among;
