@@ -1,11 +1,20 @@
 <a name="unreleased"></a>
 ## [Unreleased]
 
+### Docs
+- update readme
+
+
+<a name="v0.5.0"></a>
+## [v0.5.0] - 2021-11-08
 ### Build
 - remove RAYLIB_370 from dub.sdl
 
 ### Chore
 - add text examples
+
+### Docs
+- add changelog
 
 ### Feat
 - add static bind
@@ -54,7 +63,8 @@
 - add parser options to build separate d files
 
 
-[Unreleased]: /compare/v0.4.0...HEAD
+[Unreleased]: /compare/v0.5.0...HEAD
+[v0.5.0]: /compare/v0.4.0...v0.5.0
 [v0.4.0]: /compare/v0.3.0...v0.4.0
 [v0.3.0]: /compare/v0.2.0...v0.3.0
 [v0.2.0]: /compare/v0.1.0...v0.2.0
