@@ -17,3 +17,7 @@ examples/shapes/shapes_basic_shapes
 examples/shapes/shapes_basic_shapes2
 examples/textures/textures_particles_blending
 parser/rlc.o
+examples/text/text_font_loading
+examples/text/text_format_text
+examples/text/text_input_box
+examples/text/text_rectangle_bounds

@@ -1,0 +1,25 @@
+name "text"
+description "Text example"
+authors "Orfeo Da Vià"
+copyright "Copyright © 2020, o3o"
+dependency "bindbc-raylib3" path="../.."
+targetType "executable"
+
+// dub -crb
+configuration "rb" {
+   targetName "text_rectangle_bounds"
+   sourceFiles "text_rectangle_bounds.d"
+}
+configuration "ib" {
+   targetName "text_input_box"
+   sourceFiles "text_input_box.d"
+}
+configuration "ft" {
+   targetName "text_format_text"
+   sourceFiles "text_format_text.d"
+   }
+
+configuration "fl" {
+   targetName "text_font_loading"
+   sourceFiles "text_font_loading.d"
+}
