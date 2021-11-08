@@ -9,7 +9,7 @@ targetType "executable"
 configuration "basic" {
    targetName "core_basic_window"
    sourceFiles "core_basic_window.d"
-   versions "RAYLIB_370" "BindRaylib_Dynamic"
+   versions "BindRaylib_Dynamic"
    }
 
 configuration "camera2" {

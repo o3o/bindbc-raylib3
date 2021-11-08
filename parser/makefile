@@ -1,7 +1,7 @@
 .PHONY: all
-TYP = ../src/bindbc/raylib/types.d 
+TYP = ../src/bindbc/raylib/types.d
 DYN = ../src/bindbc/raylib/binddynamic.d
-D_FILE = ../src/bindbc/raylib/binddynamic.d ../src/bindbc/raylib/types.d 
+D_FILE = ../src/bindbc/raylib/binddynamic.d ../src/bindbc/raylib/types.d
 TEMPLATE_FILE = ./templates/footer.txt ./templates/load.txt ./templates/types.txt
 
 all: $(TYP) $(DYN)

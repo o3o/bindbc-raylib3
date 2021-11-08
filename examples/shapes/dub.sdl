@@ -9,10 +9,10 @@ targetType "executable"
 configuration "basic" {
    targetName "shapes_basic_shapes"
    sourceFiles "shapes_basic_shapes.d"
-   versions "RAYLIB_370" "BindRaylib_Dynamic"
+   versions "BindRaylib_Dynamic"
 }
 configuration "basic2" {
    targetName "shapes_basic_shapes2"
    sourceFiles "shapes_basic_shapes2.d"
-   versions "RAYLIB_370" "BindRaylib_Dynamic"
+   versions "BindRaylib_Dynamic"
    }
