@@ -48,10 +48,11 @@ For static binding see [wiki](https://github.com/o3o/bindbc-raylib3/wiki/the-sta
 ## Raylib version
 Following are the `bindbc-raylib3` versions, the supported versions of raylib and the corresponding `RaylibSupport` members.
 
-| bindbc-raylib3 version| Raylib version       |  `RaylibSupport` Member    |
-| --- | -------------------- |  --------------------      |
-| 0.4.0 | 4.0.0                |  `RaylibSupport.raylib400` |
-| 0.3.0 | 3.7.0                |  `RaylibSupport.raylib370` |
+| bindbc-raylib3 version | Raylib version       | `RaylibSupport` Member    |
+| ---                    | -------------------- | --------------------      |
+| 0.5.0                  | 4.0.0                | `RaylibSupport.raylib400` |
+| 0.4.0                  | 4.0.0                | `RaylibSupport.raylib400` |
+| 0.3.0                  | 3.7.0                | `RaylibSupport.raylib370` |
 
 For bind-raylib3 version see [wiki](https://github.com/o3o/bindbc-raylib3/wiki/version)
 
