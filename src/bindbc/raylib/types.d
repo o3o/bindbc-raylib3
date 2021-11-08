@@ -1,3 +1,8 @@
+/**
+ * Raylib types
+ *
+ * Automatically generated, do not modify
+ */
 module bindbc.raylib.types;
 
 enum RaylibSupport {
@@ -7,18 +12,11 @@ enum RaylibSupport {
    raylib400 = 400
 }
 
-
-version (RAYLIB_370) {
-   enum RAYLIB_VERSION_MAJOR = 3;
-   enum RAYLIB_VERSION_MINOR = 7;
-   enum RAYLIB_VERSION_REVISION = 0;
-   enum raylibSupport = RaylibSupport.raylib370;
-} else {
-   enum RAYLIB_VERSION_MAJOR = 4;
-   enum RAYLIB_VERSION_MINOR = 0;
-   enum RAYLIB_VERSION_REVISION = 0;
-   enum raylibSupport = RaylibSupport.raylib400;
-}
+enum RAYLIB_VERSION_MAJOR = 4;
+enum RAYLIB_VERSION_MINOR = 0;
+enum RAYLIB_VERSION_REVISION = 0;
+enum RAYLIB_VERSION_BUILD = 0;
+enum raylibSupport = RaylibSupport.raylib400;
 
 
 // structs

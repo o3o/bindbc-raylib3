@@ -1,3 +1,8 @@
+/**
+ * Raylib binding.
+ *
+ * Automatically generated, do not modify
+ */
 private {
    SharedLib lib;
    RaylibSupport loadedVersion;

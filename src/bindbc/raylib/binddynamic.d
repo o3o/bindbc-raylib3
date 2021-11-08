@@ -976,6 +976,11 @@ __gshared {
    pSetAudioStreamPitch SetAudioStreamPitch;
    pSetAudioStreamBufferSizeDefault SetAudioStreamBufferSizeDefault;
 }
+/**
+ * Raylib binding.
+ *
+ * Automatically generated, do not modify
+ */
 private {
    SharedLib lib;
    RaylibSupport loadedVersion;

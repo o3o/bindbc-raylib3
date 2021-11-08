@@ -48,12 +48,12 @@ void main(string[] args) {
 For static binding see [wiki]()
 
 ## Raylib version
-Following are the supported versions of raylib, the corresponding version IDs to pass to the compiler, and the corresponding `RaylibSupport` members.
+Following are the `bindbc-raylib3` versions, the supported versions of raylib and the corresponding `RaylibSupport` members.
 
-| Raylib version       | Version ID           | `RaylibSupport` Member    |
-| -------------------- | ------------------   | --------------------      |
-| 4.0.0                | Raylib_400 (Default) | `RaylibSupport.raylib400` |
-| 3.7.0                | Raylib_370  | `RaylibSupport.raylib370` |
+| bindbc-raylib3 version| Raylib version       |  `RaylibSupport` Member    |
+| --- | -------------------- |  --------------------      |
+| 0.4.0 | 4.0.0                |  `RaylibSupport.raylib400` |
+| 0.3.0 | 3.7.0                |  `RaylibSupport.raylib370` |
 
 For bind-raylib3 version see [wiki]()
 
