@@ -1,5 +1,5 @@
 --- /home/dao/cc/raylib/parser/raylib_parser.c
-+++ /home/dao/cc/raylib/parser/raylib_parser_o.c
++++ /home/dao/d/bindbc-raylib3/parser/raylib_parser.c
 @@ -377,17 +377,17 @@
                      {
                          if (linePtr[c + 1] == ' ') c += 2;
@@ -21,7 +21,14 @@
                          if (integer[1] == 'x') enums[i].valueInteger[enums[i].valueCount] = (int)strtol(integer, NULL, 16);
                          else enums[i].valueInteger[enums[i].valueCount] = atoi(integer);
                      }
-@@ -907,14 +907,14 @@
+@@ -901,20 +901,21 @@
+             {
+                 fprintf(outFile, "    {\n");
+                 fprintf(outFile, "      \"name\": \"%s\",\n", funcs[i].name);
+-                fprintf(outFile, "      \"description\": \"%s\",\n", CharReplace(funcs[i].desc, '\\', ' ') + 3);
++                fprintf(outFile, "      \"description\": \"%s\",\n",
++                    CharReplace(CharReplace(funcs[i].desc, '"', '`'), '\\', ' ') + 3);
+                 fprintf(outFile, "      \"returnType\": \"%s\"", funcs[i].retType);
                  if (funcs[i].paramCount == 0) fprintf(outFile, "\n");
                  else
                  {
@@ -39,4 +46,9 @@
                  }
                  fprintf(outFile, "    }");
  
+@@ -1001,3 +1002,4 @@
+ 
+     fclose(outFile);
+ }
++
 
