@@ -22,11 +22,11 @@ configuration "dynamicBC" {
 
 configuration "static" {
     versions "BindRaylib_Static"
-    excludedSourceFiles "src/bindbc/raylib3/binddynamic.d"
+    excludedSourceFiles "src/bindbc/raylib/binddynamic.d"
 }
 
 configuration "staticBC" {
     dflags "-betterC"
     versions "BindRaylib_Static"
-    excludedSourceFiles "src/bindbc/raylib3/binddynamic.d"
+    excludedSourceFiles "src/bindbc/raylib/binddynamic.d"
 }

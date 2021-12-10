@@ -1,0 +1,12 @@
+name "static"
+description "A minimal D application."
+authors "Orfeo Da Vià"
+copyright "Copyright © 2021, Orfeo Da Vià"
+license "proprietary"
+libs "raylib"
+sourceFiles "app.d"
+importPaths "."
+/*versions "BindRaylib_Static"*/
+dependency "bindbc-raylib3" path="../../"
+subConfiguration "bindbc-raylib3" "static"
+targetType "executable"
