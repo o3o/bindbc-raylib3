@@ -357,8 +357,8 @@ extern (C) @nogc nothrow {
    alias pTextSubtext = const(char)* function(const(char)* text, int position, int length);
    alias pTextReplace = char* function(char* text, const(char)* replace, const(char)* by);
    alias pTextInsert = char* function(const(char)* text, const(char)* insert, int position);
-   alias pTextJoin = const(char)* function(const char** textList, int count, const(char)* delimiter);
-   alias pTextSplit = const char** function(const(char)* text, char delimiter, int* count);
+   alias pTextJoin = const(char)* function(const(char*)* textList, int count, const(char)* delimiter);
+   alias pTextSplit = const(char*)* function(const(char)* text, char delimiter, int* count);
    alias pTextAppend = void function(char* text, const(char)* append, int* position);
    alias pTextFindIndex = int function(const(char)* text, const(char)* find);
    alias pTextToUpper = const(char)* function(const(char)* text);

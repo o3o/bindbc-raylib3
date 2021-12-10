@@ -1388,11 +1388,11 @@ extern (C) @nogc nothrow {
    /**
     * Join text strings with delimiter
     */
-   const(char)* TextJoin(const char** textList, int count, const(char)* delimiter);
+   const(char)* TextJoin(const(char*)* textList, int count, const(char)* delimiter);
    /**
     * Split text into multiple strings
     */
-   const char** TextSplit(const(char)* text, char delimiter, int* count);
+   const(char*)* TextSplit(const(char)* text, char delimiter, int* count);
    /**
     * Append text at specific position and move cursor!
     */

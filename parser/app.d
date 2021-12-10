@@ -180,6 +180,7 @@ void createBinddynamic(in string dir, JSONValue root) {
    string f = import("footer.txt");
    of.writeln(f);
 }
+
 void createBindstatic(in string dir, JSONValue root) {
    import std.stdio : File;
    import std.path : buildPath;
@@ -244,13 +245,13 @@ size_t skipFunc(string fn) {
                "TraceLogCallback",
                );
 }
+
 size_t skipEnum(string fn) {
    import std.algorithm.comparison : among;
    return fn.among!(
                "Vector2"
                );
 }
-
 
 
 string convertType(string cType) {
@@ -271,6 +272,7 @@ string convertType(string cType) {
       case "unsigned int*": return "uint*";
       case "const char": return "const(char)";
       case "const char*": return "const(char)*";
+      case "const char**": return "const(char*)*";
 
       case "const unsigned char": return "const(ubyte)";
       case "const unsigned char*": return "const(ubyte)*";
@@ -278,4 +280,6 @@ string convertType(string cType) {
    }
 }
 
-
+unittest {
+   assert(convertType( "const char**") == "const(char*)*";
+}
