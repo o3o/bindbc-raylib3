@@ -6,7 +6,7 @@
 module bindbc.raylib;
 
 public import bindbc.raylib.types;
-public import bindbc.raylib.colors;
+public import bindbc.raylib.defines;
 
 version (BindBC_Static) {
    version = BindRaylib_Static;

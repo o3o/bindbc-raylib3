@@ -82,7 +82,7 @@ void createTypes(string dir, JSONValue root) {
    of.writeln();
 
    foreach (e; enums) {
-      string en =e["name"].str;
+      string en = e["name"].str;
       if (en.skipEnum) {
          continue;
       }
@@ -94,6 +94,16 @@ void createTypes(string dir, JSONValue root) {
          of.writefln("   %s = %s,", f["name"].str, f["value"].integer);
       }
       of.writeln("}");
+
+      writeRem(e);
+      of.writefln("enum {");
+      foreach (f; e["values"].array) {
+         writeRem(f, "   ");
+         of.writefln("   %s = %s.%s,", f["name"].str, en, f["name"].str);
+      }
+      of.writeln("}");
+      of.writeln();
+
    }
 }
 
