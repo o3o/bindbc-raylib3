@@ -1,6 +1,8 @@
 # bindbc-raylib3
 This project provides both static and dynamic bindings to the [raylib](https://www.raylib.com/) _a simple and easy-to-use library to enjoy videogames programming_.
 
+## Documentation
+See [wiki](https://github.com/o3o/bindbc-raylib3/wiki).
 
 ## Compile raylib source code
 See [raylib wiki](https://github.com/raysan5/raylib/wiki) and
