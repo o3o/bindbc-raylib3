@@ -82,7 +82,7 @@ void createTypes(string dir, JSONValue root) {
    of.writeln();
 
    foreach (e; enums) {
-      string en =e["name"].str;
+      string en = e["name"].str;
       if (en.skipEnum) {
          continue;
       }
@@ -94,6 +94,11 @@ void createTypes(string dir, JSONValue root) {
          of.writefln("   %s = %s,", f["name"].str, f["value"].integer);
       }
       of.writeln("}");
+      of.writeln();
+      foreach (f; e["values"].array) {
+         of.writefln("alias %s = %s.%s;", f["name"].str, en, f["name"].str);
+      }
+
    }
 }
 

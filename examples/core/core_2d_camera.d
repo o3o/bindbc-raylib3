@@ -45,9 +45,9 @@ void main(string[] args) {
       SetTargetFPS(60); // Set our game to run at 60 frames-per-second
 
       while (!WindowShouldClose()) { // Detect window close button or ESC key
-         if (IsKeyDown(KeyboardKey.KEY_RIGHT)) {
+         if (IsKeyDown(KEY_RIGHT)) {
             player.x += 2;
-         } else if (IsKeyDown(KeyboardKey.KEY_LEFT)) {
+         } else if (IsKeyDown(KEY_LEFT)) {
             player.x -= 2;
          }
 
@@ -55,9 +55,9 @@ void main(string[] args) {
          camera.target = Vector2(player.x + 20, player.y + 20);
 
          // Camera rotation controls
-         if (IsKeyDown(KeyboardKey.KEY_A))
+         if (IsKeyDown(KEY_A))
             camera.rotation--;
-         else if (IsKeyDown(KeyboardKey.KEY_S))
+         else if (IsKeyDown(KEY_S))
             camera.rotation++;
 
          // Limit camera rotation to 80 degrees (-40 to 40)
@@ -75,7 +75,7 @@ void main(string[] args) {
             camera.zoom = 0.1f;
 
          // Camera reset (zoom and rotation)
-         if (IsKeyPressed(KeyboardKey.KEY_R)) {
+         if (IsKeyPressed(KEY_R)) {
             camera.zoom = 1.0f;
             camera.rotation = 0.0f;
          }
