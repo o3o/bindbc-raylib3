@@ -2,7 +2,7 @@
 This project provides both static and dynamic bindings to the [raylib](https://www.raylib.com/) [v4.0.0](https://github.com/raysan5/raylib/releases/tag/4.0.0)  _a simple and easy-to-use library to enjoy videogames programming_.
 
 ## Documentation
-See [wiki](https://github.com/o3o/bindbc-raylib3/wiki).
+See [wiki](https://github.com/o3o/bindbc-raylib3/wiki) and [API](https://bindbc-raylib3.dpldocs.info/bindbc.raylib.html).
 
 ## Compile raylib source code
 See [raylib wiki](https://github.com/raysan5/raylib/wiki) and
