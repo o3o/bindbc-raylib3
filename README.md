@@ -1,4 +1,4 @@
-# bindbc-raylib3
+# bindbc-raylib3  [![DUB](https://img.shields.io/dub/v/bindbc-raylib3?style=for-the-badge)](https://code.dlang.org/packages/bindbc-raylib3)
 This project provides both static and dynamic bindings to the [raylib](https://www.raylib.com/) [v4.0.0](https://github.com/raysan5/raylib/releases/tag/4.0.0)  _a simple and easy-to-use library to enjoy videogames programming_.
 
 ## Documentation
