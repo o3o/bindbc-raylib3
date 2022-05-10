@@ -13,7 +13,7 @@ See [raylib wiki](https://github.com/raysan5/raylib/wiki) and
 By default, `bindbc-raylib3` is configured to compile as a _dynamic binding_ that is not `-betterC` compatible.
 The dynamic binding has no link-time dependency on the raylib library, so the raylib shared library must be manually loaded at run time.
 
-To use raylib, add `bindbc-raylib3` as a dependency to your project's package config file. For example, the following is configured to compile raylib as a dynamic binding that is not `-betterC` compatible:
+To use raylib, add `bindbc-raylib3` as a dependency to your project's package config file. For example, the following is configured to compile raylib as a dynamic binding:
 
 __dub.json__
 ```
@@ -25,6 +25,13 @@ dependencies {
 __dub.sdl__
 ```
 dependency "bindbc-raylib3" version="~>0.1.0"
+```
+For [static binding](https://github.com/o3o/bindbc-raylib3/tree/master/examples/static/dub.sdl):
+
+__dub.sdl__
+```
+dependency "bindbc-raylib3" version="~>0.1.0"
+subConfiguration "bindbc-raylib3" "static"
 ```
 
 ### Loading raylib
@@ -50,11 +57,10 @@ For static binding see [wiki](https://github.com/o3o/bindbc-raylib3/wiki/the-sta
 ## Raylib version
 Following are the `bindbc-raylib3` versions, the supported versions of raylib and the corresponding `RaylibSupport` members.
 
-| bindbc-raylib3 version | Raylib version       | `RaylibSupport` Member    |
-| ---                    | -------------------- | --------------------      |
-| 0.5.0                  | 4.0.0                | `RaylibSupport.raylib400` |
-| 0.4.0                  | 4.0.0                | `RaylibSupport.raylib400` |
-| 0.3.0                  | 3.7.0                | `RaylibSupport.raylib370` |
+| Raylib version       | `RaylibSupport` Member    | bindbc-raylib3 version |
+| -------------------- | --------------------      | ---                    |
+| 4.0.0                | `RaylibSupport.raylib400` | 1.0.0                  |
+| 3.7.0                | `RaylibSupport.raylib370` | 0.3.0                  |
 
 For bind-raylib3 version see [wiki](https://github.com/o3o/bindbc-raylib3/wiki/version)
 
