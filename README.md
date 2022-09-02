@@ -1,9 +1,8 @@
-# bindbc-raylib3  [![DUB](https://img.shields.io/dub/v/bindbc-raylib3?style=for-the-badge)](https://code.dlang.org/packages/bindbc-raylib3)
-This project provides both static and dynamic bindings to the [raylib](https://www.raylib.com/) [v4.0.0](https://github.com/raysan5/raylib/releases/tag/4.0.0)  _a simple and easy-to-use library to enjoy videogames programming_.
+# bindbc-raylib3
+This project provides both static and dynamic bindings to the [raylib](https://www.raylib.com/) _a simple and easy-to-use library to enjoy videogames programming_.
 
-## Documentation
+
 See [wiki](https://github.com/o3o/bindbc-raylib3/wiki) and [API](https://bindbc-raylib3.dpldocs.info/bindbc.raylib.html).
-
 ## Compile raylib source code
 See [raylib wiki](https://github.com/raysan5/raylib/wiki) and
 [bindbc wiki](https://github.com/o3o/bindbc-raylib3/wiki/compile-raylib)
@@ -59,10 +58,11 @@ Following are the `bindbc-raylib3` versions, the supported versions of raylib an
 
 | Raylib version       | `RaylibSupport` Member    | bindbc-raylib3 version |
 | -------------------- | --------------------      | ---                    |
+| 4.2.0                | `RaylibSupport.raylib420` | 2.0.0                  |
 | 4.0.0                | `RaylibSupport.raylib400` | 1.0.0                  |
 | 3.7.0                | `RaylibSupport.raylib370` | 0.3.0                  |
 
-For bind-raylib3 version see [wiki](https://github.com/o3o/bindbc-raylib3/wiki/version)
+For bind-raylib3 version see [wiki](https://github.com/o3o/bindbc-raylib3/wiki/version).
 
 ## Versioning
 bindbc-raylib3 is being [semantically versioned](http://semver.org). Roughly described, major version changes will always represent backwards incompatible changes, minor version changes will always represent new features and will be backwards compatible, and patch ('tiny') version changes will always be bug fixes.

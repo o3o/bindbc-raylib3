@@ -3,8 +3,8 @@
    } else {
       loadedVersion = RaylibSupport.raylib370;
    }
-   static if (raylibSupport >= RaylibSupport.raylib400) {
-      loadedVersion = RaylibSupport.raylib400;
+   static if (raylibSupport >= RaylibSupport.raylib420) {
+      loadedVersion = RaylibSupport.raylib420;
    }
 
    return loadedVersion;

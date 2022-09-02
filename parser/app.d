@@ -42,9 +42,11 @@ void main(string[] args) {
 void createTypes(string dir, JSONValue root) {
    import std.stdio : File;
    import std.path : buildPath;
+   import std.algorithm: map;
 
    JSONValue[] structs = root["structs"].array;
    JSONValue[] enums = root["enums"].array;
+   JSONValue[] callbacks = root["callbacks"].array;
    auto of = File(buildPath(dir, "types.d"), "w");
 
    void writeRem(JSONValue j, string space = "") {
@@ -54,6 +56,22 @@ void createTypes(string dir, JSONValue root) {
    }
    string s = import("types.txt");
    of.writeln(s);
+
+   of.writeln();
+   of.writeln("// structs");
+   of.writeln();
+   foreach (e; callbacks) {
+      string fn = e["name"].str;
+
+      if (fn.skipCallbacks) {
+         continue;
+      }
+      writeRem(e);
+      auto p = e["params"].array.map!(a => a["type"].str.convertType);
+      of.writefln("alias %s = %s function(%-(%s, %));", fn, e["returnType"].str.convertType, p);
+   }
+   of.writeln();
+
 
    of.writeln();
    of.writeln("// structs");
@@ -69,7 +87,14 @@ void createTypes(string dir, JSONValue root) {
       of.writeln("}");
    }
    of.writeln();
+   enum RAUDIO = `struct rAudioProcessor {
+      AudioCallback process;          // Processor callback function
+      rAudioProcessor *next;          // Next audio processor on the list
+      rAudioProcessor *prev;          // Previous audio processor on the list
+   };`;
 
+   of.writeln(RAUDIO);
+   of.writeln();
    of.writeln("alias RenderTexture2D = RenderTexture;");
    of.writeln("alias Camera = Camera3D;");
    of.writeln("alias Texture2D = Texture;");
@@ -95,10 +120,10 @@ void createTypes(string dir, JSONValue root) {
       }
       of.writeln("}");
       of.writeln();
+      // add alias for enum
       foreach (f; e["values"].array) {
          of.writefln("alias %s = %s.%s;", f["name"].str, en, f["name"].str);
       }
-
    }
 }
 
@@ -195,9 +220,6 @@ void createBindstatic(in string dir, JSONValue root) {
    JSONValue[] fun = root["functions"].array;
    auto of = File(buildPath(dir, "bindstatic.d"), "w");
 
-   /**
-    *
-    */
    void writeRem(JSONValue j, string space = "") {
       if (j["description"].str.length) {
          of.writefln("%s/**", space);
@@ -236,6 +258,13 @@ void createBindstatic(in string dir, JSONValue root) {
    of.writeln();
 }
 
+size_t skipCallbacks(string fn) {
+   import std.algorithm.comparison : among;
+   return fn.among!(
+               "TraceLogCallback",
+               );
+}
+
 
 size_t skipFunc(string fn) {
    import std.algorithm.comparison : among;
@@ -247,7 +276,9 @@ size_t skipFunc(string fn) {
                "SetTraceLogCallback",
                "TextFormat",
                "TraceLog",
-               "TraceLogCallback",
+               //"AttachAudioStreamProcessor",
+               //"DetachAudioStreamProcessor",
+               //"SetAudioStreamCallback",
                );
 }
 
@@ -259,6 +290,9 @@ size_t skipEnum(string fn) {
 }
 
 
+/**
+ * Converts c type into d types
+ */
 string convertType(string cType) {
    import std.string : endsWith;
    if (cType.endsWith(" *")) {
@@ -268,6 +302,7 @@ string convertType(string cType) {
    }
 
    switch (cType) {
+      case "const void*": return "const(void)*";
       case "unsigned char": return "ubyte";
       case "unsigned char*": return "ubyte*";
       case "unsigned short": return "ushort";
@@ -275,6 +310,7 @@ string convertType(string cType) {
 
       case "unsigned int": return "uint";
       case "unsigned int*": return "uint*";
+      case "const int*": return "const(int)*";
       case "const char": return "const(char)";
       case "const char*": return "const(char)*";
       case "const char**": return "const(char*)*";

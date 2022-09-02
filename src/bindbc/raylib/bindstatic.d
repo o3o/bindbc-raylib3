@@ -50,7 +50,7 @@ extern (C) @nogc nothrow {
     */
    bool IsWindowState(uint flag);
    /**
-    * Set window configuration state using flags
+    * Set window configuration state using flags (only PLATFORM_DESKTOP)
     */
    void SetWindowState(uint flags);
    /**
@@ -98,6 +98,10 @@ extern (C) @nogc nothrow {
     */
    void SetWindowSize(int width, int height);
    /**
+    * Set window opacity [0.0f..1.0f] (only PLATFORM_DESKTOP)
+    */
+   void SetWindowOpacity(float opacity);
+   /**
     * Get native window handle
     */
    void* GetWindowHandle();
@@ -109,6 +113,14 @@ extern (C) @nogc nothrow {
     * Get current screen height
     */
    int GetScreenHeight();
+   /**
+    * Get current render width (it considers HiDPI)
+    */
+   int GetRenderWidth();
+   /**
+    * Get current render height (it considers HiDPI)
+    */
+   int GetRenderHeight();
    /**
     * Get number of connected monitors
     */
@@ -122,11 +134,11 @@ extern (C) @nogc nothrow {
     */
    Vector2 GetMonitorPosition(int monitor);
    /**
-    * Get specified monitor width (max available by monitor)
+    * Get specified monitor width (current video mode used by monitor)
     */
    int GetMonitorWidth(int monitor);
    /**
-    * Get specified monitor height (max available by monitor)
+    * Get specified monitor height (current video mode used by monitor)
     */
    int GetMonitorHeight(int monitor);
    /**
@@ -162,6 +174,14 @@ extern (C) @nogc nothrow {
     */
    const(char)* GetClipboardText();
    /**
+    * Enable waiting for events on EndDrawing(), no automatic event polling
+    */
+   void EnableEventWaiting();
+   /**
+    * Disable waiting for events on EndDrawing(), automatic events polling
+    */
+   void DisableEventWaiting();
+   /**
     * Swap back buffer with front buffer (screen drawing)
     */
    void SwapScreenBuffer();
@@ -170,9 +190,9 @@ extern (C) @nogc nothrow {
     */
    void PollInputEvents();
    /**
-    * Wait for some milliseconds (halt program execution)
+    * Wait for some time (halt program execution)
     */
-   void WaitTime(float ms);
+   void WaitTime(double seconds);
    /**
     * Shows cursor
     */
@@ -292,11 +312,11 @@ extern (C) @nogc nothrow {
    /**
     * Set shader uniform value
     */
-   void SetShaderValue(Shader shader, int locIndex, const void* value, int uniformType);
+   void SetShaderValue(Shader shader, int locIndex, const(void)* value, int uniformType);
    /**
     * Set shader uniform value vector
     */
-   void SetShaderValueV(Shader shader, int locIndex, const void* value, int uniformType, int count);
+   void SetShaderValueV(Shader shader, int locIndex, const(void)* value, int uniformType, int count);
    /**
     * Set shader uniform value (matrix 4x4)
     */
@@ -326,6 +346,10 @@ extern (C) @nogc nothrow {
     */
    Vector2 GetWorldToScreen(Vector3 position, Camera camera);
    /**
+    * Get the world space position for a 2d camera screen space position
+    */
+   Vector2 GetScreenToWorld2D(Vector2 position, Camera2D camera);
+   /**
     * Get size position for a 3d world space position
     */
    Vector2 GetWorldToScreenEx(Vector3 position, Camera camera, int width, int height);
@@ -333,10 +357,6 @@ extern (C) @nogc nothrow {
     * Get the screen space position for a 2d camera world space position
     */
    Vector2 GetWorldToScreen2D(Vector2 position, Camera2D camera);
-   /**
-    * Get the world space position for a 2d camera screen space position
-    */
-   Vector2 GetScreenToWorld2D(Vector2 position, Camera2D camera);
    /**
     * Set target FPS (maximum)
     */
@@ -386,6 +406,10 @@ extern (C) @nogc nothrow {
     */
    void MemFree(void* ptr);
    /**
+    * Open URL with default system browser (if available)
+    */
+   void OpenURL(const(char)* url);
+   /**
     * Load file data as byte array (read)
     */
    ubyte* LoadFileData(const(char)* fileName, uint* bytesRead);
@@ -398,7 +422,11 @@ extern (C) @nogc nothrow {
     */
    bool SaveFileData(const(char)* fileName, void* data, uint bytesToWrite);
    /**
-    * Load text data from file (read), returns a ' 0' terminated string
+    * Export data to code (.h), returns true on success
+    */
+   bool ExportDataAsCode(const(char)* data, uint size, const(char)* fileName);
+   /**
+    * Load text data from file (read), returns a '\0' terminated string
     */
    char* LoadFileText(const(char)* fileName);
    /**
@@ -406,7 +434,7 @@ extern (C) @nogc nothrow {
     */
    void UnloadFileText(char* text);
    /**
-    * Save text data to file (write), string must be ' 0' terminated, returns true on success
+    * Save text data to file (write), string must be '\0' terminated, returns true on success
     */
    bool SaveFileText(const(char)* fileName, char* text);
    /**
@@ -421,6 +449,10 @@ extern (C) @nogc nothrow {
     * Check file extension (including point: .png, .wav)
     */
    bool IsFileExtension(const(char)* fileName, const(char)* ext);
+   /**
+    * Get file length in bytes (NOTE: GetFileSize() conflicts with windows.h)
+    */
+   int GetFileLength(const(char)* fileName);
    /**
     * Get pointer to extension for a filename string (includes dot: '.png')
     */
@@ -446,61 +478,61 @@ extern (C) @nogc nothrow {
     */
    const(char)* GetWorkingDirectory();
    /**
-    * Get filenames in a directory path (memory should be freed)
+    * Get the directory if the running application (uses static string)
     */
-   char** GetDirectoryFiles(const(char)* dirPath, int* count);
-   /**
-    * Clear directory files paths buffers (free memory)
-    */
-   void ClearDirectoryFiles();
+   const(char)* GetApplicationDirectory();
    /**
     * Change working directory, return true on success
     */
    bool ChangeDirectory(const(char)* dir);
    /**
+    * Check if a given path is a file or a directory
+    */
+   bool IsPathFile(const(char)* path);
+   /**
+    * Load directory filepaths
+    */
+   FilePathList LoadDirectoryFiles(const(char)* dirPath);
+   /**
+    * Load directory filepaths with extension filtering and recursive directory scan
+    */
+   FilePathList LoadDirectoryFilesEx(const(char)* basePath, const(char)* filter, bool scanSubdirs);
+   /**
+    * Unload filepaths
+    */
+   void UnloadDirectoryFiles(FilePathList files);
+   /**
     * Check if a file has been dropped into window
     */
    bool IsFileDropped();
    /**
-    * Get dropped files names (memory should be freed)
+    * Load dropped filepaths
     */
-   char** GetDroppedFiles(int* count);
+   FilePathList LoadDroppedFiles();
    /**
-    * Clear dropped files paths buffer (free memory)
+    * Unload dropped filepaths
     */
-   void ClearDroppedFiles();
+   void UnloadDroppedFiles(FilePathList files);
    /**
     * Get file modification time (last write time)
     */
    long GetFileModTime(const(char)* fileName);
    /**
-    * Compress data (DEFLATE algorithm)
+    * Compress data (DEFLATE algorithm), memory must be MemFree()
     */
-   ubyte* CompressData(ubyte* data, int dataLength, int* compDataLength);
+   ubyte* CompressData(const(ubyte)* data, int dataSize, int* compDataSize);
    /**
-    * Decompress data (DEFLATE algorithm)
+    * Decompress data (DEFLATE algorithm), memory must be MemFree()
     */
-   ubyte* DecompressData(ubyte* compData, int compDataLength, int* dataLength);
+   ubyte* DecompressData(const(ubyte)* compData, int compDataSize, int* dataSize);
    /**
-    * Encode data to Base64 string
+    * Encode data to Base64 string, memory must be MemFree()
     */
-   char* EncodeDataBase64(const(ubyte)* data, int dataLength, int* outputLength);
+   char* EncodeDataBase64(const(ubyte)* data, int dataSize, int* outputSize);
    /**
-    * Decode Base64 string data
+    * Decode Base64 string data, memory must be MemFree()
     */
-   ubyte* DecodeDataBase64(ubyte* data, int* outputLength);
-   /**
-    * Save integer value to storage file (to defined position), returns true on success
-    */
-   bool SaveStorageValue(uint position, int value);
-   /**
-    * Load integer value from storage file (from defined position)
-    */
-   int LoadStorageValue(uint position);
-   /**
-    * Open URL with default system browser (if available)
-    */
-   void OpenURL(const(char)* url);
+   ubyte* DecodeDataBase64(const(ubyte)* data, int* outputSize);
    /**
     * Check if a key has been pressed once
     */
@@ -614,9 +646,13 @@ extern (C) @nogc nothrow {
     */
    void SetMouseScale(float scaleX, float scaleY);
    /**
-    * Get mouse wheel movement Y
+    * Get mouse wheel movement for X or Y, whichever is larger
     */
    float GetMouseWheelMove();
+   /**
+    * Get mouse wheel movement for both X and Y
+    */
+   Vector2 GetMouseWheelMoveV();
    /**
     * Set mouse cursor
     */
@@ -1160,11 +1196,11 @@ extern (C) @nogc nothrow {
    /**
     * Update GPU texture with new data
     */
-   void UpdateTexture(Texture2D texture, const void* pixels);
+   void UpdateTexture(Texture2D texture, const(void)* pixels);
    /**
     * Update GPU texture rectangle with new data
     */
-   void UpdateTextureRec(Texture2D texture, Rectangle rec, const void* pixels);
+   void UpdateTextureRec(Texture2D texture, Rectangle rec, const(void)* pixels);
    /**
     * Generate GPU mipmaps for a texture
     */
@@ -1270,7 +1306,7 @@ extern (C) @nogc nothrow {
     */
    Font LoadFont(const(char)* fileName);
    /**
-    * Load font from file with extended parameters
+    * Load font from file with extended parameters, use NULL for fontChars and 0 for glyphCount to load the default character set
     */
    Font LoadFontEx(const(char)* fileName, int fontSize, int* fontChars, int glyphCount);
    /**
@@ -1294,9 +1330,13 @@ extern (C) @nogc nothrow {
     */
    void UnloadFontData(GlyphInfo* chars, int glyphCount);
    /**
-    * Unload Font from GPU memory (VRAM)
+    * Unload font from GPU memory (VRAM)
     */
    void UnloadFont(Font font);
+   /**
+    * Export font as code file, returns true on success
+    */
+   bool ExportFontAsCode(Font font, const(char)* fileName);
    /**
     * Draw current FPS
     */
@@ -1317,6 +1357,10 @@ extern (C) @nogc nothrow {
     * Draw one character (codepoint)
     */
    void DrawTextCodepoint(Font font, int codepoint, Vector2 position, float fontSize, Color tint);
+   /**
+    * Draw multiple character (codepoint)
+    */
+   void DrawTextCodepoints(Font font, const(int)* codepoints, int count, Vector2 position, float fontSize, float spacing, Color tint);
    /**
     * Measure string width for default font
     */
@@ -1360,7 +1404,7 @@ extern (C) @nogc nothrow {
    /**
     * Encode text as codepoints array into UTF-8 text string (WARNING: memory must be freed!)
     */
-   char* TextCodepointsToUTF8(int* codepoints, int length);
+   char* TextCodepointsToUTF8(const(int)* codepoints, int length);
    /**
     * Copy one string to another, returns bytes copied
     */
@@ -1370,7 +1414,7 @@ extern (C) @nogc nothrow {
     */
    bool TextIsEqual(const(char)* text1, const(char)* text2);
    /**
-    * Get text length, checks for ' 0' ending
+    * Get text length, checks for '\0' ending
     */
    uint TextLength(const(char)* text);
    /**
@@ -1560,7 +1604,7 @@ extern (C) @nogc nothrow {
    /**
     * Update mesh vertex data in GPU for a specific buffer index
     */
-   void UpdateMeshBuffer(Mesh mesh, int index, void* data, int dataSize, int offset);
+   void UpdateMeshBuffer(Mesh mesh, int index, const(void)* data, int dataSize, int offset);
    /**
     * Unload mesh data from CPU and GPU
     */
@@ -1572,7 +1616,7 @@ extern (C) @nogc nothrow {
    /**
     * Draw multiple mesh instances with material and different transforms
     */
-   void DrawMeshInstanced(Mesh mesh, Material material, Matrix* transforms, int instances);
+   void DrawMeshInstanced(Mesh mesh, Material material, const Matrix* transforms, int instances);
    /**
     * Export mesh data to file, returns true on success
     */
@@ -1585,10 +1629,6 @@ extern (C) @nogc nothrow {
     * Compute mesh tangents
     */
    void GenMeshTangents(Mesh* mesh);
-   /**
-    * Compute mesh binormals
-    */
-   void GenMeshBinormals(Mesh* mesh);
    /**
     * Generate polygonal mesh
     */
@@ -1694,10 +1734,6 @@ extern (C) @nogc nothrow {
     */
    RayCollision GetRayCollisionBox(Ray ray, BoundingBox box);
    /**
-    * Get collision info between ray and model
-    */
-   RayCollision GetRayCollisionModel(Ray ray, Model model);
-   /**
     * Get collision info between ray and mesh
     */
    RayCollision GetRayCollisionMesh(Ray ray, Mesh mesh, Matrix transform);
@@ -1744,7 +1780,7 @@ extern (C) @nogc nothrow {
    /**
     * Update sound buffer with new data
     */
-   void UpdateSound(Sound sound, const void* data, int sampleCount);
+   void UpdateSound(Sound sound, const(void)* data, int sampleCount);
    /**
     * Unload wave data
     */
@@ -1802,9 +1838,9 @@ extern (C) @nogc nothrow {
     */
    void SetSoundPitch(Sound sound, float pitch);
    /**
-    * Convert wave data to desired format
+    * Set pan for a sound (0.5 is center)
     */
-   void WaveFormat(Wave* wave, int sampleRate, int sampleSize, int channels);
+   void SetSoundPan(Sound sound, float pan);
    /**
     * Copy a wave to a new wave
     */
@@ -1814,7 +1850,11 @@ extern (C) @nogc nothrow {
     */
    void WaveCrop(Wave* wave, int initSample, int finalSample);
    /**
-    * Load samples data from wave as a floats array
+    * Convert wave data to desired format
+    */
+   void WaveFormat(Wave* wave, int sampleRate, int sampleSize, int channels);
+   /**
+    * Load samples data from wave as a 32bit float data array
     */
    float* LoadWaveSamples(Wave wave);
    /**
@@ -1828,7 +1868,7 @@ extern (C) @nogc nothrow {
    /**
     * Load music stream from data
     */
-   Music LoadMusicStreamFromMemory(const(char)* fileType, ubyte* data, int dataSize);
+   Music LoadMusicStreamFromMemory(const(char)* fileType, const(ubyte)* data, int dataSize);
    /**
     * Unload music stream
     */
@@ -1870,6 +1910,10 @@ extern (C) @nogc nothrow {
     */
    void SetMusicPitch(Music music, float pitch);
    /**
+    * Set pan for a music (0.5 is center)
+    */
+   void SetMusicPan(Music music, float pan);
+   /**
     * Get music time length (in seconds)
     */
    float GetMusicTimeLength(Music music);
@@ -1888,7 +1932,7 @@ extern (C) @nogc nothrow {
    /**
     * Update audio stream buffers with data
     */
-   void UpdateAudioStream(AudioStream stream, const void* data, int frameCount);
+   void UpdateAudioStream(AudioStream stream, const(void)* data, int frameCount);
    /**
     * Check if any audio stream buffers requires refill
     */
@@ -1922,8 +1966,24 @@ extern (C) @nogc nothrow {
     */
    void SetAudioStreamPitch(AudioStream stream, float pitch);
    /**
+    * Set pan for audio stream (0.5 is centered)
+    */
+   void SetAudioStreamPan(AudioStream stream, float pan);
+   /**
     * Default size for new audio streams
     */
    void SetAudioStreamBufferSizeDefault(int size);
+   /**
+    * Audio thread callback to request new data
+    */
+   void SetAudioStreamCallback(AudioStream stream, AudioCallback callback);
+   /**
+    * Attach audio stream processor to stream
+    */
+   void AttachAudioStreamProcessor(AudioStream stream, AudioCallback processor);
+   /**
+    * Detach audio stream processor from stream
+    */
+   void DetachAudioStreamProcessor(AudioStream stream, AudioCallback processor);
 }
 
