@@ -1,6 +1,22 @@
 # Changelog
-
 All notable changes to this project will be documented in this file.
+
+## [2.0.0] - 2022-09-02
+
+### Documentation
+
+- Update readme
+- Add api link to readme
+
+### Features
+
+- Raylib v4.2.0
+
+## [1.0.0] - 2022-05-10
+
+### Documentation
+
+- Update changelog
 
 ## [0.6.0] - 2022-05-07
 
@@ -33,10 +49,6 @@ All notable changes to this project will be documented in this file.
 ### Features
 
 - Add static bind
-
-### Miscellaneous Tasks
-
-- Add text examples
 
 ### Refactor
 
@@ -77,13 +89,6 @@ All notable changes to this project will be documented in this file.
 - Modify readme
 - Modify readme
 - Update readme
-
-### Miscellaneous Tasks
-
-- Add license
-- Add examples
-- Add shapes examples
-- Add texture example
 
 ### Refactor
 
