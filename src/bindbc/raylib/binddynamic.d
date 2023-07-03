@@ -30,6 +30,7 @@ extern (C) @nogc nothrow {
    alias pMinimizeWindow = void function();
    alias pRestoreWindow = void function();
    alias pSetWindowIcon = void function(Image image);
+   alias pSetWindowIcons = void function(Image* images, int count);
    alias pSetWindowTitle = void function(const(char)* title);
    alias pSetWindowPosition = void function(int x, int y);
    alias pSetWindowMonitor = void function(int monitor);
@@ -86,6 +87,7 @@ extern (C) @nogc nothrow {
    alias pUnloadVrStereoConfig = void function(VrStereoConfig config);
    alias pLoadShader = Shader function(const(char)* vsFileName, const(char)* fsFileName);
    alias pLoadShaderFromMemory = Shader function(const(char)* vsCode, const(char)* fsCode);
+   alias pIsShaderReady = bool function(Shader shader);
    alias pGetShaderLocation = int function(Shader shader, const(char)* uniformName);
    alias pGetShaderLocationAttrib = int function(Shader shader, const(char)* attribName);
    alias pSetShaderValue = void function(Shader shader, int locIndex, const(void)* value, int uniformType);
@@ -109,14 +111,14 @@ extern (C) @nogc nothrow {
    alias pTakeScreenshot = void function(const(char)* fileName);
    alias pSetConfigFlags = void function(uint flags);
    alias pSetTraceLogLevel = void function(int logLevel);
-   alias pMemAlloc = void* function(int size);
-   alias pMemRealloc = void* function(void* ptr, int size);
+   alias pMemAlloc = void* function(uint size);
+   alias pMemRealloc = void* function(void* ptr, uint size);
    alias pMemFree = void function(void* ptr);
    alias pOpenURL = void function(const(char)* url);
    alias pLoadFileData = ubyte* function(const(char)* fileName, uint* bytesRead);
    alias pUnloadFileData = void function(ubyte* data);
    alias pSaveFileData = bool function(const(char)* fileName, void* data, uint bytesToWrite);
-   alias pExportDataAsCode = bool function(const(char)* data, uint size, const(char)* fileName);
+   alias pExportDataAsCode = bool function(const(ubyte)* data, uint size, const(char)* fileName);
    alias pLoadFileText = char* function(const(char)* fileName);
    alias pUnloadFileText = void function(char* text);
    alias pSaveFileText = bool function(const(char)* fileName, char* text);
@@ -188,12 +190,8 @@ extern (C) @nogc nothrow {
    alias pGetGestureDragAngle = float function();
    alias pGetGesturePinchVector = Vector2 function();
    alias pGetGesturePinchAngle = float function();
-   alias pSetCameraMode = void function(Camera camera, int mode);
-   alias pUpdateCamera = void function(Camera* camera);
-   alias pSetCameraPanControl = void function(int keyPan);
-   alias pSetCameraAltControl = void function(int keyAlt);
-   alias pSetCameraSmoothZoomControl = void function(int keySmoothZoom);
-   alias pSetCameraMoveControls = void function(int keyFront, int keyBack, int keyRight, int keyLeft, int keyUp, int keyDown);
+   alias pUpdateCamera = void function(Camera* camera, int mode);
+   alias pUpdateCameraPro = void function(Camera* camera, Vector3 movement, Vector3 rotation, float zoom);
    alias pSetShapesTexture = void function(Texture2D texture, Rectangle source);
    alias pDrawPixel = void function(int posX, int posY, Color color);
    alias pDrawPixelV = void function(Vector2 position, Color color);
@@ -238,6 +236,7 @@ extern (C) @nogc nothrow {
    alias pCheckCollisionPointRec = bool function(Vector2 point, Rectangle rec);
    alias pCheckCollisionPointCircle = bool function(Vector2 point, Vector2 center, float radius);
    alias pCheckCollisionPointTriangle = bool function(Vector2 point, Vector2 p1, Vector2 p2, Vector2 p3);
+   alias pCheckCollisionPointPoly = bool function(Vector2 point, Vector2* points, int pointCount);
    alias pCheckCollisionLines = bool function(Vector2 startPos1, Vector2 endPos1, Vector2 startPos2, Vector2 endPos2, Vector2* collisionPoint);
    alias pCheckCollisionPointLine = bool function(Vector2 point, Vector2 p1, Vector2 p2, int threshold);
    alias pGetCollisionRec = Rectangle function(Rectangle rec1, Rectangle rec2);
@@ -247,6 +246,7 @@ extern (C) @nogc nothrow {
    alias pLoadImageFromMemory = Image function(const(char)* fileType, const(ubyte)* fileData, int dataSize);
    alias pLoadImageFromTexture = Image function(Texture2D texture);
    alias pLoadImageFromScreen = Image function();
+   alias pIsImageReady = bool function(Image image);
    alias pUnloadImage = void function(Image image);
    alias pExportImage = bool function(Image image, const(char)* fileName);
    alias pExportImageAsCode = bool function(Image image, const(char)* fileName);
@@ -256,7 +256,9 @@ extern (C) @nogc nothrow {
    alias pGenImageGradientRadial = Image function(int width, int height, float density, Color inner, Color outer);
    alias pGenImageChecked = Image function(int width, int height, int checksX, int checksY, Color col1, Color col2);
    alias pGenImageWhiteNoise = Image function(int width, int height, float factor);
+   alias pGenImagePerlinNoise = Image function(int width, int height, int offsetX, int offsetY, float scale);
    alias pGenImageCellular = Image function(int width, int height, int tileSize);
+   alias pGenImageText = Image function(int width, int height, const(char)* text);
    alias pImageCopy = Image function(Image image);
    alias pImageFromImage = Image function(Image image, Rectangle rec);
    alias pImageText = Image function(const(char)* text, int fontSize, Color color);
@@ -268,6 +270,7 @@ extern (C) @nogc nothrow {
    alias pImageAlphaClear = void function(Image* image, Color color, float threshold);
    alias pImageAlphaMask = void function(Image* image, Image alphaMask);
    alias pImageAlphaPremultiply = void function(Image* image);
+   alias pImageBlurGaussian = void function(Image* image, int blurSize);
    alias pImageResize = void function(Image* image, int newWidth, int newHeight);
    alias pImageResizeNN = void function(Image* image, int newWidth, int newHeight);
    alias pImageResizeCanvas = void function(Image* image, int newWidth, int newHeight, int offsetX, int offsetY, Color fill);
@@ -296,6 +299,8 @@ extern (C) @nogc nothrow {
    alias pImageDrawLineV = void function(Image* dst, Vector2 start, Vector2 end, Color color);
    alias pImageDrawCircle = void function(Image* dst, int centerX, int centerY, int radius, Color color);
    alias pImageDrawCircleV = void function(Image* dst, Vector2 center, int radius, Color color);
+   alias pImageDrawCircleLines = void function(Image* dst, int centerX, int centerY, int radius, Color color);
+   alias pImageDrawCircleLinesV = void function(Image* dst, Vector2 center, int radius, Color color);
    alias pImageDrawRectangle = void function(Image* dst, int posX, int posY, int width, int height, Color color);
    alias pImageDrawRectangleV = void function(Image* dst, Vector2 position, Vector2 size, Color color);
    alias pImageDrawRectangleRec = void function(Image* dst, Rectangle rec, Color color);
@@ -307,7 +312,9 @@ extern (C) @nogc nothrow {
    alias pLoadTextureFromImage = Texture2D function(Image image);
    alias pLoadTextureCubemap = TextureCubemap function(Image image, int layout);
    alias pLoadRenderTexture = RenderTexture2D function(int width, int height);
+   alias pIsTextureReady = bool function(Texture2D texture);
    alias pUnloadTexture = void function(Texture2D texture);
+   alias pIsRenderTextureReady = bool function(RenderTexture2D target);
    alias pUnloadRenderTexture = void function(RenderTexture2D target);
    alias pUpdateTexture = void function(Texture2D texture, const(void)* pixels);
    alias pUpdateTextureRec = void function(Texture2D texture, Rectangle rec, const(void)* pixels);
@@ -318,17 +325,17 @@ extern (C) @nogc nothrow {
    alias pDrawTextureV = void function(Texture2D texture, Vector2 position, Color tint);
    alias pDrawTextureEx = void function(Texture2D texture, Vector2 position, float rotation, float scale, Color tint);
    alias pDrawTextureRec = void function(Texture2D texture, Rectangle source, Vector2 position, Color tint);
-   alias pDrawTextureQuad = void function(Texture2D texture, Vector2 tiling, Vector2 offset, Rectangle quad, Color tint);
-   alias pDrawTextureTiled = void function(Texture2D texture, Rectangle source, Rectangle dest, Vector2 origin, float rotation, float scale, Color tint);
    alias pDrawTexturePro = void function(Texture2D texture, Rectangle source, Rectangle dest, Vector2 origin, float rotation, Color tint);
    alias pDrawTextureNPatch = void function(Texture2D texture, NPatchInfo nPatchInfo, Rectangle dest, Vector2 origin, float rotation, Color tint);
-   alias pDrawTexturePoly = void function(Texture2D texture, Vector2 center, Vector2* points, Vector2* texcoords, int pointCount, Color tint);
    alias pFade = Color function(Color color, float alpha);
    alias pColorToInt = int function(Color color);
    alias pColorNormalize = Vector4 function(Color color);
    alias pColorFromNormalized = Color function(Vector4 normalized);
    alias pColorToHSV = Vector3 function(Color color);
    alias pColorFromHSV = Color function(float hue, float saturation, float value);
+   alias pColorTint = Color function(Color color, Color tint);
+   alias pColorBrightness = Color function(Color color, float factor);
+   alias pColorContrast = Color function(Color color, float contrast);
    alias pColorAlpha = Color function(Color color, float alpha);
    alias pColorAlphaBlend = Color function(Color dst, Color src, Color tint);
    alias pGetColor = Color function(uint hexValue);
@@ -340,6 +347,7 @@ extern (C) @nogc nothrow {
    alias pLoadFontEx = Font function(const(char)* fileName, int fontSize, int* fontChars, int glyphCount);
    alias pLoadFontFromImage = Font function(Image image, Color key, int firstChar);
    alias pLoadFontFromMemory = Font function(const(char)* fileType, const(ubyte)* fileData, int dataSize, int fontSize, int* fontChars, int glyphCount);
+   alias pIsFontReady = bool function(Font font);
    alias pLoadFontData = GlyphInfo* function(const(ubyte)* fileData, int dataSize, int fontSize, int* fontChars, int glyphCount, int type);
    alias pGenImageFontAtlas = Image function(const GlyphInfo* chars, Rectangle** recs, int glyphCount, int fontSize, int padding, int packMethod);
    alias pUnloadFontData = void function(GlyphInfo* chars, int glyphCount);
@@ -356,12 +364,15 @@ extern (C) @nogc nothrow {
    alias pGetGlyphIndex = int function(Font font, int codepoint);
    alias pGetGlyphInfo = GlyphInfo function(Font font, int codepoint);
    alias pGetGlyphAtlasRec = Rectangle function(Font font, int codepoint);
+   alias pLoadUTF8 = char* function(const(int)* codepoints, int length);
+   alias pUnloadUTF8 = void function(char* text);
    alias pLoadCodepoints = int* function(const(char)* text, int* count);
    alias pUnloadCodepoints = void function(int* codepoints);
    alias pGetCodepointCount = int function(const(char)* text);
-   alias pGetCodepoint = int function(const(char)* text, int* bytesProcessed);
-   alias pCodepointToUTF8 = const(char)* function(int codepoint, int* byteSize);
-   alias pTextCodepointsToUTF8 = char* function(const(int)* codepoints, int length);
+   alias pGetCodepoint = int function(const(char)* text, int* codepointSize);
+   alias pGetCodepointNext = int function(const(char)* text, int* codepointSize);
+   alias pGetCodepointPrevious = int function(const(char)* text, int* codepointSize);
+   alias pCodepointToUTF8 = const(char)* function(int codepoint, int* utf8Size);
    alias pTextCopy = int function(char* dst, const(char)* src);
    alias pTextIsEqual = bool function(const(char)* text1, const(char)* text2);
    alias pTextLength = uint function(const(char)* text);
@@ -385,8 +396,6 @@ extern (C) @nogc nothrow {
    alias pDrawCubeV = void function(Vector3 position, Vector3 size, Color color);
    alias pDrawCubeWires = void function(Vector3 position, float width, float height, float length, Color color);
    alias pDrawCubeWiresV = void function(Vector3 position, Vector3 size, Color color);
-   alias pDrawCubeTexture = void function(Texture2D texture, Vector3 position, float width, float height, float length, Color color);
-   alias pDrawCubeTextureRec = void function(Texture2D texture, Rectangle source, Vector3 position, float width, float height, float length, Color color);
    alias pDrawSphere = void function(Vector3 centerPos, float radius, Color color);
    alias pDrawSphereEx = void function(Vector3 centerPos, float radius, int rings, int slices, Color color);
    alias pDrawSphereWires = void function(Vector3 centerPos, float radius, int rings, int slices, Color color);
@@ -394,13 +403,15 @@ extern (C) @nogc nothrow {
    alias pDrawCylinderEx = void function(Vector3 startPos, Vector3 endPos, float startRadius, float endRadius, int sides, Color color);
    alias pDrawCylinderWires = void function(Vector3 position, float radiusTop, float radiusBottom, float height, int slices, Color color);
    alias pDrawCylinderWiresEx = void function(Vector3 startPos, Vector3 endPos, float startRadius, float endRadius, int sides, Color color);
+   alias pDrawCapsule = void function(Vector3 startPos, Vector3 endPos, float radius, int slices, int rings, Color color);
+   alias pDrawCapsuleWires = void function(Vector3 startPos, Vector3 endPos, float radius, int slices, int rings, Color color);
    alias pDrawPlane = void function(Vector3 centerPos, Vector2 size, Color color);
    alias pDrawRay = void function(Ray ray, Color color);
    alias pDrawGrid = void function(int slices, float spacing);
    alias pLoadModel = Model function(const(char)* fileName);
    alias pLoadModelFromMesh = Model function(Mesh mesh);
+   alias pIsModelReady = bool function(Model model);
    alias pUnloadModel = void function(Model model);
-   alias pUnloadModelKeepMeshes = void function(Model model);
    alias pGetModelBoundingBox = BoundingBox function(Model model);
    alias pDrawModel = void function(Model model, Vector3 position, float scale, Color tint);
    alias pDrawModelEx = void function(Model model, Vector3 position, Vector3 rotationAxis, float rotationAngle, Vector3 scale, Color tint);
@@ -431,6 +442,7 @@ extern (C) @nogc nothrow {
    alias pGenMeshCubicmap = Mesh function(Image cubicmap, Vector3 cubeSize);
    alias pLoadMaterials = Material* function(const(char)* fileName, int* materialCount);
    alias pLoadMaterialDefault = Material function();
+   alias pIsMaterialReady = bool function(Material material);
    alias pUnloadMaterial = void function(Material material);
    alias pSetMaterialTexture = void function(Material* material, int mapType, Texture2D texture);
    alias pSetModelMeshMaterial = void function(Model* model, int meshId, int materialId);
@@ -453,8 +465,10 @@ extern (C) @nogc nothrow {
    alias pSetMasterVolume = void function(float volume);
    alias pLoadWave = Wave function(const(char)* fileName);
    alias pLoadWaveFromMemory = Wave function(const(char)* fileType, const(ubyte)* fileData, int dataSize);
+   alias pIsWaveReady = bool function(Wave wave);
    alias pLoadSound = Sound function(const(char)* fileName);
    alias pLoadSoundFromWave = Sound function(Wave wave);
+   alias pIsSoundReady = bool function(Sound sound);
    alias pUpdateSound = void function(Sound sound, const(void)* data, int sampleCount);
    alias pUnloadWave = void function(Wave wave);
    alias pUnloadSound = void function(Sound sound);
@@ -464,9 +478,6 @@ extern (C) @nogc nothrow {
    alias pStopSound = void function(Sound sound);
    alias pPauseSound = void function(Sound sound);
    alias pResumeSound = void function(Sound sound);
-   alias pPlaySoundMulti = void function(Sound sound);
-   alias pStopSoundMulti = void function();
-   alias pGetSoundsPlaying = int function();
    alias pIsSoundPlaying = bool function(Sound sound);
    alias pSetSoundVolume = void function(Sound sound, float volume);
    alias pSetSoundPitch = void function(Sound sound, float pitch);
@@ -478,6 +489,7 @@ extern (C) @nogc nothrow {
    alias pUnloadWaveSamples = void function(float* samples);
    alias pLoadMusicStream = Music function(const(char)* fileName);
    alias pLoadMusicStreamFromMemory = Music function(const(char)* fileType, const(ubyte)* data, int dataSize);
+   alias pIsMusicReady = bool function(Music music);
    alias pUnloadMusicStream = void function(Music music);
    alias pPlayMusicStream = void function(Music music);
    alias pIsMusicStreamPlaying = bool function(Music music);
@@ -492,6 +504,7 @@ extern (C) @nogc nothrow {
    alias pGetMusicTimeLength = float function(Music music);
    alias pGetMusicTimePlayed = float function(Music music);
    alias pLoadAudioStream = AudioStream function(uint sampleRate, uint sampleSize, uint channels);
+   alias pIsAudioStreamReady = bool function(AudioStream stream);
    alias pUnloadAudioStream = void function(AudioStream stream);
    alias pUpdateAudioStream = void function(AudioStream stream, const(void)* data, int frameCount);
    alias pIsAudioStreamProcessed = bool function(AudioStream stream);
@@ -507,6 +520,8 @@ extern (C) @nogc nothrow {
    alias pSetAudioStreamCallback = void function(AudioStream stream, AudioCallback callback);
    alias pAttachAudioStreamProcessor = void function(AudioStream stream, AudioCallback processor);
    alias pDetachAudioStreamProcessor = void function(AudioStream stream, AudioCallback processor);
+   alias pAttachAudioMixedProcessor = void function(AudioCallback processor);
+   alias pDetachAudioMixedProcessor = void function(AudioCallback processor);
 }
 
 __gshared {
@@ -528,6 +543,7 @@ __gshared {
    pMinimizeWindow MinimizeWindow;
    pRestoreWindow RestoreWindow;
    pSetWindowIcon SetWindowIcon;
+   pSetWindowIcons SetWindowIcons;
    pSetWindowTitle SetWindowTitle;
    pSetWindowPosition SetWindowPosition;
    pSetWindowMonitor SetWindowMonitor;
@@ -584,6 +600,7 @@ __gshared {
    pUnloadVrStereoConfig UnloadVrStereoConfig;
    pLoadShader LoadShader;
    pLoadShaderFromMemory LoadShaderFromMemory;
+   pIsShaderReady IsShaderReady;
    pGetShaderLocation GetShaderLocation;
    pGetShaderLocationAttrib GetShaderLocationAttrib;
    pSetShaderValue SetShaderValue;
@@ -686,12 +703,8 @@ __gshared {
    pGetGestureDragAngle GetGestureDragAngle;
    pGetGesturePinchVector GetGesturePinchVector;
    pGetGesturePinchAngle GetGesturePinchAngle;
-   pSetCameraMode SetCameraMode;
    pUpdateCamera UpdateCamera;
-   pSetCameraPanControl SetCameraPanControl;
-   pSetCameraAltControl SetCameraAltControl;
-   pSetCameraSmoothZoomControl SetCameraSmoothZoomControl;
-   pSetCameraMoveControls SetCameraMoveControls;
+   pUpdateCameraPro UpdateCameraPro;
    pSetShapesTexture SetShapesTexture;
    pDrawPixel DrawPixel;
    pDrawPixelV DrawPixelV;
@@ -736,6 +749,7 @@ __gshared {
    pCheckCollisionPointRec CheckCollisionPointRec;
    pCheckCollisionPointCircle CheckCollisionPointCircle;
    pCheckCollisionPointTriangle CheckCollisionPointTriangle;
+   pCheckCollisionPointPoly CheckCollisionPointPoly;
    pCheckCollisionLines CheckCollisionLines;
    pCheckCollisionPointLine CheckCollisionPointLine;
    pGetCollisionRec GetCollisionRec;
@@ -745,6 +759,7 @@ __gshared {
    pLoadImageFromMemory LoadImageFromMemory;
    pLoadImageFromTexture LoadImageFromTexture;
    pLoadImageFromScreen LoadImageFromScreen;
+   pIsImageReady IsImageReady;
    pUnloadImage UnloadImage;
    pExportImage ExportImage;
    pExportImageAsCode ExportImageAsCode;
@@ -754,7 +769,9 @@ __gshared {
    pGenImageGradientRadial GenImageGradientRadial;
    pGenImageChecked GenImageChecked;
    pGenImageWhiteNoise GenImageWhiteNoise;
+   pGenImagePerlinNoise GenImagePerlinNoise;
    pGenImageCellular GenImageCellular;
+   pGenImageText GenImageText;
    pImageCopy ImageCopy;
    pImageFromImage ImageFromImage;
    pImageText ImageText;
@@ -766,6 +783,7 @@ __gshared {
    pImageAlphaClear ImageAlphaClear;
    pImageAlphaMask ImageAlphaMask;
    pImageAlphaPremultiply ImageAlphaPremultiply;
+   pImageBlurGaussian ImageBlurGaussian;
    pImageResize ImageResize;
    pImageResizeNN ImageResizeNN;
    pImageResizeCanvas ImageResizeCanvas;
@@ -794,6 +812,8 @@ __gshared {
    pImageDrawLineV ImageDrawLineV;
    pImageDrawCircle ImageDrawCircle;
    pImageDrawCircleV ImageDrawCircleV;
+   pImageDrawCircleLines ImageDrawCircleLines;
+   pImageDrawCircleLinesV ImageDrawCircleLinesV;
    pImageDrawRectangle ImageDrawRectangle;
    pImageDrawRectangleV ImageDrawRectangleV;
    pImageDrawRectangleRec ImageDrawRectangleRec;
@@ -805,7 +825,9 @@ __gshared {
    pLoadTextureFromImage LoadTextureFromImage;
    pLoadTextureCubemap LoadTextureCubemap;
    pLoadRenderTexture LoadRenderTexture;
+   pIsTextureReady IsTextureReady;
    pUnloadTexture UnloadTexture;
+   pIsRenderTextureReady IsRenderTextureReady;
    pUnloadRenderTexture UnloadRenderTexture;
    pUpdateTexture UpdateTexture;
    pUpdateTextureRec UpdateTextureRec;
@@ -816,17 +838,17 @@ __gshared {
    pDrawTextureV DrawTextureV;
    pDrawTextureEx DrawTextureEx;
    pDrawTextureRec DrawTextureRec;
-   pDrawTextureQuad DrawTextureQuad;
-   pDrawTextureTiled DrawTextureTiled;
    pDrawTexturePro DrawTexturePro;
    pDrawTextureNPatch DrawTextureNPatch;
-   pDrawTexturePoly DrawTexturePoly;
    pFade Fade;
    pColorToInt ColorToInt;
    pColorNormalize ColorNormalize;
    pColorFromNormalized ColorFromNormalized;
    pColorToHSV ColorToHSV;
    pColorFromHSV ColorFromHSV;
+   pColorTint ColorTint;
+   pColorBrightness ColorBrightness;
+   pColorContrast ColorContrast;
    pColorAlpha ColorAlpha;
    pColorAlphaBlend ColorAlphaBlend;
    pGetColor GetColor;
@@ -838,6 +860,7 @@ __gshared {
    pLoadFontEx LoadFontEx;
    pLoadFontFromImage LoadFontFromImage;
    pLoadFontFromMemory LoadFontFromMemory;
+   pIsFontReady IsFontReady;
    pLoadFontData LoadFontData;
    pGenImageFontAtlas GenImageFontAtlas;
    pUnloadFontData UnloadFontData;
@@ -854,12 +877,15 @@ __gshared {
    pGetGlyphIndex GetGlyphIndex;
    pGetGlyphInfo GetGlyphInfo;
    pGetGlyphAtlasRec GetGlyphAtlasRec;
+   pLoadUTF8 LoadUTF8;
+   pUnloadUTF8 UnloadUTF8;
    pLoadCodepoints LoadCodepoints;
    pUnloadCodepoints UnloadCodepoints;
    pGetCodepointCount GetCodepointCount;
    pGetCodepoint GetCodepoint;
+   pGetCodepointNext GetCodepointNext;
+   pGetCodepointPrevious GetCodepointPrevious;
    pCodepointToUTF8 CodepointToUTF8;
-   pTextCodepointsToUTF8 TextCodepointsToUTF8;
    pTextCopy TextCopy;
    pTextIsEqual TextIsEqual;
    pTextLength TextLength;
@@ -883,8 +909,6 @@ __gshared {
    pDrawCubeV DrawCubeV;
    pDrawCubeWires DrawCubeWires;
    pDrawCubeWiresV DrawCubeWiresV;
-   pDrawCubeTexture DrawCubeTexture;
-   pDrawCubeTextureRec DrawCubeTextureRec;
    pDrawSphere DrawSphere;
    pDrawSphereEx DrawSphereEx;
    pDrawSphereWires DrawSphereWires;
@@ -892,13 +916,15 @@ __gshared {
    pDrawCylinderEx DrawCylinderEx;
    pDrawCylinderWires DrawCylinderWires;
    pDrawCylinderWiresEx DrawCylinderWiresEx;
+   pDrawCapsule DrawCapsule;
+   pDrawCapsuleWires DrawCapsuleWires;
    pDrawPlane DrawPlane;
    pDrawRay DrawRay;
    pDrawGrid DrawGrid;
    pLoadModel LoadModel;
    pLoadModelFromMesh LoadModelFromMesh;
+   pIsModelReady IsModelReady;
    pUnloadModel UnloadModel;
-   pUnloadModelKeepMeshes UnloadModelKeepMeshes;
    pGetModelBoundingBox GetModelBoundingBox;
    pDrawModel DrawModel;
    pDrawModelEx DrawModelEx;
@@ -929,6 +955,7 @@ __gshared {
    pGenMeshCubicmap GenMeshCubicmap;
    pLoadMaterials LoadMaterials;
    pLoadMaterialDefault LoadMaterialDefault;
+   pIsMaterialReady IsMaterialReady;
    pUnloadMaterial UnloadMaterial;
    pSetMaterialTexture SetMaterialTexture;
    pSetModelMeshMaterial SetModelMeshMaterial;
@@ -951,8 +978,10 @@ __gshared {
    pSetMasterVolume SetMasterVolume;
    pLoadWave LoadWave;
    pLoadWaveFromMemory LoadWaveFromMemory;
+   pIsWaveReady IsWaveReady;
    pLoadSound LoadSound;
    pLoadSoundFromWave LoadSoundFromWave;
+   pIsSoundReady IsSoundReady;
    pUpdateSound UpdateSound;
    pUnloadWave UnloadWave;
    pUnloadSound UnloadSound;
@@ -962,9 +991,6 @@ __gshared {
    pStopSound StopSound;
    pPauseSound PauseSound;
    pResumeSound ResumeSound;
-   pPlaySoundMulti PlaySoundMulti;
-   pStopSoundMulti StopSoundMulti;
-   pGetSoundsPlaying GetSoundsPlaying;
    pIsSoundPlaying IsSoundPlaying;
    pSetSoundVolume SetSoundVolume;
    pSetSoundPitch SetSoundPitch;
@@ -976,6 +1002,7 @@ __gshared {
    pUnloadWaveSamples UnloadWaveSamples;
    pLoadMusicStream LoadMusicStream;
    pLoadMusicStreamFromMemory LoadMusicStreamFromMemory;
+   pIsMusicReady IsMusicReady;
    pUnloadMusicStream UnloadMusicStream;
    pPlayMusicStream PlayMusicStream;
    pIsMusicStreamPlaying IsMusicStreamPlaying;
@@ -990,6 +1017,7 @@ __gshared {
    pGetMusicTimeLength GetMusicTimeLength;
    pGetMusicTimePlayed GetMusicTimePlayed;
    pLoadAudioStream LoadAudioStream;
+   pIsAudioStreamReady IsAudioStreamReady;
    pUnloadAudioStream UnloadAudioStream;
    pUpdateAudioStream UpdateAudioStream;
    pIsAudioStreamProcessed IsAudioStreamProcessed;
@@ -1005,6 +1033,8 @@ __gshared {
    pSetAudioStreamCallback SetAudioStreamCallback;
    pAttachAudioStreamProcessor AttachAudioStreamProcessor;
    pDetachAudioStreamProcessor DetachAudioStreamProcessor;
+   pAttachAudioMixedProcessor AttachAudioMixedProcessor;
+   pDetachAudioMixedProcessor DetachAudioMixedProcessor;
 }
 /**
  * Raylib binding.
@@ -1083,6 +1113,7 @@ RaylibSupport loadRaylib(const(char)* libName) {
    lib.bindSymbol(cast(void**)&MinimizeWindow, "MinimizeWindow");
    lib.bindSymbol(cast(void**)&RestoreWindow, "RestoreWindow");
    lib.bindSymbol(cast(void**)&SetWindowIcon, "SetWindowIcon");
+   lib.bindSymbol(cast(void**)&SetWindowIcons, "SetWindowIcons");
    lib.bindSymbol(cast(void**)&SetWindowTitle, "SetWindowTitle");
    lib.bindSymbol(cast(void**)&SetWindowPosition, "SetWindowPosition");
    lib.bindSymbol(cast(void**)&SetWindowMonitor, "SetWindowMonitor");
@@ -1139,6 +1170,7 @@ RaylibSupport loadRaylib(const(char)* libName) {
    lib.bindSymbol(cast(void**)&UnloadVrStereoConfig, "UnloadVrStereoConfig");
    lib.bindSymbol(cast(void**)&LoadShader, "LoadShader");
    lib.bindSymbol(cast(void**)&LoadShaderFromMemory, "LoadShaderFromMemory");
+   lib.bindSymbol(cast(void**)&IsShaderReady, "IsShaderReady");
    lib.bindSymbol(cast(void**)&GetShaderLocation, "GetShaderLocation");
    lib.bindSymbol(cast(void**)&GetShaderLocationAttrib, "GetShaderLocationAttrib");
    lib.bindSymbol(cast(void**)&SetShaderValue, "SetShaderValue");
@@ -1241,12 +1273,8 @@ RaylibSupport loadRaylib(const(char)* libName) {
    lib.bindSymbol(cast(void**)&GetGestureDragAngle, "GetGestureDragAngle");
    lib.bindSymbol(cast(void**)&GetGesturePinchVector, "GetGesturePinchVector");
    lib.bindSymbol(cast(void**)&GetGesturePinchAngle, "GetGesturePinchAngle");
-   lib.bindSymbol(cast(void**)&SetCameraMode, "SetCameraMode");
    lib.bindSymbol(cast(void**)&UpdateCamera, "UpdateCamera");
-   lib.bindSymbol(cast(void**)&SetCameraPanControl, "SetCameraPanControl");
-   lib.bindSymbol(cast(void**)&SetCameraAltControl, "SetCameraAltControl");
-   lib.bindSymbol(cast(void**)&SetCameraSmoothZoomControl, "SetCameraSmoothZoomControl");
-   lib.bindSymbol(cast(void**)&SetCameraMoveControls, "SetCameraMoveControls");
+   lib.bindSymbol(cast(void**)&UpdateCameraPro, "UpdateCameraPro");
    lib.bindSymbol(cast(void**)&SetShapesTexture, "SetShapesTexture");
    lib.bindSymbol(cast(void**)&DrawPixel, "DrawPixel");
    lib.bindSymbol(cast(void**)&DrawPixelV, "DrawPixelV");
@@ -1291,6 +1319,7 @@ RaylibSupport loadRaylib(const(char)* libName) {
    lib.bindSymbol(cast(void**)&CheckCollisionPointRec, "CheckCollisionPointRec");
    lib.bindSymbol(cast(void**)&CheckCollisionPointCircle, "CheckCollisionPointCircle");
    lib.bindSymbol(cast(void**)&CheckCollisionPointTriangle, "CheckCollisionPointTriangle");
+   lib.bindSymbol(cast(void**)&CheckCollisionPointPoly, "CheckCollisionPointPoly");
    lib.bindSymbol(cast(void**)&CheckCollisionLines, "CheckCollisionLines");
    lib.bindSymbol(cast(void**)&CheckCollisionPointLine, "CheckCollisionPointLine");
    lib.bindSymbol(cast(void**)&GetCollisionRec, "GetCollisionRec");
@@ -1300,6 +1329,7 @@ RaylibSupport loadRaylib(const(char)* libName) {
    lib.bindSymbol(cast(void**)&LoadImageFromMemory, "LoadImageFromMemory");
    lib.bindSymbol(cast(void**)&LoadImageFromTexture, "LoadImageFromTexture");
    lib.bindSymbol(cast(void**)&LoadImageFromScreen, "LoadImageFromScreen");
+   lib.bindSymbol(cast(void**)&IsImageReady, "IsImageReady");
    lib.bindSymbol(cast(void**)&UnloadImage, "UnloadImage");
    lib.bindSymbol(cast(void**)&ExportImage, "ExportImage");
    lib.bindSymbol(cast(void**)&ExportImageAsCode, "ExportImageAsCode");
@@ -1309,7 +1339,9 @@ RaylibSupport loadRaylib(const(char)* libName) {
    lib.bindSymbol(cast(void**)&GenImageGradientRadial, "GenImageGradientRadial");
    lib.bindSymbol(cast(void**)&GenImageChecked, "GenImageChecked");
    lib.bindSymbol(cast(void**)&GenImageWhiteNoise, "GenImageWhiteNoise");
+   lib.bindSymbol(cast(void**)&GenImagePerlinNoise, "GenImagePerlinNoise");
    lib.bindSymbol(cast(void**)&GenImageCellular, "GenImageCellular");
+   lib.bindSymbol(cast(void**)&GenImageText, "GenImageText");
    lib.bindSymbol(cast(void**)&ImageCopy, "ImageCopy");
    lib.bindSymbol(cast(void**)&ImageFromImage, "ImageFromImage");
    lib.bindSymbol(cast(void**)&ImageText, "ImageText");
@@ -1321,6 +1353,7 @@ RaylibSupport loadRaylib(const(char)* libName) {
    lib.bindSymbol(cast(void**)&ImageAlphaClear, "ImageAlphaClear");
    lib.bindSymbol(cast(void**)&ImageAlphaMask, "ImageAlphaMask");
    lib.bindSymbol(cast(void**)&ImageAlphaPremultiply, "ImageAlphaPremultiply");
+   lib.bindSymbol(cast(void**)&ImageBlurGaussian, "ImageBlurGaussian");
    lib.bindSymbol(cast(void**)&ImageResize, "ImageResize");
    lib.bindSymbol(cast(void**)&ImageResizeNN, "ImageResizeNN");
    lib.bindSymbol(cast(void**)&ImageResizeCanvas, "ImageResizeCanvas");
@@ -1349,6 +1382,8 @@ RaylibSupport loadRaylib(const(char)* libName) {
    lib.bindSymbol(cast(void**)&ImageDrawLineV, "ImageDrawLineV");
    lib.bindSymbol(cast(void**)&ImageDrawCircle, "ImageDrawCircle");
    lib.bindSymbol(cast(void**)&ImageDrawCircleV, "ImageDrawCircleV");
+   lib.bindSymbol(cast(void**)&ImageDrawCircleLines, "ImageDrawCircleLines");
+   lib.bindSymbol(cast(void**)&ImageDrawCircleLinesV, "ImageDrawCircleLinesV");
    lib.bindSymbol(cast(void**)&ImageDrawRectangle, "ImageDrawRectangle");
    lib.bindSymbol(cast(void**)&ImageDrawRectangleV, "ImageDrawRectangleV");
    lib.bindSymbol(cast(void**)&ImageDrawRectangleRec, "ImageDrawRectangleRec");
@@ -1360,7 +1395,9 @@ RaylibSupport loadRaylib(const(char)* libName) {
    lib.bindSymbol(cast(void**)&LoadTextureFromImage, "LoadTextureFromImage");
    lib.bindSymbol(cast(void**)&LoadTextureCubemap, "LoadTextureCubemap");
    lib.bindSymbol(cast(void**)&LoadRenderTexture, "LoadRenderTexture");
+   lib.bindSymbol(cast(void**)&IsTextureReady, "IsTextureReady");
    lib.bindSymbol(cast(void**)&UnloadTexture, "UnloadTexture");
+   lib.bindSymbol(cast(void**)&IsRenderTextureReady, "IsRenderTextureReady");
    lib.bindSymbol(cast(void**)&UnloadRenderTexture, "UnloadRenderTexture");
    lib.bindSymbol(cast(void**)&UpdateTexture, "UpdateTexture");
    lib.bindSymbol(cast(void**)&UpdateTextureRec, "UpdateTextureRec");
@@ -1371,17 +1408,17 @@ RaylibSupport loadRaylib(const(char)* libName) {
    lib.bindSymbol(cast(void**)&DrawTextureV, "DrawTextureV");
    lib.bindSymbol(cast(void**)&DrawTextureEx, "DrawTextureEx");
    lib.bindSymbol(cast(void**)&DrawTextureRec, "DrawTextureRec");
-   lib.bindSymbol(cast(void**)&DrawTextureQuad, "DrawTextureQuad");
-   lib.bindSymbol(cast(void**)&DrawTextureTiled, "DrawTextureTiled");
    lib.bindSymbol(cast(void**)&DrawTexturePro, "DrawTexturePro");
    lib.bindSymbol(cast(void**)&DrawTextureNPatch, "DrawTextureNPatch");
-   lib.bindSymbol(cast(void**)&DrawTexturePoly, "DrawTexturePoly");
    lib.bindSymbol(cast(void**)&Fade, "Fade");
    lib.bindSymbol(cast(void**)&ColorToInt, "ColorToInt");
    lib.bindSymbol(cast(void**)&ColorNormalize, "ColorNormalize");
    lib.bindSymbol(cast(void**)&ColorFromNormalized, "ColorFromNormalized");
    lib.bindSymbol(cast(void**)&ColorToHSV, "ColorToHSV");
    lib.bindSymbol(cast(void**)&ColorFromHSV, "ColorFromHSV");
+   lib.bindSymbol(cast(void**)&ColorTint, "ColorTint");
+   lib.bindSymbol(cast(void**)&ColorBrightness, "ColorBrightness");
+   lib.bindSymbol(cast(void**)&ColorContrast, "ColorContrast");
    lib.bindSymbol(cast(void**)&ColorAlpha, "ColorAlpha");
    lib.bindSymbol(cast(void**)&ColorAlphaBlend, "ColorAlphaBlend");
    lib.bindSymbol(cast(void**)&GetColor, "GetColor");
@@ -1393,6 +1430,7 @@ RaylibSupport loadRaylib(const(char)* libName) {
    lib.bindSymbol(cast(void**)&LoadFontEx, "LoadFontEx");
    lib.bindSymbol(cast(void**)&LoadFontFromImage, "LoadFontFromImage");
    lib.bindSymbol(cast(void**)&LoadFontFromMemory, "LoadFontFromMemory");
+   lib.bindSymbol(cast(void**)&IsFontReady, "IsFontReady");
    lib.bindSymbol(cast(void**)&LoadFontData, "LoadFontData");
    lib.bindSymbol(cast(void**)&GenImageFontAtlas, "GenImageFontAtlas");
    lib.bindSymbol(cast(void**)&UnloadFontData, "UnloadFontData");
@@ -1409,12 +1447,15 @@ RaylibSupport loadRaylib(const(char)* libName) {
    lib.bindSymbol(cast(void**)&GetGlyphIndex, "GetGlyphIndex");
    lib.bindSymbol(cast(void**)&GetGlyphInfo, "GetGlyphInfo");
    lib.bindSymbol(cast(void**)&GetGlyphAtlasRec, "GetGlyphAtlasRec");
+   lib.bindSymbol(cast(void**)&LoadUTF8, "LoadUTF8");
+   lib.bindSymbol(cast(void**)&UnloadUTF8, "UnloadUTF8");
    lib.bindSymbol(cast(void**)&LoadCodepoints, "LoadCodepoints");
    lib.bindSymbol(cast(void**)&UnloadCodepoints, "UnloadCodepoints");
    lib.bindSymbol(cast(void**)&GetCodepointCount, "GetCodepointCount");
    lib.bindSymbol(cast(void**)&GetCodepoint, "GetCodepoint");
+   lib.bindSymbol(cast(void**)&GetCodepointNext, "GetCodepointNext");
+   lib.bindSymbol(cast(void**)&GetCodepointPrevious, "GetCodepointPrevious");
    lib.bindSymbol(cast(void**)&CodepointToUTF8, "CodepointToUTF8");
-   lib.bindSymbol(cast(void**)&TextCodepointsToUTF8, "TextCodepointsToUTF8");
    lib.bindSymbol(cast(void**)&TextCopy, "TextCopy");
    lib.bindSymbol(cast(void**)&TextIsEqual, "TextIsEqual");
    lib.bindSymbol(cast(void**)&TextLength, "TextLength");
@@ -1438,8 +1479,6 @@ RaylibSupport loadRaylib(const(char)* libName) {
    lib.bindSymbol(cast(void**)&DrawCubeV, "DrawCubeV");
    lib.bindSymbol(cast(void**)&DrawCubeWires, "DrawCubeWires");
    lib.bindSymbol(cast(void**)&DrawCubeWiresV, "DrawCubeWiresV");
-   lib.bindSymbol(cast(void**)&DrawCubeTexture, "DrawCubeTexture");
-   lib.bindSymbol(cast(void**)&DrawCubeTextureRec, "DrawCubeTextureRec");
    lib.bindSymbol(cast(void**)&DrawSphere, "DrawSphere");
    lib.bindSymbol(cast(void**)&DrawSphereEx, "DrawSphereEx");
    lib.bindSymbol(cast(void**)&DrawSphereWires, "DrawSphereWires");
@@ -1447,13 +1486,15 @@ RaylibSupport loadRaylib(const(char)* libName) {
    lib.bindSymbol(cast(void**)&DrawCylinderEx, "DrawCylinderEx");
    lib.bindSymbol(cast(void**)&DrawCylinderWires, "DrawCylinderWires");
    lib.bindSymbol(cast(void**)&DrawCylinderWiresEx, "DrawCylinderWiresEx");
+   lib.bindSymbol(cast(void**)&DrawCapsule, "DrawCapsule");
+   lib.bindSymbol(cast(void**)&DrawCapsuleWires, "DrawCapsuleWires");
    lib.bindSymbol(cast(void**)&DrawPlane, "DrawPlane");
    lib.bindSymbol(cast(void**)&DrawRay, "DrawRay");
    lib.bindSymbol(cast(void**)&DrawGrid, "DrawGrid");
    lib.bindSymbol(cast(void**)&LoadModel, "LoadModel");
    lib.bindSymbol(cast(void**)&LoadModelFromMesh, "LoadModelFromMesh");
+   lib.bindSymbol(cast(void**)&IsModelReady, "IsModelReady");
    lib.bindSymbol(cast(void**)&UnloadModel, "UnloadModel");
-   lib.bindSymbol(cast(void**)&UnloadModelKeepMeshes, "UnloadModelKeepMeshes");
    lib.bindSymbol(cast(void**)&GetModelBoundingBox, "GetModelBoundingBox");
    lib.bindSymbol(cast(void**)&DrawModel, "DrawModel");
    lib.bindSymbol(cast(void**)&DrawModelEx, "DrawModelEx");
@@ -1484,6 +1525,7 @@ RaylibSupport loadRaylib(const(char)* libName) {
    lib.bindSymbol(cast(void**)&GenMeshCubicmap, "GenMeshCubicmap");
    lib.bindSymbol(cast(void**)&LoadMaterials, "LoadMaterials");
    lib.bindSymbol(cast(void**)&LoadMaterialDefault, "LoadMaterialDefault");
+   lib.bindSymbol(cast(void**)&IsMaterialReady, "IsMaterialReady");
    lib.bindSymbol(cast(void**)&UnloadMaterial, "UnloadMaterial");
    lib.bindSymbol(cast(void**)&SetMaterialTexture, "SetMaterialTexture");
    lib.bindSymbol(cast(void**)&SetModelMeshMaterial, "SetModelMeshMaterial");
@@ -1506,8 +1548,10 @@ RaylibSupport loadRaylib(const(char)* libName) {
    lib.bindSymbol(cast(void**)&SetMasterVolume, "SetMasterVolume");
    lib.bindSymbol(cast(void**)&LoadWave, "LoadWave");
    lib.bindSymbol(cast(void**)&LoadWaveFromMemory, "LoadWaveFromMemory");
+   lib.bindSymbol(cast(void**)&IsWaveReady, "IsWaveReady");
    lib.bindSymbol(cast(void**)&LoadSound, "LoadSound");
    lib.bindSymbol(cast(void**)&LoadSoundFromWave, "LoadSoundFromWave");
+   lib.bindSymbol(cast(void**)&IsSoundReady, "IsSoundReady");
    lib.bindSymbol(cast(void**)&UpdateSound, "UpdateSound");
    lib.bindSymbol(cast(void**)&UnloadWave, "UnloadWave");
    lib.bindSymbol(cast(void**)&UnloadSound, "UnloadSound");
@@ -1517,9 +1561,6 @@ RaylibSupport loadRaylib(const(char)* libName) {
    lib.bindSymbol(cast(void**)&StopSound, "StopSound");
    lib.bindSymbol(cast(void**)&PauseSound, "PauseSound");
    lib.bindSymbol(cast(void**)&ResumeSound, "ResumeSound");
-   lib.bindSymbol(cast(void**)&PlaySoundMulti, "PlaySoundMulti");
-   lib.bindSymbol(cast(void**)&StopSoundMulti, "StopSoundMulti");
-   lib.bindSymbol(cast(void**)&GetSoundsPlaying, "GetSoundsPlaying");
    lib.bindSymbol(cast(void**)&IsSoundPlaying, "IsSoundPlaying");
    lib.bindSymbol(cast(void**)&SetSoundVolume, "SetSoundVolume");
    lib.bindSymbol(cast(void**)&SetSoundPitch, "SetSoundPitch");
@@ -1531,6 +1572,7 @@ RaylibSupport loadRaylib(const(char)* libName) {
    lib.bindSymbol(cast(void**)&UnloadWaveSamples, "UnloadWaveSamples");
    lib.bindSymbol(cast(void**)&LoadMusicStream, "LoadMusicStream");
    lib.bindSymbol(cast(void**)&LoadMusicStreamFromMemory, "LoadMusicStreamFromMemory");
+   lib.bindSymbol(cast(void**)&IsMusicReady, "IsMusicReady");
    lib.bindSymbol(cast(void**)&UnloadMusicStream, "UnloadMusicStream");
    lib.bindSymbol(cast(void**)&PlayMusicStream, "PlayMusicStream");
    lib.bindSymbol(cast(void**)&IsMusicStreamPlaying, "IsMusicStreamPlaying");
@@ -1545,6 +1587,7 @@ RaylibSupport loadRaylib(const(char)* libName) {
    lib.bindSymbol(cast(void**)&GetMusicTimeLength, "GetMusicTimeLength");
    lib.bindSymbol(cast(void**)&GetMusicTimePlayed, "GetMusicTimePlayed");
    lib.bindSymbol(cast(void**)&LoadAudioStream, "LoadAudioStream");
+   lib.bindSymbol(cast(void**)&IsAudioStreamReady, "IsAudioStreamReady");
    lib.bindSymbol(cast(void**)&UnloadAudioStream, "UnloadAudioStream");
    lib.bindSymbol(cast(void**)&UpdateAudioStream, "UpdateAudioStream");
    lib.bindSymbol(cast(void**)&IsAudioStreamProcessed, "IsAudioStreamProcessed");
@@ -1560,13 +1603,12 @@ RaylibSupport loadRaylib(const(char)* libName) {
    lib.bindSymbol(cast(void**)&SetAudioStreamCallback, "SetAudioStreamCallback");
    lib.bindSymbol(cast(void**)&AttachAudioStreamProcessor, "AttachAudioStreamProcessor");
    lib.bindSymbol(cast(void**)&DetachAudioStreamProcessor, "DetachAudioStreamProcessor");
+   lib.bindSymbol(cast(void**)&AttachAudioMixedProcessor, "AttachAudioMixedProcessor");
+   lib.bindSymbol(cast(void**)&DetachAudioMixedProcessor, "DetachAudioMixedProcessor");
    if (errorCount() != errCount) {
       return RaylibSupport.badLibrary;
    } else {
-      loadedVersion = RaylibSupport.raylib370;
-   }
-   static if (raylibSupport >= RaylibSupport.raylib420) {
-      loadedVersion = RaylibSupport.raylib420;
+      loadedVersion = RaylibSupport.raylib450;
    }
 
    return loadedVersion;

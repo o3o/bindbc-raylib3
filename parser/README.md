@@ -1,15 +1,11 @@
 #  Parser
-From release 4.2 of raylib is not longer necessary to apply the patch.
-
-
 ```
 $ cd parser
 $ git clone git@github.com:raysan5/raylib.git
 $ cp raylib/parser/raylib_parser.c .
-
 ```
+then:
 
-## Apply patch
 ```
 $ make
 ```

@@ -74,9 +74,13 @@ extern (C) @nogc nothrow {
     */
    void RestoreWindow();
    /**
-    * Set icon for window (only PLATFORM_DESKTOP)
+    * Set icon for window (single image, RGBA 32bit, only PLATFORM_DESKTOP)
     */
    void SetWindowIcon(Image image);
+   /**
+    * Set icon for window (multiple images, RGBA 32bit, only PLATFORM_DESKTOP)
+    */
+   void SetWindowIcons(Image* images, int count);
    /**
     * Set title for window (only PLATFORM_DESKTOP)
     */
@@ -302,6 +306,10 @@ extern (C) @nogc nothrow {
     */
    Shader LoadShaderFromMemory(const(char)* vsCode, const(char)* fsCode);
    /**
+    * Check if a shader is ready
+    */
+   bool IsShaderReady(Shader shader);
+   /**
     * Get shader uniform location
     */
    int GetShaderLocation(Shader shader, const(char)* uniformName);
@@ -396,11 +404,11 @@ extern (C) @nogc nothrow {
    /**
     * Internal memory allocator
     */
-   void* MemAlloc(int size);
+   void* MemAlloc(uint size);
    /**
     * Internal memory reallocator
     */
-   void* MemRealloc(void* ptr, int size);
+   void* MemRealloc(void* ptr, uint size);
    /**
     * Internal memory free
     */
@@ -424,7 +432,7 @@ extern (C) @nogc nothrow {
    /**
     * Export data to code (.h), returns true on success
     */
-   bool ExportDataAsCode(const(char)* data, uint size, const(char)* fileName);
+   bool ExportDataAsCode(const(ubyte)* data, uint size, const(char)* fileName);
    /**
     * Load text data from file (read), returns a '\0' terminated string
     */
@@ -710,29 +718,13 @@ extern (C) @nogc nothrow {
     */
    float GetGesturePinchAngle();
    /**
-    * Set camera mode (multiple camera modes available)
-    */
-   void SetCameraMode(Camera camera, int mode);
-   /**
     * Update camera position for selected mode
     */
-   void UpdateCamera(Camera* camera);
+   void UpdateCamera(Camera* camera, int mode);
    /**
-    * Set camera pan key to combine with mouse movement (free camera)
+    * Update camera movement/rotation
     */
-   void SetCameraPanControl(int keyPan);
-   /**
-    * Set camera alt key to combine with mouse movement (free camera)
-    */
-   void SetCameraAltControl(int keyAlt);
-   /**
-    * Set camera smooth zoom key to combine with mouse (free camera)
-    */
-   void SetCameraSmoothZoomControl(int keySmoothZoom);
-   /**
-    * Set camera move controls (1st person and 3rd person cameras)
-    */
-   void SetCameraMoveControls(int keyFront, int keyBack, int keyRight, int keyLeft, int keyUp, int keyDown);
+   void UpdateCameraPro(Camera* camera, Vector3 movement, Vector3 rotation, float zoom);
    /**
     * Set texture and rectangle to be used on shapes drawing
     */
@@ -910,6 +902,10 @@ extern (C) @nogc nothrow {
     */
    bool CheckCollisionPointTriangle(Vector2 point, Vector2 p1, Vector2 p2, Vector2 p3);
    /**
+    * Check if point is within a polygon described by array of vertices
+    */
+   bool CheckCollisionPointPoly(Vector2 point, Vector2* points, int pointCount);
+   /**
     * Check the collision between two lines defined by two points each, returns collision point by reference
     */
    bool CheckCollisionLines(Vector2 startPos1, Vector2 endPos1, Vector2 startPos2, Vector2 endPos2, Vector2* collisionPoint);
@@ -945,6 +941,10 @@ extern (C) @nogc nothrow {
     * Load image from screen buffer and (screenshot)
     */
    Image LoadImageFromScreen();
+   /**
+    * Check if an image is ready
+    */
+   bool IsImageReady(Image image);
    /**
     * Unload image from CPU memory (RAM)
     */
@@ -982,9 +982,17 @@ extern (C) @nogc nothrow {
     */
    Image GenImageWhiteNoise(int width, int height, float factor);
    /**
+    * Generate image: perlin noise
+    */
+   Image GenImagePerlinNoise(int width, int height, int offsetX, int offsetY, float scale);
+   /**
     * Generate image: cellular algorithm, bigger tileSize means bigger cells
     */
    Image GenImageCellular(int width, int height, int tileSize);
+   /**
+    * Generate image: grayscale image from text data
+    */
+   Image GenImageText(int width, int height, const(char)* text);
    /**
     * Create an image duplicate (useful for transformations)
     */
@@ -1029,6 +1037,10 @@ extern (C) @nogc nothrow {
     * Premultiply alpha channel
     */
    void ImageAlphaPremultiply(Image* image);
+   /**
+    * Apply Gaussian blur using a box blur approximation
+    */
+   void ImageBlurGaussian(Image* image, int blurSize);
    /**
     * Resize image (Bicubic scaling algorithm)
     */
@@ -1134,13 +1146,21 @@ extern (C) @nogc nothrow {
     */
    void ImageDrawLineV(Image* dst, Vector2 start, Vector2 end, Color color);
    /**
-    * Draw circle within an image
+    * Draw a filled circle within an image
     */
    void ImageDrawCircle(Image* dst, int centerX, int centerY, int radius, Color color);
    /**
-    * Draw circle within an image (Vector version)
+    * Draw a filled circle within an image (Vector version)
     */
    void ImageDrawCircleV(Image* dst, Vector2 center, int radius, Color color);
+   /**
+    * Draw circle outline within an image
+    */
+   void ImageDrawCircleLines(Image* dst, int centerX, int centerY, int radius, Color color);
+   /**
+    * Draw circle outline within an image (Vector version)
+    */
+   void ImageDrawCircleLinesV(Image* dst, Vector2 center, int radius, Color color);
    /**
     * Draw rectangle within an image
     */
@@ -1186,9 +1206,17 @@ extern (C) @nogc nothrow {
     */
    RenderTexture2D LoadRenderTexture(int width, int height);
    /**
+    * Check if a texture is ready
+    */
+   bool IsTextureReady(Texture2D texture);
+   /**
     * Unload texture from GPU memory (VRAM)
     */
    void UnloadTexture(Texture2D texture);
+   /**
+    * Check if a render texture is ready
+    */
+   bool IsRenderTextureReady(RenderTexture2D target);
    /**
     * Unload render texture from GPU memory (VRAM)
     */
@@ -1230,14 +1258,6 @@ extern (C) @nogc nothrow {
     */
    void DrawTextureRec(Texture2D texture, Rectangle source, Vector2 position, Color tint);
    /**
-    * Draw texture quad with tiling and offset parameters
-    */
-   void DrawTextureQuad(Texture2D texture, Vector2 tiling, Vector2 offset, Rectangle quad, Color tint);
-   /**
-    * Draw part of a texture (defined by a rectangle) with rotation and scale tiled into dest.
-    */
-   void DrawTextureTiled(Texture2D texture, Rectangle source, Rectangle dest, Vector2 origin, float rotation, float scale, Color tint);
-   /**
     * Draw a part of a texture defined by a rectangle with 'pro' parameters
     */
    void DrawTexturePro(Texture2D texture, Rectangle source, Rectangle dest, Vector2 origin, float rotation, Color tint);
@@ -1245,10 +1265,6 @@ extern (C) @nogc nothrow {
     * Draws a texture (or part of it) that stretches or shrinks nicely
     */
    void DrawTextureNPatch(Texture2D texture, NPatchInfo nPatchInfo, Rectangle dest, Vector2 origin, float rotation, Color tint);
-   /**
-    * Draw a textured polygon
-    */
-   void DrawTexturePoly(Texture2D texture, Vector2 center, Vector2* points, Vector2* texcoords, int pointCount, Color tint);
    /**
     * Get color with alpha applied, alpha goes from 0.0f to 1.0f
     */
@@ -1273,6 +1289,18 @@ extern (C) @nogc nothrow {
     * Get a Color from HSV values, hue [0..360], saturation/value [0..1]
     */
    Color ColorFromHSV(float hue, float saturation, float value);
+   /**
+    * Get color multiplied with another color
+    */
+   Color ColorTint(Color color, Color tint);
+   /**
+    * Get color with brightness correction, brightness factor goes from -1.0f to 1.0f
+    */
+   Color ColorBrightness(Color color, float factor);
+   /**
+    * Get color with contrast correction, contrast values between -1.0f and 1.0f
+    */
+   Color ColorContrast(Color color, float contrast);
    /**
     * Get color with alpha applied, alpha goes from 0.0f to 1.0f
     */
@@ -1317,6 +1345,10 @@ extern (C) @nogc nothrow {
     * Load font from memory buffer, fileType refers to extension: i.e. '.ttf'
     */
    Font LoadFontFromMemory(const(char)* fileType, const(ubyte)* fileData, int dataSize, int fontSize, int* fontChars, int glyphCount);
+   /**
+    * Check if a font is ready
+    */
+   bool IsFontReady(Font font);
    /**
     * Load font data for further use
     */
@@ -1382,6 +1414,14 @@ extern (C) @nogc nothrow {
     */
    Rectangle GetGlyphAtlasRec(Font font, int codepoint);
    /**
+    * Load UTF-8 text encoded from codepoints array
+    */
+   char* LoadUTF8(const(int)* codepoints, int length);
+   /**
+    * Unload UTF-8 text encoded from codepoints array
+    */
+   void UnloadUTF8(char* text);
+   /**
     * Load all codepoints from a UTF-8 text string, codepoints count returned by parameter
     */
    int* LoadCodepoints(const(char)* text, int* count);
@@ -1396,15 +1436,19 @@ extern (C) @nogc nothrow {
    /**
     * Get next codepoint in a UTF-8 encoded string, 0x3f('?') is returned on failure
     */
-   int GetCodepoint(const(char)* text, int* bytesProcessed);
+   int GetCodepoint(const(char)* text, int* codepointSize);
+   /**
+    * Get next codepoint in a UTF-8 encoded string, 0x3f('?') is returned on failure
+    */
+   int GetCodepointNext(const(char)* text, int* codepointSize);
+   /**
+    * Get previous codepoint in a UTF-8 encoded string, 0x3f('?') is returned on failure
+    */
+   int GetCodepointPrevious(const(char)* text, int* codepointSize);
    /**
     * Encode one codepoint into UTF-8 byte array (array length returned as parameter)
     */
-   const(char)* CodepointToUTF8(int codepoint, int* byteSize);
-   /**
-    * Encode text as codepoints array into UTF-8 text string (WARNING: memory must be freed!)
-    */
-   char* TextCodepointsToUTF8(const(int)* codepoints, int length);
+   const(char)* CodepointToUTF8(int codepoint, int* utf8Size);
    /**
     * Copy one string to another, returns bytes copied
     */
@@ -1498,14 +1542,6 @@ extern (C) @nogc nothrow {
     */
    void DrawCubeWiresV(Vector3 position, Vector3 size, Color color);
    /**
-    * Draw cube textured
-    */
-   void DrawCubeTexture(Texture2D texture, Vector3 position, float width, float height, float length, Color color);
-   /**
-    * Draw cube with a region of a texture
-    */
-   void DrawCubeTextureRec(Texture2D texture, Rectangle source, Vector3 position, float width, float height, float length, Color color);
-   /**
     * Draw sphere
     */
    void DrawSphere(Vector3 centerPos, float radius, Color color);
@@ -1534,6 +1570,14 @@ extern (C) @nogc nothrow {
     */
    void DrawCylinderWiresEx(Vector3 startPos, Vector3 endPos, float startRadius, float endRadius, int sides, Color color);
    /**
+    * Draw a capsule with the center of its sphere caps at startPos and endPos
+    */
+   void DrawCapsule(Vector3 startPos, Vector3 endPos, float radius, int slices, int rings, Color color);
+   /**
+    * Draw capsule wireframe with the center of its sphere caps at startPos and endPos
+    */
+   void DrawCapsuleWires(Vector3 startPos, Vector3 endPos, float radius, int slices, int rings, Color color);
+   /**
     * Draw a plane XZ
     */
    void DrawPlane(Vector3 centerPos, Vector2 size, Color color);
@@ -1554,13 +1598,13 @@ extern (C) @nogc nothrow {
     */
    Model LoadModelFromMesh(Mesh mesh);
    /**
+    * Check if a model is ready
+    */
+   bool IsModelReady(Model model);
+   /**
     * Unload model (including meshes) from memory (RAM and/or VRAM)
     */
    void UnloadModel(Model model);
-   /**
-    * Unload model (but not meshes) from memory (RAM and/or VRAM)
-    */
-   void UnloadModelKeepMeshes(Model model);
    /**
     * Compute model bounding box limits (considers all meshes)
     */
@@ -1682,6 +1726,10 @@ extern (C) @nogc nothrow {
     */
    Material LoadMaterialDefault();
    /**
+    * Check if a material is ready
+    */
+   bool IsMaterialReady(Material material);
+   /**
     * Unload material from GPU memory (VRAM)
     */
    void UnloadMaterial(Material material);
@@ -1770,6 +1818,10 @@ extern (C) @nogc nothrow {
     */
    Wave LoadWaveFromMemory(const(char)* fileType, const(ubyte)* fileData, int dataSize);
    /**
+    * Checks if wave data is ready
+    */
+   bool IsWaveReady(Wave wave);
+   /**
     * Load sound from file
     */
    Sound LoadSound(const(char)* fileName);
@@ -1777,6 +1829,10 @@ extern (C) @nogc nothrow {
     * Load sound from wave data
     */
    Sound LoadSoundFromWave(Wave wave);
+   /**
+    * Checks if a sound is ready
+    */
+   bool IsSoundReady(Sound sound);
    /**
     * Update sound buffer with new data
     */
@@ -1813,18 +1869,6 @@ extern (C) @nogc nothrow {
     * Resume a paused sound
     */
    void ResumeSound(Sound sound);
-   /**
-    * Play a sound (using multichannel buffer pool)
-    */
-   void PlaySoundMulti(Sound sound);
-   /**
-    * Stop any sound playing (using multichannel buffer pool)
-    */
-   void StopSoundMulti();
-   /**
-    * Get number of sounds playing in the multichannel
-    */
-   int GetSoundsPlaying();
    /**
     * Check if a sound is currently playing
     */
@@ -1869,6 +1913,10 @@ extern (C) @nogc nothrow {
     * Load music stream from data
     */
    Music LoadMusicStreamFromMemory(const(char)* fileType, const(ubyte)* data, int dataSize);
+   /**
+    * Checks if a music stream is ready
+    */
+   bool IsMusicReady(Music music);
    /**
     * Unload music stream
     */
@@ -1925,6 +1973,10 @@ extern (C) @nogc nothrow {
     * Load audio stream (to stream raw audio pcm data)
     */
    AudioStream LoadAudioStream(uint sampleRate, uint sampleSize, uint channels);
+   /**
+    * Checks if an audio stream is ready
+    */
+   bool IsAudioStreamReady(AudioStream stream);
    /**
     * Unload audio stream and free memory
     */
@@ -1985,5 +2037,13 @@ extern (C) @nogc nothrow {
     * Detach audio stream processor from stream
     */
    void DetachAudioStreamProcessor(AudioStream stream, AudioCallback processor);
+   /**
+    * Attach audio stream processor to the entire audio pipeline
+    */
+   void AttachAudioMixedProcessor(AudioCallback processor);
+   /**
+    * Detach audio stream processor from the entire audio pipeline
+    */
+   void DetachAudioMixedProcessor(AudioCallback processor);
 }
 

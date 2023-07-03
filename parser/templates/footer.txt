@@ -1,10 +1,7 @@
    if (errorCount() != errCount) {
       return RaylibSupport.badLibrary;
    } else {
-      loadedVersion = RaylibSupport.raylib370;
-   }
-   static if (raylibSupport >= RaylibSupport.raylib420) {
-      loadedVersion = RaylibSupport.raylib420;
+      loadedVersion = RaylibSupport.raylib450;
    }
 
    return loadedVersion;

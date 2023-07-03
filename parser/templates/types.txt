@@ -8,14 +8,13 @@ module bindbc.raylib.types;
 enum RaylibSupport {
    noLibrary,
    badLibrary,
-   raylib370 = 370,
-   raylib400 = 400,
-   raylib420 = 420
+   raylib450
 }
+enum raylibSupport = RaylibSupport.raylib450;
 
-enum RAYLIB_VERSION_MAJOR = 4;
-enum RAYLIB_VERSION_MINOR = 2;
-enum RAYLIB_VERSION_REVISION = 0;
-enum RAYLIB_VERSION_BUILD = 0;
-enum raylibSupport = RaylibSupport.raylib420;
 
+
+// Opaque structs declaration
+// NOTE: Actual structs are defined internally in raudio module
+struct rAudioBuffer;
+struct rAudioProcessor;

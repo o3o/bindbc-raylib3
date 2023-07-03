@@ -3,6 +3,7 @@ This project provides both static and dynamic bindings to the [raylib](https://w
 
 
 See [wiki](https://github.com/o3o/bindbc-raylib3/wiki) and [API](https://bindbc-raylib3.dpldocs.info/bindbc.raylib.html).
+
 ## Compile raylib source code
 See [raylib wiki](https://github.com/raysan5/raylib/wiki) and
 [bindbc wiki](https://github.com/o3o/bindbc-raylib3/wiki/compile-raylib)
@@ -58,14 +59,13 @@ Following are the `bindbc-raylib3` versions, the supported versions of raylib an
 
 | Raylib version       | `RaylibSupport` Member    | bindbc-raylib3 version |
 | -------------------- | --------------------      | ---                    |
+| 4.5.0                | `RaylibSupport.raylib450` | 4.5.0                  |
 | 4.2.0                | `RaylibSupport.raylib420` | 2.0.0                  |
 | 4.0.0                | `RaylibSupport.raylib400` | 1.0.0                  |
 | 3.7.0                | `RaylibSupport.raylib370` | 0.3.0                  |
 
-For bind-raylib3 version see [wiki](https://github.com/o3o/bindbc-raylib3/wiki/version).
+For more detailed information please refer to the [wiki](https://github.com/o3o/bindbc-raylib3/wiki/bindbc-raylib3-versioning).
 
-## Versioning
-bindbc-raylib3 is being [semantically versioned](http://semver.org). Roughly described, major version changes will always represent backwards incompatible changes, minor version changes will always represent new features and will be backwards compatible, and patch ('tiny') version changes will always be bug fixes.
 
 ## Examples
 You can find [original raylib examples](https://www.raylib.com/examples.html) ported to D inside [examples directory](https://github.com/o3o/bindbc-raylib3/tree/master/examples).

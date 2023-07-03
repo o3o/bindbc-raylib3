@@ -58,7 +58,19 @@ void createTypes(string dir, JSONValue root) {
    of.writeln(s);
 
    of.writeln();
-   of.writeln("// structs");
+   of.writeln("// defines");
+   of.writeln();
+   foreach (e; root["defines"].array) {
+      string typ = e["type"].str;
+      if (typ == "INT") {
+         of.writefln("enum int %s = %d;", e["name"].str, e["value"].get!int);
+      } else  if (typ == "STRING") {
+         of.writefln("enum string %s = \"%s\";", e["name"].str, e["value"].str);
+      }
+   }
+
+   of.writeln();
+   of.writeln("// callbacks");
    of.writeln();
    foreach (e; callbacks) {
       string fn = e["name"].str;
@@ -86,21 +98,17 @@ void createTypes(string dir, JSONValue root) {
       }
       of.writeln("}");
    }
-   of.writeln();
-   enum RAUDIO = `struct rAudioProcessor {
-      AudioCallback process;          // Processor callback function
-      rAudioProcessor *next;          // Next audio processor on the list
-      rAudioProcessor *prev;          // Previous audio processor on the list
-   };`;
 
-   of.writeln(RAUDIO);
+
    of.writeln();
-   of.writeln("alias RenderTexture2D = RenderTexture;");
-   of.writeln("alias Camera = Camera3D;");
-   of.writeln("alias Texture2D = Texture;");
-   of.writeln("alias TextureCubemap = Texture;");
-   of.writeln("alias Quaternion = Vector4;");
-   of.writeln("struct rAudioBuffer {}");
+   of.writeln("// aliases");
+   of.writeln();
+
+   JSONValue[] aliases = root["aliases"].array;
+   foreach (e; aliases) {
+      of.writefln("alias %s = %s; // %s", e["name"].str, e["type"].str, e["description"].str);
+   }
+
 
    of.writeln();
    of.writeln("// enums");
@@ -258,6 +266,11 @@ void createBindstatic(in string dir, JSONValue root) {
    of.writeln();
 }
 
+size_t skipDefines(string fn) {
+   return (fn == "INT"  || fn == "STRING") ? 1 : 0;
+}
+
+
 size_t skipCallbacks(string fn) {
    import std.algorithm.comparison : among;
    return fn.among!(
@@ -265,7 +278,10 @@ size_t skipCallbacks(string fn) {
                );
 }
 
-
+/**
+ *
+ * Returns 0 if value is not among values.
+ */
 size_t skipFunc(string fn) {
    import std.algorithm.comparison : among;
    return fn.among!(
@@ -317,10 +333,14 @@ string convertType(string cType) {
 
       case "const unsigned char": return "const(ubyte)";
       case "const unsigned char*": return "const(ubyte)*";
+      case "INT": return "int";
+      case "STRING": return "string";
       default: return cType;
    }
 }
 
 unittest {
    assert(convertType( "const char**") == "const(char*)*";
+   assert(convertType( "INT") == "int";
+   assert(convertType( "STRING") == "string";
 }

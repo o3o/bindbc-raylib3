@@ -8,20 +8,26 @@ module bindbc.raylib.types;
 enum RaylibSupport {
    noLibrary,
    badLibrary,
-   raylib370 = 370,
-   raylib400 = 400,
-   raylib420 = 420
+   raylib450
 }
-
-enum RAYLIB_VERSION_MAJOR = 4;
-enum RAYLIB_VERSION_MINOR = 2;
-enum RAYLIB_VERSION_REVISION = 0;
-enum RAYLIB_VERSION_BUILD = 0;
-enum raylibSupport = RaylibSupport.raylib420;
+enum raylibSupport = RaylibSupport.raylib450;
 
 
 
-// structs
+// Opaque structs declaration
+// NOTE: Actual structs are defined internally in raudio module
+struct rAudioBuffer;
+struct rAudioProcessor;
+
+
+// defines
+
+enum int RAYLIB_VERSION_MAJOR = 4;
+enum int RAYLIB_VERSION_MINOR = 5;
+enum int RAYLIB_VERSION_PATCH = 0;
+enum string RAYLIB_VERSION = "4.5";
+
+// callbacks
 
 /// FileIO: Load binary data
 alias LoadFileDataCallback = ubyte* function(const(char)*, uint*);
@@ -63,7 +69,7 @@ struct Vector4 {
    /// Vector w component
    float w;
 }
-/// Matrix, 4x4 components, column major, OpenGL style, right handed
+/// Matrix, 4x4 components, column major, OpenGL style, right-handed
 struct Matrix {
    /// Matrix first row (4 components)
    float m0;
@@ -206,7 +212,7 @@ struct Camera3D {
    Vector3 target;
    /// Camera up vector (rotation over its axis)
    Vector3 up;
-   /// Camera field-of-view apperture in Y (degrees) in perspective, used as near plane width in orthographic
+   /// Camera field-of-view aperture in Y (degrees) in perspective, used as near plane width in orthographic
    float fovy;
    /// Camera projection: CAMERA_PERSPECTIVE or CAMERA_ORTHOGRAPHIC
    int projection;
@@ -280,7 +286,7 @@ struct Material {
    /// Material generic parameters (if required)
    float[4] params;
 }
-/// Transform, vectex transformation data
+/// Transform, vertex transformation data
 struct Transform {
    /// Translation
    Vector3 translation;
@@ -339,9 +345,9 @@ struct Ray {
 struct RayCollision {
    /// Did the ray hit something?
    bool hit;
-   /// Distance to nearest hit
+   /// Distance to the nearest hit
    float distance;
-   /// Point of nearest hit
+   /// Point of the nearest hit
    Vector3 point;
    /// Surface normal of hit
    Vector3 normal;
@@ -451,18 +457,13 @@ struct FilePathList {
    char** paths;
 }
 
-struct rAudioProcessor {
-      AudioCallback process;          // Processor callback function
-      rAudioProcessor *next;          // Next audio processor on the list
-      rAudioProcessor *prev;          // Previous audio processor on the list
-   };
+// aliases
 
-alias RenderTexture2D = RenderTexture;
-alias Camera = Camera3D;
-alias Texture2D = Texture;
-alias TextureCubemap = Texture;
-alias Quaternion = Vector4;
-struct rAudioBuffer {}
+alias Quaternion = Vector4; // Quaternion, 4 components (Vector4 alias)
+alias Texture2D = Texture; // Texture2D, same as Texture
+alias TextureCubemap = Texture; // TextureCubemap, same as Texture
+alias RenderTexture2D = RenderTexture; // RenderTexture2D, same as RenderTexture
+alias Camera = Camera3D; // Camera type fallback, defaults to Camera3D
 
 // enums
 
@@ -889,7 +890,7 @@ enum MouseButton {
    MOUSE_BUTTON_SIDE = 3,
    /// Mouse button extra (advanced mouse device)
    MOUSE_BUTTON_EXTRA = 4,
-   /// Mouse button fordward (advanced mouse device)
+   /// Mouse button forward (advanced mouse device)
    MOUSE_BUTTON_FORWARD = 5,
    /// Mouse button back (advanced mouse device)
    MOUSE_BUTTON_BACK = 6,
@@ -922,7 +923,7 @@ enum MouseCursor {
    MOUSE_CURSOR_RESIZE_NWSE = 7,
    /// The top-right to bottom-left diagonal resize/move arrow shape
    MOUSE_CURSOR_RESIZE_NESW = 8,
-   /// The omni-directional resize/move cursor shape
+   /// The omnidirectional resize/move cursor shape
    MOUSE_CURSOR_RESIZE_ALL = 9,
    /// The operation-not-allowed shape
    MOUSE_CURSOR_NOT_ALLOWED = 10,
@@ -1296,13 +1297,13 @@ enum CubemapLayout {
    CUBEMAP_LAYOUT_AUTO_DETECT = 0,
    /// Layout is defined by a vertical line with faces
    CUBEMAP_LAYOUT_LINE_VERTICAL = 1,
-   /// Layout is defined by an horizontal line with faces
+   /// Layout is defined by a horizontal line with faces
    CUBEMAP_LAYOUT_LINE_HORIZONTAL = 2,
    /// Layout is defined by a 3x4 cross with cubemap faces
    CUBEMAP_LAYOUT_CROSS_THREE_BY_FOUR = 3,
    /// Layout is defined by a 4x3 cross with cubemap faces
    CUBEMAP_LAYOUT_CROSS_FOUR_BY_THREE = 4,
-   /// Layout is defined by a panorama image (equirectangular map)
+   /// Layout is defined by a panorama image (equirrectangular map)
    CUBEMAP_LAYOUT_PANORAMA = 5,
 }
 
@@ -1339,8 +1340,10 @@ enum BlendMode {
    BLEND_SUBTRACT_COLORS = 4,
    /// Blend premultiplied textures considering alpha
    BLEND_ALPHA_PREMULTIPLY = 5,
-   /// Blend textures using custom src/dst factors (use rlSetBlendMode())
+   /// Blend textures using custom src/dst factors (use rlSetBlendFactors())
    BLEND_CUSTOM = 6,
+   /// Blend textures using custom rgb/alpha separate src/dst factors (use rlSetBlendFactorsSeparate())
+   BLEND_CUSTOM_SEPARATE = 7,
 }
 
 alias BLEND_ALPHA = BlendMode.BLEND_ALPHA;
@@ -1350,6 +1353,7 @@ alias BLEND_ADD_COLORS = BlendMode.BLEND_ADD_COLORS;
 alias BLEND_SUBTRACT_COLORS = BlendMode.BLEND_SUBTRACT_COLORS;
 alias BLEND_ALPHA_PREMULTIPLY = BlendMode.BLEND_ALPHA_PREMULTIPLY;
 alias BLEND_CUSTOM = BlendMode.BLEND_CUSTOM;
+alias BLEND_CUSTOM_SEPARATE = BlendMode.BLEND_CUSTOM_SEPARATE;
 /// Gesture
 enum Gesture {
    /// No gesture
