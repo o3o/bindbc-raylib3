@@ -10,12 +10,12 @@ targetName "bindbc-raylib3"
 
 configuration "dynamic" {
     versions "BindRaylib_Dynamic"
-    dependency "bindbc-loader" version="~>1.0.1"
+    dependency "bindbc-loader" version="~>1.1.1"
 }
 
 configuration "dynamicBC" {
     versions "BindRaylib_Dynamic"
-    dependency "bindbc-loader" version="~>1.0.1"
+    dependency "bindbc-loader" version="~>1.1.1"
     subConfiguration "bindbc-loader" "yesBC"
     dflags "-betterC"
 }
