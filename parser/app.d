@@ -187,7 +187,7 @@ void createBinddynamic(in string dir, JSONValue root) {
       string args;
       if ("params" in e) {
          foreach (p; e["params"].array) {
-            args ~= format!("%s %s, ")(p["type"].str.convertType, p["name"].str);
+            args ~= format!("%s %s, ")(p["type"].str.convertType, p["name"].str.convertName);
          }
          of.write(args.stripRight.chop);
       }
@@ -256,7 +256,7 @@ void createBindstatic(in string dir, JSONValue root) {
       string args;
       if ("params" in e) {
          foreach (p; e["params"].array) {
-            args ~= format!("%s %s, ")(p["type"].str.convertType, p["name"].str);
+            args ~= format!("%s %s, ")(p["type"].str.convertType, p["name"].str.convertName);
          }
          of.write(args.stripRight.chop);
       }
@@ -343,4 +343,14 @@ unittest {
    assert(convertType( "const char**") == "const(char*)*";
    assert(convertType( "INT") == "int";
    assert(convertType( "STRING") == "string";
+}
+
+/**
+ * Converts c name into d valid name
+ */
+string convertName(string cName) {
+   switch (cName) {
+   case "alias" : return "aka";
+   default: return cName;
+   }
 }
