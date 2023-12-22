@@ -8,9 +8,10 @@ module bindbc.raylib.types;
 enum RaylibSupport {
    noLibrary,
    badLibrary,
-   raylib450
+   raylib450,
+   raylib500
 }
-enum raylibSupport = RaylibSupport.raylib450;
+enum raylibSupport = RaylibSupport.raylib500;
 
 
 
