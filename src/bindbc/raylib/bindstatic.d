@@ -10,13 +10,13 @@ extern (C) @nogc nothrow {
     */
    void InitWindow(int width, int height, const(char)* title);
    /**
-    * Check if KEY_ESCAPE pressed or Close icon pressed
-    */
-   bool WindowShouldClose();
-   /**
     * Close window and unload OpenGL context
     */
    void CloseWindow();
+   /**
+    * Check if application should close (KEY_ESCAPE pressed or windows close icon clicked)
+    */
+   bool WindowShouldClose();
    /**
     * Check if window has been initialized successfully
     */
@@ -62,6 +62,10 @@ extern (C) @nogc nothrow {
     */
    void ToggleFullscreen();
    /**
+    * Toggle window state: borderless windowed (only PLATFORM_DESKTOP)
+    */
+   void ToggleBorderlessWindowed();
+   /**
     * Set window state: maximized, if resizable (only PLATFORM_DESKTOP)
     */
    void MaximizeWindow();
@@ -82,7 +86,7 @@ extern (C) @nogc nothrow {
     */
    void SetWindowIcons(Image* images, int count);
    /**
-    * Set title for window (only PLATFORM_DESKTOP)
+    * Set title for window (only PLATFORM_DESKTOP and PLATFORM_WEB)
     */
    void SetWindowTitle(const(char)* title);
    /**
@@ -90,13 +94,17 @@ extern (C) @nogc nothrow {
     */
    void SetWindowPosition(int x, int y);
    /**
-    * Set monitor for the current window (fullscreen mode)
+    * Set monitor for the current window
     */
    void SetWindowMonitor(int monitor);
    /**
     * Set window minimum dimensions (for FLAG_WINDOW_RESIZABLE)
     */
    void SetWindowMinSize(int width, int height);
+   /**
+    * Set window maximum dimensions (for FLAG_WINDOW_RESIZABLE)
+    */
+   void SetWindowMaxSize(int width, int height);
    /**
     * Set window dimensions
     */
@@ -105,6 +113,10 @@ extern (C) @nogc nothrow {
     * Set window opacity [0.0f..1.0f] (only PLATFORM_DESKTOP)
     */
    void SetWindowOpacity(float opacity);
+   /**
+    * Set window focused (only PLATFORM_DESKTOP)
+    */
+   void SetWindowFocused();
    /**
     * Get native window handle
     */
@@ -166,7 +178,7 @@ extern (C) @nogc nothrow {
     */
    Vector2 GetWindowScaleDPI();
    /**
-    * Get the human-readable, UTF-8 encoded name of the primary monitor
+    * Get the human-readable, UTF-8 encoded name of the specified monitor
     */
    const(char)* GetMonitorName(int monitor);
    /**
@@ -185,18 +197,6 @@ extern (C) @nogc nothrow {
     * Disable waiting for events on EndDrawing(), automatic events polling
     */
    void DisableEventWaiting();
-   /**
-    * Swap back buffer with front buffer (screen drawing)
-    */
-   void SwapScreenBuffer();
-   /**
-    * Register all input events
-    */
-   void PollInputEvents();
-   /**
-    * Wait for some time (halt program execution)
-    */
-   void WaitTime(double seconds);
    /**
     * Shows cursor
     */
@@ -370,10 +370,6 @@ extern (C) @nogc nothrow {
     */
    void SetTargetFPS(int fps);
    /**
-    * Get current FPS
-    */
-   int GetFPS();
-   /**
     * Get time in seconds for last frame drawn (delta time)
     */
    float GetFrameTime();
@@ -382,13 +378,37 @@ extern (C) @nogc nothrow {
     */
    double GetTime();
    /**
-    * Get a random value between min and max (both included)
+    * Get current FPS
     */
-   int GetRandomValue(int min, int max);
+   int GetFPS();
+   /**
+    * Swap back buffer with front buffer (screen drawing)
+    */
+   void SwapScreenBuffer();
+   /**
+    * Register all input events
+    */
+   void PollInputEvents();
+   /**
+    * Wait for some time (halt program execution)
+    */
+   void WaitTime(double seconds);
    /**
     * Set the seed for the random number generator
     */
    void SetRandomSeed(uint seed);
+   /**
+    * Get a random value between min and max (both included)
+    */
+   int GetRandomValue(int min, int max);
+   /**
+    * Load random values sequence, no values repeated
+    */
+   int* LoadRandomSequence(uint count, int min, int max);
+   /**
+    * Unload random values sequence
+    */
+   void UnloadRandomSequence(int* sequence);
    /**
     * Takes a screenshot of current screen (filename extension defines format)
     */
@@ -397,6 +417,10 @@ extern (C) @nogc nothrow {
     * Setup init configuration flags (view FLAGS)
     */
    void SetConfigFlags(uint flags);
+   /**
+    * Open URL with default system browser (if available)
+    */
+   void OpenURL(const(char)* url);
    /**
     * Set the current threshold (minimum) log level
     */
@@ -414,13 +438,9 @@ extern (C) @nogc nothrow {
     */
    void MemFree(void* ptr);
    /**
-    * Open URL with default system browser (if available)
-    */
-   void OpenURL(const(char)* url);
-   /**
     * Load file data as byte array (read)
     */
-   ubyte* LoadFileData(const(char)* fileName, uint* bytesRead);
+   ubyte* LoadFileData(const(char)* fileName, int* dataSize);
    /**
     * Unload file data allocated by LoadFileData()
     */
@@ -428,11 +448,11 @@ extern (C) @nogc nothrow {
    /**
     * Save data to file from byte array (write), returns true on success
     */
-   bool SaveFileData(const(char)* fileName, void* data, uint bytesToWrite);
+   bool SaveFileData(const(char)* fileName, void* data, int dataSize);
    /**
     * Export data to code (.h), returns true on success
     */
-   bool ExportDataAsCode(const(ubyte)* data, uint size, const(char)* fileName);
+   bool ExportDataAsCode(const(ubyte)* data, int dataSize, const(char)* fileName);
    /**
     * Load text data from file (read), returns a '\0' terminated string
     */
@@ -486,7 +506,7 @@ extern (C) @nogc nothrow {
     */
    const(char)* GetWorkingDirectory();
    /**
-    * Get the directory if the running application (uses static string)
+    * Get the directory of the running application (uses static string)
     */
    const(char)* GetApplicationDirectory();
    /**
@@ -542,9 +562,45 @@ extern (C) @nogc nothrow {
     */
    ubyte* DecodeDataBase64(const(ubyte)* data, int* outputSize);
    /**
+    * Load automation events list from file, NULL for empty list, capacity = MAX_AUTOMATION_EVENTS
+    */
+   AutomationEventList LoadAutomationEventList(const(char)* fileName);
+   /**
+    * Unload automation events list from file
+    */
+   void UnloadAutomationEventList(AutomationEventList* list);
+   /**
+    * Export automation events list as text file
+    */
+   bool ExportAutomationEventList(AutomationEventList list, const(char)* fileName);
+   /**
+    * Set automation event list to record to
+    */
+   void SetAutomationEventList(AutomationEventList* list);
+   /**
+    * Set automation event internal base frame to start recording
+    */
+   void SetAutomationEventBaseFrame(int frame);
+   /**
+    * Start recording automation events (AutomationEventList must be set)
+    */
+   void StartAutomationEventRecording();
+   /**
+    * Stop recording automation events
+    */
+   void StopAutomationEventRecording();
+   /**
+    * Play a recorded automation event
+    */
+   void PlayAutomationEvent(AutomationEvent event);
+   /**
     * Check if a key has been pressed once
     */
    bool IsKeyPressed(int key);
+   /**
+    * Check if a key has been pressed again (Only PLATFORM_DESKTOP)
+    */
+   bool IsKeyPressedRepeat(int key);
    /**
     * Check if a key is being pressed
     */
@@ -558,10 +614,6 @@ extern (C) @nogc nothrow {
     */
    bool IsKeyUp(int key);
    /**
-    * Set a custom key to exit program (default is ESC)
-    */
-   void SetExitKey(int key);
-   /**
     * Get key pressed (keycode), call it multiple times for keys queued, returns 0 when the queue is empty
     */
    int GetKeyPressed();
@@ -569,6 +621,10 @@ extern (C) @nogc nothrow {
     * Get char pressed (unicode), call it multiple times for chars queued, returns 0 when the queue is empty
     */
    int GetCharPressed();
+   /**
+    * Set a custom key to exit program (default is ESC)
+    */
+   void SetExitKey(int key);
    /**
     * Check if a gamepad is available
     */
@@ -692,7 +748,7 @@ extern (C) @nogc nothrow {
    /**
     * Check if a gesture have been detected
     */
-   bool IsGestureDetected(int gesture);
+   bool IsGestureDetected(uint gesture);
    /**
     * Get latest detected gesture
     */
@@ -742,29 +798,21 @@ extern (C) @nogc nothrow {
     */
    void DrawLine(int startPosX, int startPosY, int endPosX, int endPosY, Color color);
    /**
-    * Draw a line (Vector version)
+    * Draw a line (using gl lines)
     */
    void DrawLineV(Vector2 startPos, Vector2 endPos, Color color);
    /**
-    * Draw a line defining thickness
+    * Draw a line (using triangles/quads)
     */
    void DrawLineEx(Vector2 startPos, Vector2 endPos, float thick, Color color);
    /**
-    * Draw a line using cubic-bezier curves in-out
-    */
-   void DrawLineBezier(Vector2 startPos, Vector2 endPos, float thick, Color color);
-   /**
-    * Draw line using quadratic bezier curves with a control point
-    */
-   void DrawLineBezierQuad(Vector2 startPos, Vector2 endPos, Vector2 controlPos, float thick, Color color);
-   /**
-    * Draw line using cubic bezier curves with 2 control points
-    */
-   void DrawLineBezierCubic(Vector2 startPos, Vector2 endPos, Vector2 startControlPos, Vector2 endControlPos, float thick, Color color);
-   /**
-    * Draw lines sequence
+    * Draw lines sequence (using gl lines)
     */
    void DrawLineStrip(Vector2* points, int pointCount, Color color);
+   /**
+    * Draw line segment cubic-bezier in-out interpolation
+    */
+   void DrawLineBezier(Vector2 startPos, Vector2 endPos, float thick, Color color);
    /**
     * Draw a color-filled circle
     */
@@ -789,6 +837,10 @@ extern (C) @nogc nothrow {
     * Draw circle outline
     */
    void DrawCircleLines(int centerX, int centerY, float radius, Color color);
+   /**
+    * Draw circle outline (Vector version)
+    */
+   void DrawCircleLinesV(Vector2 center, float radius, Color color);
    /**
     * Draw ellipse
     */
@@ -878,6 +930,66 @@ extern (C) @nogc nothrow {
     */
    void DrawPolyLinesEx(Vector2 center, int sides, float radius, float rotation, float lineThick, Color color);
    /**
+    * Draw spline: Linear, minimum 2 points
+    */
+   void DrawSplineLinear(Vector2* points, int pointCount, float thick, Color color);
+   /**
+    * Draw spline: B-Spline, minimum 4 points
+    */
+   void DrawSplineBasis(Vector2* points, int pointCount, float thick, Color color);
+   /**
+    * Draw spline: Catmull-Rom, minimum 4 points
+    */
+   void DrawSplineCatmullRom(Vector2* points, int pointCount, float thick, Color color);
+   /**
+    * Draw spline: Quadratic Bezier, minimum 3 points (1 control point): [p1, c2, p3, c4...]
+    */
+   void DrawSplineBezierQuadratic(Vector2* points, int pointCount, float thick, Color color);
+   /**
+    * Draw spline: Cubic Bezier, minimum 4 points (2 control points): [p1, c2, c3, p4, c5, c6...]
+    */
+   void DrawSplineBezierCubic(Vector2* points, int pointCount, float thick, Color color);
+   /**
+    * Draw spline segment: Linear, 2 points
+    */
+   void DrawSplineSegmentLinear(Vector2 p1, Vector2 p2, float thick, Color color);
+   /**
+    * Draw spline segment: B-Spline, 4 points
+    */
+   void DrawSplineSegmentBasis(Vector2 p1, Vector2 p2, Vector2 p3, Vector2 p4, float thick, Color color);
+   /**
+    * Draw spline segment: Catmull-Rom, 4 points
+    */
+   void DrawSplineSegmentCatmullRom(Vector2 p1, Vector2 p2, Vector2 p3, Vector2 p4, float thick, Color color);
+   /**
+    * Draw spline segment: Quadratic Bezier, 2 points, 1 control point
+    */
+   void DrawSplineSegmentBezierQuadratic(Vector2 p1, Vector2 c2, Vector2 p3, float thick, Color color);
+   /**
+    * Draw spline segment: Cubic Bezier, 2 points, 2 control points
+    */
+   void DrawSplineSegmentBezierCubic(Vector2 p1, Vector2 c2, Vector2 c3, Vector2 p4, float thick, Color color);
+   /**
+    * Get (evaluate) spline point: Linear
+    */
+   Vector2 GetSplinePointLinear(Vector2 startPos, Vector2 endPos, float t);
+   /**
+    * Get (evaluate) spline point: B-Spline
+    */
+   Vector2 GetSplinePointBasis(Vector2 p1, Vector2 p2, Vector2 p3, Vector2 p4, float t);
+   /**
+    * Get (evaluate) spline point: Catmull-Rom
+    */
+   Vector2 GetSplinePointCatmullRom(Vector2 p1, Vector2 p2, Vector2 p3, Vector2 p4, float t);
+   /**
+    * Get (evaluate) spline point: Quadratic Bezier
+    */
+   Vector2 GetSplinePointBezierQuad(Vector2 p1, Vector2 c2, Vector2 p3, float t);
+   /**
+    * Get (evaluate) spline point: Cubic Bezier
+    */
+   Vector2 GetSplinePointBezierCubic(Vector2 p1, Vector2 c2, Vector2 c3, Vector2 p4, float t);
+   /**
     * Check collision between two rectangles
     */
    bool CheckCollisionRecs(Rectangle rec1, Rectangle rec2);
@@ -926,6 +1038,10 @@ extern (C) @nogc nothrow {
     */
    Image LoadImageRaw(const(char)* fileName, int width, int height, int format, int headerSize);
    /**
+    * Load image from SVG file data or string with specified size
+    */
+   Image LoadImageSvg(const(char)* fileNameOrString, int width, int height);
+   /**
     * Load image sequence from file (frames appended to image.data)
     */
    Image LoadImageAnim(const(char)* fileName, int* frames);
@@ -954,6 +1070,10 @@ extern (C) @nogc nothrow {
     */
    bool ExportImage(Image image, const(char)* fileName);
    /**
+    * Export image to memory buffer
+    */
+   ubyte* ExportImageToMemory(Image image, const(char)* fileType, int* fileSize);
+   /**
     * Export image as code file defining an array of bytes, returns true on success
     */
    bool ExportImageAsCode(Image image, const(char)* fileName);
@@ -962,17 +1082,17 @@ extern (C) @nogc nothrow {
     */
    Image GenImageColor(int width, int height, Color color);
    /**
-    * Generate image: vertical gradient
+    * Generate image: linear gradient, direction in degrees [0..360], 0=Vertical gradient
     */
-   Image GenImageGradientV(int width, int height, Color top, Color bottom);
-   /**
-    * Generate image: horizontal gradient
-    */
-   Image GenImageGradientH(int width, int height, Color left, Color right);
+   Image GenImageGradientLinear(int width, int height, int direction, Color start, Color end);
    /**
     * Generate image: radial gradient
     */
    Image GenImageGradientRadial(int width, int height, float density, Color inner, Color outer);
+   /**
+    * Generate image: square gradient
+    */
+   Image GenImageGradientSquare(int width, int height, float density, Color inner, Color outer);
    /**
     * Generate image: checked
     */
@@ -1069,6 +1189,10 @@ extern (C) @nogc nothrow {
     * Flip image horizontally
     */
    void ImageFlipHorizontal(Image* image);
+   /**
+    * Rotate image by input angle in degrees (-359 to 359)
+    */
+   void ImageRotate(Image* image, int degrees);
    /**
     * Rotate image clockwise 90deg
     */
@@ -1334,9 +1458,9 @@ extern (C) @nogc nothrow {
     */
    Font LoadFont(const(char)* fileName);
    /**
-    * Load font from file with extended parameters, use NULL for fontChars and 0 for glyphCount to load the default character set
+    * Load font from file with extended parameters, use NULL for codepoints and 0 for codepointCount to load the default character setFont
     */
-   Font LoadFontEx(const(char)* fileName, int fontSize, int* fontChars, int glyphCount);
+   Font LoadFontEx(const(char)* fileName, int fontSize, int* codepoints, int codepointCount);
    /**
     * Load font from Image (XNA style)
     */
@@ -1344,7 +1468,7 @@ extern (C) @nogc nothrow {
    /**
     * Load font from memory buffer, fileType refers to extension: i.e. '.ttf'
     */
-   Font LoadFontFromMemory(const(char)* fileType, const(ubyte)* fileData, int dataSize, int fontSize, int* fontChars, int glyphCount);
+   Font LoadFontFromMemory(const(char)* fileType, const(ubyte)* fileData, int dataSize, int fontSize, int* codepoints, int codepointCount);
    /**
     * Check if a font is ready
     */
@@ -1352,15 +1476,15 @@ extern (C) @nogc nothrow {
    /**
     * Load font data for further use
     */
-   GlyphInfo* LoadFontData(const(ubyte)* fileData, int dataSize, int fontSize, int* fontChars, int glyphCount, int type);
+   GlyphInfo* LoadFontData(const(ubyte)* fileData, int dataSize, int fontSize, int* codepoints, int codepointCount, int type);
    /**
     * Generate image font atlas using chars info
     */
-   Image GenImageFontAtlas(const GlyphInfo* chars, Rectangle** recs, int glyphCount, int fontSize, int padding, int packMethod);
+   Image GenImageFontAtlas(const GlyphInfo* glyphs, Rectangle** glyphRecs, int glyphCount, int fontSize, int padding, int packMethod);
    /**
     * Unload font chars info data (RAM)
     */
-   void UnloadFontData(GlyphInfo* chars, int glyphCount);
+   void UnloadFontData(GlyphInfo* glyphs, int glyphCount);
    /**
     * Unload font from GPU memory (VRAM)
     */
@@ -1392,7 +1516,11 @@ extern (C) @nogc nothrow {
    /**
     * Draw multiple character (codepoint)
     */
-   void DrawTextCodepoints(Font font, const(int)* codepoints, int count, Vector2 position, float fontSize, float spacing, Color tint);
+   void DrawTextCodepoints(Font font, const(int)* codepoints, int codepointCount, Vector2 position, float fontSize, float spacing, Color tint);
+   /**
+    * Set vertical line spacing when drawing with line-breaks
+    */
+   void SetTextLineSpacing(int spacing);
    /**
     * Measure string width for default font
     */
@@ -1744,7 +1872,7 @@ extern (C) @nogc nothrow {
    /**
     * Load model animations from file
     */
-   ModelAnimation* LoadModelAnimations(const(char)* fileName, uint* animCount);
+   ModelAnimation* LoadModelAnimations(const(char)* fileName, int* animCount);
    /**
     * Update model animation pose
     */
@@ -1756,7 +1884,7 @@ extern (C) @nogc nothrow {
    /**
     * Unload animation array data
     */
-   void UnloadModelAnimations(ModelAnimation* animations, uint count);
+   void UnloadModelAnimations(ModelAnimation* animations, int animCount);
    /**
     * Check model animation skeleton match
     */
@@ -1810,6 +1938,10 @@ extern (C) @nogc nothrow {
     */
    void SetMasterVolume(float volume);
    /**
+    * Get master volume (listener)
+    */
+   float GetMasterVolume();
+   /**
     * Load wave data from file
     */
    Wave LoadWave(const(char)* fileName);
@@ -1830,6 +1962,10 @@ extern (C) @nogc nothrow {
     */
    Sound LoadSoundFromWave(Wave wave);
    /**
+    * Create a new sound that shares the same sample data as the source sound, does not own the sound data
+    */
+   Sound LoadSoundAlias(Sound source);
+   /**
     * Checks if a sound is ready
     */
    bool IsSoundReady(Sound sound);
@@ -1845,6 +1981,10 @@ extern (C) @nogc nothrow {
     * Unload sound
     */
    void UnloadSound(Sound sound);
+   /**
+    * Unload a sound alias (does not deallocate sample data)
+    */
+   void UnloadSoundAlias(Sound aka);
    /**
     * Export wave data to file, returns true on success
     */
@@ -2030,7 +2170,7 @@ extern (C) @nogc nothrow {
     */
    void SetAudioStreamCallback(AudioStream stream, AudioCallback callback);
    /**
-    * Attach audio stream processor to stream
+    * Attach audio stream processor to stream, receives the samples as <float>s
     */
    void AttachAudioStreamProcessor(AudioStream stream, AudioCallback processor);
    /**
@@ -2038,7 +2178,7 @@ extern (C) @nogc nothrow {
     */
    void DetachAudioStreamProcessor(AudioStream stream, AudioCallback processor);
    /**
-    * Attach audio stream processor to the entire audio pipeline
+    * Attach audio stream processor to the entire audio pipeline, receives the samples as <float>s
     */
    void AttachAudioMixedProcessor(AudioCallback processor);
    /**

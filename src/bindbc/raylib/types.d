@@ -22,17 +22,17 @@ struct rAudioProcessor;
 
 // defines
 
-enum int RAYLIB_VERSION_MAJOR = 4;
-enum int RAYLIB_VERSION_MINOR = 5;
+enum int RAYLIB_VERSION_MAJOR = 5;
+enum int RAYLIB_VERSION_MINOR = 0;
 enum int RAYLIB_VERSION_PATCH = 0;
-enum string RAYLIB_VERSION = "4.5";
+enum string RAYLIB_VERSION = "5.0";
 
 // callbacks
 
 /// FileIO: Load binary data
-alias LoadFileDataCallback = ubyte* function(const(char)*, uint*);
+alias LoadFileDataCallback = ubyte* function(const(char)*, int*);
 /// FileIO: Save binary data
-alias SaveFileDataCallback = bool function(const(char)*, void*, uint);
+alias SaveFileDataCallback = bool function(const(char)*, void*, int);
 /// FileIO: Load text data
 alias LoadFileTextCallback = char* function(const(char)*);
 /// FileIO: Save text data
@@ -333,6 +333,8 @@ struct ModelAnimation {
    BoneInfo* bones;
    /// Poses array by frame
    Transform** framePoses;
+   /// Animation name
+   char[32] name;
 }
 /// Ray, ray for raycasting
 struct Ray {
@@ -456,6 +458,24 @@ struct FilePathList {
    /// Filepaths entries
    char** paths;
 }
+/// Automation event
+struct AutomationEvent {
+   /// Event frame
+   uint frame;
+   /// Event type (AutomationEventType)
+   uint type;
+   /// Event parameters (if required)
+   int[4] params;
+}
+/// Automation event list
+struct AutomationEventList {
+   /// Events max entries (MAX_AUTOMATION_EVENTS)
+   uint capacity;
+   /// Events entries count
+   uint count;
+   /// Events entries
+   AutomationEvent* events;
+}
 
 // aliases
 
@@ -495,6 +515,8 @@ enum ConfigFlags {
    FLAG_WINDOW_HIGHDPI = 8192,
    /// Set to support mouse passthrough, only supported when FLAG_WINDOW_UNDECORATED
    FLAG_WINDOW_MOUSE_PASSTHROUGH = 16384,
+   /// Set to run program in borderless windowed mode
+   FLAG_BORDERLESS_WINDOWED_MODE = 32768,
    /// Set to try enabling MSAA 4X
    FLAG_MSAA_4X_HINT = 32,
    /// Set to try enabling interlaced video format (for V3D)
@@ -514,6 +536,7 @@ alias FLAG_WINDOW_ALWAYS_RUN = ConfigFlags.FLAG_WINDOW_ALWAYS_RUN;
 alias FLAG_WINDOW_TRANSPARENT = ConfigFlags.FLAG_WINDOW_TRANSPARENT;
 alias FLAG_WINDOW_HIGHDPI = ConfigFlags.FLAG_WINDOW_HIGHDPI;
 alias FLAG_WINDOW_MOUSE_PASSTHROUGH = ConfigFlags.FLAG_WINDOW_MOUSE_PASSTHROUGH;
+alias FLAG_BORDERLESS_WINDOWED_MODE = ConfigFlags.FLAG_BORDERLESS_WINDOWED_MODE;
 alias FLAG_MSAA_4X_HINT = ConfigFlags.FLAG_MSAA_4X_HINT;
 alias FLAG_INTERLACED_HINT = ConfigFlags.FLAG_INTERLACED_HINT;
 /// Trace log level
@@ -1208,28 +1231,34 @@ enum PixelFormat {
    PIXELFORMAT_UNCOMPRESSED_R32G32B32 = 9,
    /// 32*4 bpp (4 channels - float)
    PIXELFORMAT_UNCOMPRESSED_R32G32B32A32 = 10,
+   /// 16 bpp (1 channel - half float)
+   PIXELFORMAT_UNCOMPRESSED_R16 = 11,
+   /// 16*3 bpp (3 channels - half float)
+   PIXELFORMAT_UNCOMPRESSED_R16G16B16 = 12,
+   /// 16*4 bpp (4 channels - half float)
+   PIXELFORMAT_UNCOMPRESSED_R16G16B16A16 = 13,
    /// 4 bpp (no alpha)
-   PIXELFORMAT_COMPRESSED_DXT1_RGB = 11,
+   PIXELFORMAT_COMPRESSED_DXT1_RGB = 14,
    /// 4 bpp (1 bit alpha)
-   PIXELFORMAT_COMPRESSED_DXT1_RGBA = 12,
+   PIXELFORMAT_COMPRESSED_DXT1_RGBA = 15,
    /// 8 bpp
-   PIXELFORMAT_COMPRESSED_DXT3_RGBA = 13,
+   PIXELFORMAT_COMPRESSED_DXT3_RGBA = 16,
    /// 8 bpp
-   PIXELFORMAT_COMPRESSED_DXT5_RGBA = 14,
+   PIXELFORMAT_COMPRESSED_DXT5_RGBA = 17,
    /// 4 bpp
-   PIXELFORMAT_COMPRESSED_ETC1_RGB = 15,
+   PIXELFORMAT_COMPRESSED_ETC1_RGB = 18,
    /// 4 bpp
-   PIXELFORMAT_COMPRESSED_ETC2_RGB = 16,
+   PIXELFORMAT_COMPRESSED_ETC2_RGB = 19,
    /// 8 bpp
-   PIXELFORMAT_COMPRESSED_ETC2_EAC_RGBA = 17,
+   PIXELFORMAT_COMPRESSED_ETC2_EAC_RGBA = 20,
    /// 4 bpp
-   PIXELFORMAT_COMPRESSED_PVRT_RGB = 18,
+   PIXELFORMAT_COMPRESSED_PVRT_RGB = 21,
    /// 4 bpp
-   PIXELFORMAT_COMPRESSED_PVRT_RGBA = 19,
+   PIXELFORMAT_COMPRESSED_PVRT_RGBA = 22,
    /// 8 bpp
-   PIXELFORMAT_COMPRESSED_ASTC_4x4_RGBA = 20,
+   PIXELFORMAT_COMPRESSED_ASTC_4x4_RGBA = 23,
    /// 2 bpp
-   PIXELFORMAT_COMPRESSED_ASTC_8x8_RGBA = 21,
+   PIXELFORMAT_COMPRESSED_ASTC_8x8_RGBA = 24,
 }
 
 alias PIXELFORMAT_UNCOMPRESSED_GRAYSCALE = PixelFormat.PIXELFORMAT_UNCOMPRESSED_GRAYSCALE;
@@ -1242,6 +1271,9 @@ alias PIXELFORMAT_UNCOMPRESSED_R8G8B8A8 = PixelFormat.PIXELFORMAT_UNCOMPRESSED_R
 alias PIXELFORMAT_UNCOMPRESSED_R32 = PixelFormat.PIXELFORMAT_UNCOMPRESSED_R32;
 alias PIXELFORMAT_UNCOMPRESSED_R32G32B32 = PixelFormat.PIXELFORMAT_UNCOMPRESSED_R32G32B32;
 alias PIXELFORMAT_UNCOMPRESSED_R32G32B32A32 = PixelFormat.PIXELFORMAT_UNCOMPRESSED_R32G32B32A32;
+alias PIXELFORMAT_UNCOMPRESSED_R16 = PixelFormat.PIXELFORMAT_UNCOMPRESSED_R16;
+alias PIXELFORMAT_UNCOMPRESSED_R16G16B16 = PixelFormat.PIXELFORMAT_UNCOMPRESSED_R16G16B16;
+alias PIXELFORMAT_UNCOMPRESSED_R16G16B16A16 = PixelFormat.PIXELFORMAT_UNCOMPRESSED_R16G16B16A16;
 alias PIXELFORMAT_COMPRESSED_DXT1_RGB = PixelFormat.PIXELFORMAT_COMPRESSED_DXT1_RGB;
 alias PIXELFORMAT_COMPRESSED_DXT1_RGBA = PixelFormat.PIXELFORMAT_COMPRESSED_DXT1_RGBA;
 alias PIXELFORMAT_COMPRESSED_DXT3_RGBA = PixelFormat.PIXELFORMAT_COMPRESSED_DXT3_RGBA;
