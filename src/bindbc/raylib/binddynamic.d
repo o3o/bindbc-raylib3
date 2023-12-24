@@ -1713,7 +1713,7 @@ RaylibSupport loadRaylib(const(char)* libName) {
    if (errorCount() != errCount) {
       return RaylibSupport.badLibrary;
    } else {
-      loadedVersion = RaylibSupport.raylib450;
+      loadedVersion = RaylibSupport.raylib500;
    }
 
    return loadedVersion;
